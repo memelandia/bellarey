@@ -1,4 +1,4 @@
-const { getTable, premiosStringToArray, premiosArrayToString, corsHeaders } = require('./utils/airtable');
+const { table, getTable, premiosStringToArray, premiosArrayToString, corsHeaders } = require('./utils/airtable');
 
 // La tabla 'Configuraciones' debe tener los campos: 'Nombre Modelo' (Single line text), 'avatarURL' (Long text), 'Premios' (Long text).
 // y debe contener una única fila de registro para que esto funcione.
@@ -9,7 +9,7 @@ exports.handler = async (event) => {
         return { statusCode: 200, headers: corsHeaders };
     }
 
-    const configTable = getTable('Configuraciones');
+    const configTable = getTable('Configuraciones');const configTable = table; // ¡Simplemente usa la tabla ya configurada!
 
     try {
         // Obtenemos siempre la primera (y única) fila de configuración.
