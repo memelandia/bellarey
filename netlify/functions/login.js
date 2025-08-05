@@ -1,9 +1,9 @@
 exports.handler = async (event, context) => {
     // Configurar CORS
     const headers = {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Content-Type',
-        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-control-Allow-Origin': '*',
+        'Access-control-Allow-Headers': 'Content-Type',
+        'Access-control-Allow-Methods': 'POST, OPTIONS',
         'Content-Type': 'application/json'
     };
 
@@ -50,52 +50,66 @@ exports.handler = async (event, context) => {
 
         // Verificar que las variables de entorno estén configuradas
         if (!validUsername || !validPassword) {
-            console.error('Variables de entorno ADMIN_USER o ADMIN_PASS no configuradas');
+            console.error('ALERTA: Las variables de entorno ADMIN_USER o ADMIN_PASS no están configuradas en Netlify.');
             return {
                 statusCode: 500,
                 headers,
                 body: JSON.stringify({
                     success: false,
-                    message: 'Error de configuración del servidor.'
+                    message: 'Error de configuración del servidor. Faltan variables de entorno.'
                 })
             };
         }
 
-        // Comparación segura de credenciales (case-sensitive)
-        const isValidUsername = username === validUsername;
-        const isValidPassword = password === validPassword;
+        //=========================================================//
+        //       INICIO DE LA MODIFICACIÓN PARA DIAGNÓSTICO        //
+        //=========================================================//
 
-        if (isValidUsername && isValidPassword) {
-            // Login exitoso
+        // Forzamos el acceso si el NOMBRE DE USUARIO es correcto, ignorando la contraseña.
+        // Esto nos permite verificar si al menos la variable ADMIN_USER se está leyendo correctamente.
+
+        console.log(`[DIAGNÓSTICO] Intento de login recibido.`);
+        console.log(`[DIAGNÓSTICO] Usuario esperado desde Netlify: '${validUsername}'`);
+        console.log(`[DIAGNÓSTICO] Contraseña esperada tiene una longitud de: ${validPassword.length}`);
+        console.log(`[DIAGNÓSTICO] Usuario recibido desde el navegador: '${username}'`);
+        
+        if (username === validUsername) {
+            console.log(`[DIAGNÓSTICO] ¡ÉXITO! El usuario coincide. Forzando acceso.`);
+            // Login forzado exitoso
             return {
                 statusCode: 200,
                 headers,
                 body: JSON.stringify({
                     success: true,
-                    message: 'Login exitoso',
+                    message: 'Login de diagnóstico exitoso',
                     user: username
                 })
             };
         } else {
-            // Credenciales incorrectas
+            console.log(`[DIAGNÓSTICO] ¡FALLO! El usuario no coincide.`);
+            // Credenciales incorrectas porque el USUARIO no coincide
             return {
                 statusCode: 401,
                 headers,
                 body: JSON.stringify({
                     success: false,
-                    message: 'Credenciales incorrectas'
+                    message: `Credenciales incorrectas. El usuario no coincide.`
                 })
             };
         }
+        
+        //=========================================================//
+        //         FIN DE LA MODIFICACIÓN PARA DIAGNÓSTICO         //
+        //=========================================================//
 
     } catch (error) {
-        console.error('Error en función login:', error);
+        console.error('Error catastrófico en la función login:', error);
         return {
             statusCode: 500,
             headers,
             body: JSON.stringify({
                 success: false,
-                message: 'Error interno del servidor'
+                message: `Error interno del servidor: ${error.message}`
             })
         };
     }
