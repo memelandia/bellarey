@@ -3,9 +3,10 @@ require('dotenv').config();
 
 const Airtable = require('airtable');
 
-// Configurar conexión a Airtable usando las variables de entorno
+// Configurar conexión a Airtable usando el nuevo método de "Personal Access Token"
+// Es importante que la variable de Netlify se llame AIRTABLE_PERSONAL_TOKEN o algo similar.
 const base = new Airtable({
-    apiKey: process.env.AIRTABLE_API_KEY
+    token: process.env.AIRTABLE_API_KEY 
 }).base(process.env.AIRTABLE_BASE_ID);
 
 // Función para obtener una tabla específica
