@@ -14,8 +14,8 @@ function getTable(tableName) {
 }
 
 // Tablas principales
-const table = base('Configuraciones'); // Tabla de configuración
-const codesTable = base('Códigos'); // Tabla de códigos
+const table = base(process.env.AIRTABLE_TABLE_CONFIG);      // Tabla de configuración
+const codesTable = base(process.env.AIRTABLE_TABLE_CODES); // Tabla de códigos
 
 // Funciones auxiliares para manejo de premios (estandarizadas)
 function premiosStringToArray(premiosString) {
