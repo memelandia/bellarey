@@ -98,9 +98,138 @@
             }
             .controls-container { grid-column: 1 / 2; justify-self: end; }
             .ruleta-section { grid-column: 2 / 3; }
+            .historial-container { grid-column: 3 / 4; justify-self: start; }
         }
         .controls-container { display: flex; flex-direction: column; align-items: center; gap: 25px; }
         .ruleta-section { display: flex; flex-direction: column; align-items: center; gap: 30px; flex-shrink: 0; }
+        .historial-container { display: none; flex-direction: column; align-items: center; gap: 25px; }
+        .historial-container.visible { display: flex; }
+        
+        /* === ESTILOS DEL HISTORIAL DE PREMIOS === */
+        .historial-section {
+            background: rgba(255, 255, 255, 0.95); padding: 25px; border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1); backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2); width: 320px; max-height: 500px;
+        }
+        
+        .historial-title {
+            font-family: 'Dancing Script', cursive; 
+            color: #c44569; 
+            font-size: 2rem; 
+            font-weight: 700; 
+            text-shadow: 0px 4px 15px rgba(0, 0, 0, 0.4), 0 0 10px rgba(255, 255, 255, 0.3);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .historial-lista {
+            max-height: 380px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        
+        .historial-lista::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .historial-lista::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+        }
+        
+        .historial-lista::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #ff6b9d, #c44569);
+            border-radius: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .historial-lista::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, #c44569, #ff6b9d);
+        }
+        
+        .premio-item {
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(196, 69, 105, 0.1));
+            border: 2px solid rgba(255, 107, 157, 0.3);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .premio-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 8px 20px rgba(196, 69, 105, 0.2);
+            border-color: rgba(255, 107, 157, 0.6);
+        }
+        
+        .premio-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .premio-item:hover::before {
+            left: 100%;
+        }
+        
+        .premio-nombre {
+            font-weight: 700;
+            color: #c44569;
+            font-size: 0.95rem;
+            margin-bottom: 5px;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+        }
+        
+        .premio-fecha {
+            font-size: 0.8rem;
+            color: #666;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .premio-numero {
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            background: linear-gradient(45deg, #ff6b9d, #c44569);
+            color: white;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(196, 69, 105, 0.3);
+        }
+        
+        .historial-vacio {
+            text-align: center;
+            color: #999;
+            font-style: italic;
+            padding: 30px 20px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+            border: 2px dashed rgba(196, 69, 105, 0.3);
+        }
+        
+        .historial-vacio::before {
+            content: '🎁';
+            display: block;
+            font-size: 2rem;
+            margin-bottom: 10px;
+            opacity: 0.5;
+        }
         .controls-section {
             display: flex; flex-direction: column; align-items: center; gap: 20px;
             background: rgba(255, 255, 255, 0.95); padding: 35px; border-radius: 25px;
@@ -229,6 +358,11 @@
             100% { opacity: 1; transform: translateY(0); }
         }
         
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(30px) scale(0.9); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        
         .mensaje-update {
             animation: fadeIn 0.5s ease-in-out;
         }
@@ -283,6 +417,24 @@
                 display: flex;
                 flex-direction: column;
                 align-items: center;
+            }
+            
+            .historial-container {
+                order: 4; /* Después del avatar */
+            }
+            
+            .historial-section {
+                width: 300px;
+                padding: 20px;
+                max-height: 400px;
+            }
+            
+            .historial-title {
+                font-size: 1.8rem;
+            }
+            
+            .historial-lista {
+                max-height: 300px;
             }
             
             #avatar-container {
@@ -347,6 +499,34 @@
             
             .main-content {
                 gap: 25px;
+            }
+            
+            .historial-section {
+                width: 280px;
+                padding: 18px;
+                max-height: 350px;
+            }
+            
+            .historial-title {
+                font-size: 1.6rem;
+                margin-bottom: 15px;
+            }
+            
+            .historial-lista {
+                max-height: 250px;
+            }
+            
+            .premio-item {
+                padding: 12px;
+                margin-bottom: 10px;
+            }
+            
+            .premio-nombre {
+                font-size: 0.9rem;
+            }
+            
+            .premio-fecha {
+                font-size: 0.75rem;
             }
             
             #avatar-container {
@@ -458,6 +638,40 @@
                 width: 150px;
                 height: 200px;
                 margin: 10px auto;
+            }
+            
+            .historial-section {
+                width: 260px;
+                padding: 15px;
+                max-height: 300px;
+            }
+            
+            .historial-title {
+                font-size: 1.4rem;
+                margin-bottom: 12px;
+            }
+            
+            .historial-lista {
+                max-height: 200px;
+            }
+            
+            .premio-item {
+                padding: 10px;
+                margin-bottom: 8px;
+            }
+            
+            .premio-nombre {
+                font-size: 0.85rem;
+            }
+            
+            .premio-fecha {
+                font-size: 0.7rem;
+            }
+            
+            .premio-numero {
+                width: 20px;
+                height: 20px;
+                font-size: 0.6rem;
             }
             
             .controls-title {
@@ -734,6 +948,18 @@
             </div>
             <!-- Nuevo contenedor para avatar -->
             <div id="avatar-container"></div>
+            <!-- Historial de premios -->
+            <div class="historial-container" id="historial-container">
+                <div class="historial-section">
+                    <div class="historial-title">🏆 Mis Premios</div>
+                    <div class="historial-lista" id="historial-lista">
+                        <div class="historial-vacio" id="historial-vacio">
+                            Aún no has ganado premios.<br>
+                            ¡Gira la ruleta para empezar!
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="message-section">
             <div id="mensaje">✨ Ingresa tu código para comenzar la experiencia mágica ✨</div>
@@ -752,6 +978,10 @@
         let tiradasRestantes = 0;
         let nombreUsuario = "";
         let codigoActual = "";
+        
+        // Variables para el historial de premios
+        let historialPremios = [];
+        let contadorPremios = 0;
 
         const soundClick = new Audio('sounds/click.wav');
         const soundWin = new Audio('sounds/win.wav');
@@ -787,6 +1017,132 @@
             setTimeout(() => {
                 banner.style.display = 'none';
             }, 400);
+        }
+        
+        // === FUNCIONES DEL HISTORIAL DE PREMIOS ===
+        function inicializarHistorial() {
+            // Cargar historial desde localStorage
+            const historialGuardado = localStorage.getItem(`historial_${codigoActual}`);
+            if (historialGuardado) {
+                try {
+                    historialPremios = JSON.parse(historialGuardado);
+                    contadorPremios = historialPremios.length;
+                    actualizarHistorialVisual();
+                } catch (error) {
+                    console.error('Error al cargar historial guardado:', error);
+                    historialPremios = [];
+                    contadorPremios = 0;
+                }
+            } else {
+                historialPremios = [];
+                contadorPremios = 0;
+            }
+            
+            // Mostrar el historial si hay premios o si se ha validado un código
+            if (codigoActual) {
+                mostrarHistorial();
+            }
+        }
+        
+        function agregarPremioAlHistorial(premio) {
+            contadorPremios++;
+            const nuevoPremio = {
+                id: contadorPremios,
+                nombre: premio,
+                fecha: new Date().toLocaleString('es-ES', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                }),
+                timestamp: Date.now()
+            };
+            
+            // Agregar al inicio del array para mostrar los más recientes primero
+            historialPremios.unshift(nuevoPremio);
+            
+            // Guardar en localStorage
+            try {
+                localStorage.setItem(`historial_${codigoActual}`, JSON.stringify(historialPremios));
+            } catch (error) {
+                console.error('Error al guardar historial:', error);
+            }
+            
+            // Actualizar la visualización
+            actualizarHistorialVisual();
+            
+            // Mostrar el historial si estaba oculto
+            mostrarHistorial();
+        }
+        
+        function actualizarHistorialVisual() {
+            const historialLista = document.getElementById('historial-lista');
+            const historialVacio = document.getElementById('historial-vacio');
+            
+            if (!historialLista) return;
+            
+            if (historialPremios.length === 0) {
+                if (historialVacio) {
+                    historialVacio.style.display = 'block';
+                }
+                return;
+            }
+            
+            // Ocultar mensaje de historial vacío
+            if (historialVacio) {
+                historialVacio.style.display = 'none';
+            }
+            
+            // Crear HTML para cada premio
+            let historialHTML = '';
+            historialPremios.forEach((premio, index) => {
+                historialHTML += `
+                    <div class="premio-item" style="animation: fadeInUp 0.5s ease ${index * 0.1}s both;">
+                        <div class="premio-numero">${premio.id}</div>
+                        <div class="premio-nombre">${premio.nombre}</div>
+                        <div class="premio-fecha">
+                            🕐 ${premio.fecha}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            historialLista.innerHTML = historialHTML;
+            
+            // Hacer scroll al elemento más reciente si es necesario
+            if (historialPremios.length > 0) {
+                setTimeout(() => {
+                    historialLista.scrollTop = 0;
+                }, 100);
+            }
+        }
+        
+        function mostrarHistorial() {
+            const historialContainer = document.getElementById('historial-container');
+            if (historialContainer) {
+                historialContainer.classList.add('visible');
+            }
+        }
+        
+        function ocultarHistorial() {
+            const historialContainer = document.getElementById('historial-container');
+            if (historialContainer) {
+                historialContainer.classList.remove('visible');
+            }
+        }
+        
+        function limpiarHistorial() {
+            historialPremios = [];
+            contadorPremios = 0;
+            
+            try {
+                localStorage.removeItem(`historial_${codigoActual}`);
+            } catch (error) {
+                console.error('Error al limpiar historial:', error);
+            }
+            
+            actualizarHistorialVisual();
         }
         
         // Comentada: función cargarCodigosPersonalizados() - ahora usamos el backend
@@ -997,6 +1353,10 @@
                 ruleta.style.transform = `rotate(${ (indiceEnRuletaCompleta * anguloPorPremio) + (anguloPorPremio / 2) }deg)`;
                 mostrarPopupPremio(premioGanado);
                 mostrarMensaje(`🎉 ¡Felicidades ${nombreUsuario}! Ganaste: <b>${premioGanado}</b>`);
+                
+                // Agregar el premio al historial
+                agregarPremioAlHistorial(premioGanado);
+                
                 tiradasRestantes--;
                 
                 // Gastar el tiro en el backend
@@ -1107,6 +1467,9 @@
                     codigoInput.style.borderColor = '#10ac84';
                     validarBtn.style.background = 'linear-gradient(45deg, #10ac84, #00d2d3)';
                     validarBtn.textContent = '✅ Código Válido';
+                    
+                    // Inicializar el historial de premios
+                    inicializarHistorial();
                     
                 } else {
                     mostrarNotificacion(`${result.message || 'Código no válido o sin tiradas disponibles'}`, 'error');
