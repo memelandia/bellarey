@@ -61,46 +61,43 @@ exports.handler = async (event, context) => {
             };
         }
 
-        //=========================================================//
-        //       INICIO DE LA MODIFICACIÓN PARA DIAGNÓSTICO        //
-        //=========================================================//
-
-        // Forzamos el acceso si el NOMBRE DE USUARIO es correcto, ignorando la contraseña.
-        // Esto nos permite verificar si al menos la variable ADMIN_USER se está leyendo correctamente.
-
-        console.log(`[DIAGNÓSTICO] Intento de login recibido.`);
-        console.log(`[DIAGNÓSTICO] Usuario esperado desde Netlify: '${validUsername}'`);
-        console.log(`[DIAGNÓSTICO] Contraseña esperada tiene una longitud de: ${validPassword.length}`);
-        console.log(`[DIAGNÓSTICO] Usuario recibido desde el navegador: '${username}'`);
+        // Log para diagnóstico (mantener para futuras depuraciones)
+        console.log(`[LOGIN] Intento de login recibido.`);
+        console.log(`[LOGIN] Usuario esperado: '${validUsername}'`);
+        console.log(`[LOGIN] Usuario recibido: '${username}'`);
+        console.log(`[LOGIN] Contraseña esperada: '${validPassword}'`);
+        console.log(`[LOGIN] Contraseña recibida: '${password}'`);
+        console.log(`[LOGIN] Longitud contraseña esperada: ${validPassword.length}`);
+        console.log(`[LOGIN] Longitud contraseña recibida: ${password.length}`);
         
-        if (username === validUsername) {
-            console.log(`[DIAGNÓSTICO] ¡ÉXITO! El usuario coincide. Forzando acceso.`);
-            // Login forzado exitoso
+        // Verificar credenciales
+        if (username === validUsername && password === validPassword) {
+            console.log(`[LOGIN] ¡ÉXITO! Credenciales correctas.`);
             return {
                 statusCode: 200,
                 headers,
                 body: JSON.stringify({
                     success: true,
-                    message: 'Login de diagnóstico exitoso',
+                    message: 'Login exitoso',
                     user: username
                 })
             };
         } else {
-            console.log(`[DIAGNÓSTICO] ¡FALLO! El usuario no coincide.`);
-            // Credenciales incorrectas porque el USUARIO no coincide
+            console.log(`[LOGIN] ¡FALLO! Credenciales incorrectas.`);
+            console.log(`[LOGIN] Usuario coincide: ${username === validUsername}`);
+            console.log(`[LOGIN] Contraseña coincide: ${password === validPassword}`);
+            console.log(`[LOGIN] Comparación directa usuario: "${username}" === "${validUsername}"`);
+            console.log(`[LOGIN] Comparación directa contraseña: "${password}" === "${validPassword}"`);
+            
             return {
                 statusCode: 401,
                 headers,
                 body: JSON.stringify({
                     success: false,
-                    message: `Credenciales incorrectas. El usuario no coincide.`
+                    message: 'Credenciales incorrectas'
                 })
             };
         }
-        
-        //=========================================================//
-        //         FIN DE LA MODIFICACIÓN PARA DIAGNÓSTICO         //
-        //=========================================================//
 
     } catch (error) {
         console.error('Error catastrófico en la función login:', error);
