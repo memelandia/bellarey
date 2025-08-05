@@ -1348,6 +1348,14 @@
                 soundSpin.pause();
                 soundSpin.currentTime = 0;
                 soundWin.play();
+                
+                // 🎊 CELEBRACIÓN CON CONFETI 🎊
+                confetti({
+                    particleCount: 200,
+                    spread: 100,
+                    origin: { y: 0.6 },
+                    gravity: 0.8
+                });
 
                 ruleta.style.transition = "";
                 ruleta.style.transform = `rotate(${ (indiceEnRuletaCompleta * anguloPorPremio) + (anguloPorPremio / 2) }deg)`;
@@ -1828,5 +1836,8 @@
             }, 250); // Debounce para evitar redibujado excesivo
         });
     </script>
+    
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </body>
 </html>
