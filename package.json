@@ -1,7 +1,7 @@
 {
-  "name": "scarletlucy-backend",
-  "version": "1.0.0",
-  "description": "Backend functions for Scarlet Lucy roulette app",
+  "name": "bellarey-backend",
+  "version": "1.0.1",
+  "description": "Backend functions for Bellarey roulette app",
   "main": "index.js",
   "scripts": {
     "dev": "netlify dev",
@@ -21,6 +21,6 @@
     "airtable",
     "serverless"
   ],
-  "author": "Scarlet Lucy",
+  "author": "Bellarey",
   "license": "MIT"
 }
