@@ -351,84 +351,24 @@
             margin: 0 auto; 
             width: 450px; 
             height: 450px; 
-            border: 12px solid transparent;
-            background: linear-gradient(white, white) padding-box, 
-                        linear-gradient(45deg, #ff6b9d, #c44569, #f8b500, #ff9ff3) border-box;
+            border: 5px solid #ff6b9d; 
             border-radius: 50%; 
             position: relative; 
-            box-shadow: 
-                0 0 0 4px rgba(255, 255, 255, 0.8),
-                0 0 0 8px rgba(196, 69, 105, 0.3),
-                0 15px 35px rgba(0,0,0,0.2),
-                inset 0 0 0 3px rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 20px rgba(196, 69, 105, 0.3);
             overflow: hidden;
-            background-clip: padding-box;
-        }
-        
-        #ruleta::before {
-            content: '';
-            position: absolute;
-            top: -6px;
-            left: -6px;
-            width: calc(100% + 12px);
-            height: calc(100% + 12px);
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            border-radius: 50%;
-            opacity: 0;
-            transition: opacity 1.2s ease-in-out;
-            z-index: 1;
-            filter: blur(12px) brightness(0.3) contrast(1.4) saturate(1.2);
-        }
-        
-        #ruleta::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(
-                circle at center,
-                rgba(255, 255, 255, 0.1) 0%,
-                rgba(196, 69, 105, 0.05) 30%,
-                rgba(0, 0, 0, 0.1) 100%
-            );
-            border-radius: 50%;
-            z-index: 11;
-            pointer-events: none;
-        }
-        
-        #ruleta.with-background::before {
-            opacity: 1;
         }
         
         #flecha { 
             width: 0; 
             height: 0; 
-            border-left: 28px solid transparent; 
-            border-right: 28px solid transparent; 
-            border-bottom: 55px solid #c44569; 
+            border-left: 25px solid transparent; 
+            border-right: 25px solid transparent; 
+            border-bottom: 50px solid #c44569; 
             position: absolute; 
             left: 50%; 
-            top: -55px; 
+            top: -50px; 
             transform: translateX(-50%); 
-            z-index: 20;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4)) drop-shadow(0 0 10px rgba(196, 69, 105, 0.6));
-        }
-        
-        #flecha::before {
-            content: '';
-            position: absolute;
-            top: 8px;
-            left: -20px;
-            width: 0;
-            height: 0;
-            border-left: 20px solid transparent;
-            border-right: 20px solid transparent;
-            border-bottom: 35px solid rgba(255, 255, 255, 0.3);
-            z-index: -1;
+            z-index: 10;
         }
         
         #opciones { 
@@ -439,7 +379,6 @@
             left: 0; 
             pointer-events: none; 
             border-radius: 50%;
-            z-index: 10;
         }
         #mensaje { 
             margin-top: 10px; 
@@ -562,130 +501,7 @@
             animation: fadeIn 0.5s ease-in-out;
         }
         
-        /* === CONTENEDOR DEL AVATAR MEJORADO === */
-        #avatar-container {
-            position: absolute;
-            right: 5%;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 380px;
-            height: 520px;
-            z-index: 0;
-            opacity: 0;
-            transition: all 1.8s cubic-bezier(0.25, 0.8, 0.25, 1);
-            border-radius: 30px;
-            overflow: hidden;
-            pointer-events: none;
-            background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(196, 69, 105, 0.1));
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 
-                0 25px 50px rgba(0, 0, 0, 0.15),
-                0 0 0 1px rgba(255, 255, 255, 0.1),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3);
-        }
-
-        #avatar-container.visible {
-            opacity: 1;
-            transform: translateY(-50%) scale(1.02);
-        }
-
-        #avatar-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                135deg,
-                rgba(255, 107, 157, 0.1) 0%,
-                rgba(196, 69, 105, 0.05) 50%,
-                rgba(255, 159, 243, 0.1) 100%
-            );
-            z-index: 2;
-            border-radius: 28px;
-            pointer-events: none;
-        }
-
-        #avatar-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 28px;
-            position: relative;
-            z-index: 1;
-            filter: 
-                grayscale(0.05) 
-                brightness(0.95) 
-                contrast(1.15) 
-                saturate(1.1)
-                sepia(0.05);
-            transition: filter 0.6s ease;
-            mask-image: linear-gradient(
-                to bottom, 
-                transparent 0%, 
-                black 15%, 
-                black 85%, 
-                transparent 100%
-            );
-            -webkit-mask-image: linear-gradient(
-                to bottom, 
-                transparent 0%, 
-                black 15%, 
-                black 85%, 
-                transparent 100%
-            );
-        }
-
-        #avatar-container:hover img {
-            filter: 
-                grayscale(0) 
-                brightness(1) 
-                contrast(1.2) 
-                saturate(1.2)
-                sepia(0);
-        }
-
-        /* Efecto de brillo sutil */
-        #avatar-container::after {
-            content: '';
-            position: absolute;
-            top: 10%;
-            left: 10%;
-            width: 80%;
-            height: 40%;
-            background: linear-gradient(
-                135deg,
-                rgba(255, 255, 255, 0.3) 0%,
-                rgba(255, 255, 255, 0.1) 50%,
-                transparent 100%
-            );
-            border-radius: 50%;
-            filter: blur(20px);
-            z-index: 3;
-            pointer-events: none;
-            opacity: 0.7;
-        }
-        
         /* === DISEÑO RESPONSIVO COMPLETO === */
-        
-        /* Pantallas grandes */
-        @media (max-width: 1200px) {
-            #avatar-container {
-                width: 320px;
-                height: 450px;
-                right: 3%;
-                border-radius: 25px;
-                box-shadow: 
-                    0 20px 40px rgba(0, 0, 0, 0.12),
-                    0 0 0 1px rgba(255, 255, 255, 0.1);
-            }
-            
-            #avatar-container img {
-                border-radius: 23px;
-            }
-        }
         
         /* Tablets y pantallas medianas */
         @media (max-width: 992px) {
@@ -697,7 +513,7 @@
             }
             
             .historial-container {
-                order: 4; /* Después del avatar */
+                order: 3;
             }
             
             .historial-section {
@@ -712,25 +528,6 @@
             
             .historial-lista {
                 max-height: 300px;
-            }
-            
-            #avatar-container {
-                position: relative;
-                right: auto;
-                top: auto;
-                transform: none;
-                width: 280px;
-                height: 380px;
-                margin: 20px auto;
-                order: 3; /* Después de la ruleta y antes de controles */
-                border-radius: 20px;
-                box-shadow: 
-                    0 15px 30px rgba(0, 0, 0, 0.1),
-                    0 0 0 1px rgba(255, 255, 255, 0.1);
-            }
-            
-            #avatar-container img {
-                border-radius: 18px;
             }
             
             .controls-title {
@@ -814,12 +611,6 @@
                 font-size: 0.75rem;
             }
             
-            #avatar-container {
-                width: 200px;
-                height: 280px;
-                margin: 15px auto;
-            }
-            
             .controls-title {
                 font-size: 2rem;
                 margin-bottom: 15px;
@@ -849,10 +640,6 @@
                 width: 350px;
                 height: 350px;
                 border-width: 7px;
-            }
-            
-            #ruleta::before {
-                filter: blur(6px) brightness(0.35) contrast(1.3);
             }
             
             #flecha {
@@ -923,12 +710,6 @@
                 gap: 20px;
             }
             
-            #avatar-container {
-                width: 150px;
-                height: 200px;
-                margin: 10px auto;
-            }
-            
             .historial-section {
                 width: 260px;
                 padding: 15px;
@@ -975,10 +756,6 @@
                 border-width: 6px;
             }
             
-            #ruleta::before {
-                filter: blur(5px) brightness(0.3) contrast(1.4);
-            }
-            
             #flecha {
                 border-left-width: 18px;
                 border-right-width: 18px;
@@ -1004,6 +781,56 @@
             #validarBtn {
                 padding: 12px 18px;
                 font-size: 0.9rem;
+            }
+            
+            #girarBtn {
+                min-width: 200px;
+                padding: 14px 30px;
+                font-size: 0.9rem;
+            }
+            
+            #mensaje {
+                font-size: 0.85rem;
+                padding: 8px 14px;
+                margin-top: 8px;
+            }
+            
+            .popup-content {
+                padding: 25px;
+                max-width: 340px;
+            }
+            
+            .popup-title {
+                font-size: 2.2rem;
+                margin-bottom: 15px;
+            }
+            
+            .popup-prize {
+                font-size: 1.2rem;
+                padding: 10px;
+                margin: 15px 0;
+            }
+            
+            .popup-instructions {
+                font-size: 0.8rem;
+                margin-top: 20px;
+            }
+            
+            .popup-close {
+                padding: 10px 20px;
+                font-size: 0.95rem;
+            }
+            
+            /* Ajustar formas de fondo para móviles */
+            .shape:nth-child(1) { width: 50px; height: 50px; }
+            .shape:nth-child(2) { width: 70px; height: 70px; }
+            .shape:nth-child(3) { width: 40px; height: 40px; }
+            .shape:nth-child(4) { width: 60px; height: 60px; }
+            
+            .particle.heart { font-size: 16px; }
+            .particle.sparkle { width: 6px; height: 6px; }
+            .particle.star { font-size: 12px; }
+        }
             }
             
             #girarBtn {
@@ -1239,12 +1066,11 @@
             </div>
             <div class="ruleta-section">
                 <div id="ruleta">
+                    <div id="flecha"></div>
                     <canvas id="opciones" width="450" height="450"></canvas>
                 </div>
                 <button id="girarBtn" class="button" disabled>🎯 ¡GIRAR RULETA! 🎯</button>
             </div>
-            <!-- Nuevo contenedor para avatar -->
-            <div id="avatar-container"></div>
             <!-- Historial de premios -->
             <div class="historial-container" id="historial-container">
                 <div class="historial-section">
@@ -1512,176 +1338,60 @@
                 ctx.arc(centroX, centroY, radio, anguloInicio, anguloFin);
                 ctx.closePath();
                 
-                // 🎨 GRADIENTES ELEGANTES PARA CADA SECTOR
-                const gradient = ctx.createRadialGradient(centroX, centroY, 0, centroX, centroY, radio);
-                const baseColor = coloresPremios[i % coloresPremios.length];
-                
-                gradient.addColorStop(0, baseColor + 'F0'); // Centro más opaco
-                gradient.addColorStop(0.7, baseColor + 'D0'); // Medio semi-transparente
-                gradient.addColorStop(1, baseColor + 'B0'); // Borde más transparente
-                
-                ctx.fillStyle = gradient;
+                // Color simple para cada sector
+                ctx.fillStyle = coloresPremios[i % coloresPremios.length];
                 ctx.fill();
                 
-                // 🎨 SOMBRA INTERNA PARA PROFUNDIDAD
-                const shadowGradient = ctx.createRadialGradient(centroX, centroY, radio * 0.3, centroX, centroY, radio);
-                shadowGradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
-                shadowGradient.addColorStop(1, 'rgba(0, 0, 0, 0.2)');
-                ctx.fillStyle = shadowGradient;
-                ctx.fill();
-                
-                ctx.clip();
-                
-                // 🎨 TEXTO CON MEJOR CONTRASTE Y EFECTOS
+                // Texto simple
                 ctx.fillStyle = "#ffffff";
-                ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
-                ctx.shadowBlur = 6;
-                ctx.shadowOffsetX = 2;
-                ctx.shadowOffsetY = 2;
+                ctx.font = "bold 14px Arial";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
                 
                 const anguloMedio = (anguloInicio + anguloFin) / 2;
-                const distanciaTexto = radio * 0.65;
-                const textoX = centroX + Math.cos(anguloMedio) * distanciaTexto;
-                const textoY = centroY + Math.sin(anguloMedio) * distanciaTexto;
+                const textoX = centroX + Math.cos(anguloMedio) * (radio * 0.7);
+                const textoY = centroY + Math.sin(anguloMedio) * (radio * 0.7);
                 
                 ctx.translate(textoX, textoY);
                 let rotacion = anguloMedio;
                 if (rotacion > Math.PI/2 && rotacion < 3*Math.PI/2) rotacion += Math.PI;
                 ctx.rotate(rotacion);
                 
-                let textoLimpio = premiosDisponibles[i].replace(/[\u{1F300}-\u{1F9FF}]/gu, '').trim().toUpperCase();
-                const palabras = textoLimpio.split(' ');
-                let lineas = [], lineaActual = '';
-                palabras.forEach(palabra => {
-                    if ((lineaActual + palabra).length > 10 && lineaActual) {
-                        lineas.push(lineaActual.trim());
-                        lineaActual = palabra + ' ';
-                    } else {
-                        lineaActual += palabra + ' ';
-                    }
-                });
-                lineas.push(lineaActual.trim());
-
-                ctx.textAlign = "center";
-                ctx.textBaseline = "middle";
-                
-                // Tamaño de fuente responsivo basado en el ancho de pantalla
-                let fontSize = 16;
-                let lineHeight = 18;
-                
-                if (window.innerWidth <= 360) {
-                    fontSize = 11;
-                    lineHeight = 13;
-                } else if (window.innerWidth <= 480) {
-                    fontSize = 12;
-                    lineHeight = 14;
-                } else if (window.innerWidth <= 768) {
-                    fontSize = 14;
-                    lineHeight = 16;
-                } else if (window.innerWidth <= 992) {
-                    fontSize = 15;
-                    lineHeight = 17;
+                // Texto del premio simplificado
+                let texto = premiosDisponibles[i].replace(/[\u{1F300}-\u{1F9FF}]/gu, '').trim().toUpperCase();
+                if (texto.length > 15) {
+                    texto = texto.substring(0, 15) + '...';
                 }
-                
-                ctx.font = `bold ${fontSize}px Poppins, sans-serif`;
-                
-                const startY = -(lineas.length - 1) * lineHeight / 2;
-                lineas.forEach((linea, index) => ctx.fillText(linea, 0, startY + (index * lineHeight)));
+                ctx.fillText(texto, 0, 0);
                 ctx.restore();
             }
             
-            // 🎨 LÍNEAS DE SEPARACIÓN CON GRADIENTE
+            // Líneas de separación simples
             for (let i = 0; i < total; i++) {
                 const anguloFin = (2 * Math.PI / total) * (i + 1);
-                const lineGradient = ctx.createLinearGradient(
-                    centroX, centroY, 
-                    centroX + radio * Math.cos(anguloFin), 
-                    centroY + radio * Math.sin(anguloFin)
-                );
-                lineGradient.addColorStop(0, 'rgba(255, 255, 255, 0.9)');
-                lineGradient.addColorStop(1, 'rgba(255, 255, 255, 0.3)');
-                
-                ctx.strokeStyle = lineGradient;
-                ctx.lineWidth = 3;
-                ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
-                ctx.shadowBlur = 3;
-                ctx.shadowOffsetX = 1;
-                ctx.shadowOffsetY = 1;
-                
+                ctx.strokeStyle = "#ffffff";
+                ctx.lineWidth = 2;
                 ctx.beginPath();
                 ctx.moveTo(centroX, centroY);
                 ctx.lineTo(centroX + radio * Math.cos(anguloFin), centroY + radio * Math.sin(anguloFin));
                 ctx.stroke();
             }
 
-            // 🎨 CÍRCULO CENTRAL CON EFECTO DIAMANTE
-            let circleRadius = 45;
-            let emojiSize = 42;
-            
-            if (window.innerWidth <= 360) {
-                circleRadius = 30;
-                emojiSize = 30;
-            } else if (window.innerWidth <= 480) {
-                circleRadius = 35;
-                emojiSize = 35;
-            } else if (window.innerWidth <= 768) {
-                circleRadius = 38;
-                emojiSize = 38;
-            } else if (window.innerWidth <= 992) {
-                circleRadius = 42;
-                emojiSize = 42;
-            }
-
-            // Círculo exterior con gradiente diamante
-            const outerGradient = ctx.createRadialGradient(centroX, centroY, 0, centroX, centroY, circleRadius + 8);
-            outerGradient.addColorStop(0, 'rgba(255, 255, 255, 0.8)');
-            outerGradient.addColorStop(0.7, 'rgba(196, 69, 105, 0.6)');
-            outerGradient.addColorStop(1, 'rgba(196, 69, 105, 0.9)');
-            
+            // Círculo central simple
             ctx.beginPath();
-            ctx.arc(centroX, centroY, circleRadius + 8, 0, 2 * Math.PI);
-            ctx.fillStyle = outerGradient;
+            ctx.arc(centroX, centroY, 30, 0, 2 * Math.PI);
+            ctx.fillStyle = "#c44569";
             ctx.fill();
-            
-            // Círculo principal con efecto de vidrio
-            const gradient = ctx.createRadialGradient(centroX - 10, centroY - 10, 0, centroX, centroY, circleRadius);
-            gradient.addColorStop(0, 'rgba(255, 255, 255, 0.9)');
-            gradient.addColorStop(0.3, 'rgba(196, 69, 105, 0.8)');
-            gradient.addColorStop(0.7, 'rgba(196, 69, 105, 0.6)');
-            gradient.addColorStop(1, 'rgba(196, 69, 105, 0.9)');
-            
-            ctx.beginPath();
-            ctx.arc(centroX, centroY, circleRadius, 0, 2 * Math.PI);
-            ctx.fillStyle = gradient;
-            ctx.fill();
-            
-            // Borde brillante
-            ctx.strokeStyle = "rgba(255, 255, 255, 0.9)";
-            ctx.lineWidth = 4;
-            ctx.shadowColor = 'rgba(196, 69, 105, 0.8)';
-            ctx.shadowBlur = 8;
+            ctx.strokeStyle = "#ffffff";
+            ctx.lineWidth = 3;
             ctx.stroke();
             
-            // Highlight superior
-            const highlightGradient = ctx.createRadialGradient(centroX - 8, centroY - 12, 0, centroX, centroY, circleRadius * 0.6);
-            highlightGradient.addColorStop(0, 'rgba(255, 255, 255, 0.6)');
-            highlightGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-            
-            ctx.beginPath();
-            ctx.arc(centroX, centroY, circleRadius, 0, 2 * Math.PI);
-            ctx.fillStyle = highlightGradient;
-            ctx.fill();
-            
-            // Emoji central con efecto especial
+            // Emoji central simple
             ctx.fillStyle = "#ffffff";
-            ctx.font = `bold ${emojiSize}px Poppins, sans-serif`;
-            ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
-            ctx.shadowBlur = 4;
-            ctx.shadowOffsetX = 2;
-            ctx.shadowOffsetY = 2;
+            ctx.font = "bold 24px Arial";
             ctx.textBaseline = "middle";
             ctx.textAlign = "center";
-            ctx.fillText("💎", centroX, centroY + 4);
+            ctx.fillText("🎯", centroX, centroY);
         }
 
         async function girarRuleta() {
@@ -1891,158 +1601,6 @@
             }, 500);
         }
 
-        // === FONDO INTERACTIVO REACTIVO AL MOUSE MEJORADO ===
-        function inicializarFondoInteractivo() {
-            const paleta = ['#ff6b9d', '#ffffff', '#f8b500', '#c44569', '#feca57', '#23a6d5', '#ff9a9e', '#8a2be2'];
-            let throttleTimer = null;
-            
-            // Crear partículas de fondo dinámicas
-            crearParticulasDeFondo();
-            
-            // Efecto épico de bienvenida
-            crearExplosionBienvenida(paleta);
-            
-            document.addEventListener('mousemove', function(e) {
-                // Throttle para mejor rendimiento
-                if (throttleTimer) return;
-                
-                throttleTimer = setTimeout(() => {
-                    throttleTimer = null;
-                }, 80); // Reducir frecuencia para mejor rendimiento
-                
-                crearParticulaMouse(e.clientX, e.clientY, paleta);
-            });
-        }
-        
-        function crearParticulasDeFondo() {
-            const container = document.querySelector('.background-shapes');
-            const tipos = ['heart', 'sparkle', 'star', 'diamond'];
-            
-            // Crear 12 partículas de fondo adicionales
-            for (let i = 0; i < 12; i++) {
-                setTimeout(() => {
-                    const particula = document.createElement('div');
-                    const tipo = tipos[Math.floor(Math.random() * tipos.length)];
-                    particula.className = `particle ${tipo}`;
-                    
-                    // Posición aleatoria
-                    particula.style.left = Math.random() * 100 + '%';
-                    particula.style.top = Math.random() * 100 + '%';
-                    
-                    // Delay aleatorio para animación
-                    particula.style.animationDelay = Math.random() * 5 + 's';
-                    
-                    if (tipo === 'diamond') {
-                        // Crear elementos diamante personalizados
-                        particula.style.width = (Math.random() * 6 + 6) + 'px';
-                        particula.style.height = particula.style.width;
-                    }
-                    
-                    container.appendChild(particula);
-                }, i * 200);
-            }
-        }
-        
-        function crearExplosionBienvenida(paleta) {
-            const centroX = window.innerWidth / 2;
-            const centroY = window.innerHeight / 2;
-            
-            // Crear 30 partículas desde el centro
-            for (let i = 0; i < 30; i++) {
-                setTimeout(() => {
-                    crearParticulaBienvenida(centroX, centroY, paleta, i);
-                }, i * 50); // Escalonar la creación
-            }
-        }
-        
-        function crearParticulaBienvenida(x, y, paleta, index) {
-            const particula = document.createElement('div');
-            particula.className = 'mouse-particle';
-            
-            // Tamaño más grande para el efecto de bienvenida
-            const tamaño = Math.random() * 30 + 10;
-            const color = paleta[Math.floor(Math.random() * paleta.length)];
-            
-            // Configurar estilos iniciales
-            particula.style.cssText = `
-                width: ${tamaño}px;
-                height: ${tamaño}px;
-                background: ${color};
-                left: ${x - tamaño/2}px;
-                top: ${y - tamaño/2}px;
-                box-shadow: 0 0 ${tamaño}px ${color};
-                opacity: 1;
-                z-index: 5;
-            `;
-            
-            document.body.appendChild(particula);
-            
-            // Animar hacia afuera en todas las direcciones
-            setTimeout(() => {
-                const angulo = (index / 30) * 2 * Math.PI;
-                const distancia = Math.random() * 300 + 200;
-                const moveX = Math.cos(angulo) * distancia;
-                const moveY = Math.sin(angulo) * distancia;
-                const scale = Math.random() * 1.5 + 0.5;
-                
-                particula.style.transform = `translate(${moveX}px, ${moveY}px) scale(${scale}) rotate(720deg)`;
-                particula.style.opacity = '0';
-            }, 100);
-            
-            // Limpiar después de la animación
-            setTimeout(() => {
-                if (particula.parentNode) {
-                    document.body.removeChild(particula);
-                }
-            }, 1500);
-        }
-        
-        function crearParticulaMouse(x, y, paleta) {
-            const particula = document.createElement('div');
-            particula.className = 'mouse-particle';
-            
-            // Tamaño aleatorio más sutil
-            const tamaño = Math.random() * 12 + 4;
-            
-            // Color aleatorio de la paleta con gradiente
-            const color1 = paleta[Math.floor(Math.random() * paleta.length)];
-            const color2 = paleta[Math.floor(Math.random() * paleta.length)];
-            
-            // Configurar estilos con gradiente
-            particula.style.cssText = `
-                width: ${tamaño}px;
-                height: ${tamaño}px;
-                background: radial-gradient(circle, ${color1}, ${color2});
-                left: ${x - tamaño/2}px;
-                top: ${y - tamaño/2}px;
-                box-shadow: 0 0 ${tamaño}px ${color1}40;
-                opacity: 0.7;
-                border-radius: 50%;
-                z-index: 1;
-            `;
-            
-            // Añadir al body
-            document.body.appendChild(particula);
-            
-            // Animar inmediatamente con efecto más suave
-            setTimeout(() => {
-                const moveX = (Math.random() - 0.5) * 60;
-                const moveY = (Math.random() - 0.5) * 60;
-                const scale = Math.random() * 1.5 + 0.5;
-                const rotate = Math.random() * 360;
-                
-                particula.style.transform = `translate(${moveX}px, ${moveY}px) scale(${scale}) rotate(${rotate}deg)`;
-                particula.style.opacity = '0';
-            }, 10);
-            
-            // Limpiar después de la animación
-            setTimeout(() => {
-                if (particula.parentNode) {
-                    document.body.removeChild(particula);
-                }
-            }, 1200);
-        }
-
         // === INICIALIZACIÓN MAESTRA DE LA PÁGINA ===
         async function inicializarPagina() {
             try {
@@ -2076,11 +1634,6 @@
                         }
                         // También actualizar el título de la página
                         document.title = `${result.data.nombreModelo} - Ruleta Interactiva`;
-                    }
-                    
-                    // Procesar avatar
-                    if (result.data.avatarURL && result.data.avatarURL.trim() && result.data.avatarURL.startsWith('data:image/')) {
-                        mostrarAvatar(result.data.avatarURL);
                     }
                     
                     // Procesar y guardar premios en variable global
@@ -2176,92 +1729,12 @@
             }
         }
 
-        function mostrarAvatar(avatarBase64) {
-            const container = document.getElementById('avatar-container');
-            if (!container) return;
-            
-            // Limpiar contenido anterior
-            container.innerHTML = '';
-            
-            // Crear nuevo elemento imagen
-            const img = document.createElement('img');
-            img.src = avatarBase64;
-            
-            // Manejar carga de imagen
-            img.onload = function() {
-                // Añadir imagen al contenedor
-                container.appendChild(img);
-                
-                // Mostrar con animación suave después de un pequeño delay
-                setTimeout(() => {
-                    container.classList.add('visible');
-                }, 300);
-                
-                // 🎨 APLICAR FONDO PERSONALIZADO A LA RULETA
-                aplicarFondoRuleta(avatarBase64);
-            };
-            
-            img.onerror = function() {
-                console.error('Error al cargar la imagen del avatar');
-                // Ocultar contenedor si hay error
-                container.classList.remove('visible');
-                // Remover fondo de la ruleta si hay error
-                removerFondoRuleta();
-            };
-        }
-        
-        function aplicarFondoRuleta(avatarBase64) {
-            const ruleta = document.getElementById('ruleta');
-            if (!ruleta) return;
-            
-            // Aplicar la imagen como fondo del pseudo-elemento ::before
-            const style = document.createElement('style');
-            style.id = 'ruleta-background-style';
-            style.textContent = `
-                #ruleta::before {
-                    background-image: url('${avatarURL}');
-                }
-            `;
-            
-            // Remover estilo anterior si existe
-            const existingStyle = document.getElementById('ruleta-background-style');
-            if (existingStyle) {
-                existingStyle.remove();
-            }
-            
-            // Agregar nuevo estilo
-            document.head.appendChild(style);
-            
-            // Activar la clase para mostrar el fondo con transición suave
-            setTimeout(() => {
-                ruleta.classList.add('with-background');
-            }, 800);
-        }
-        
-        function removerFondoRuleta() {
-            const ruleta = document.getElementById('ruleta');
-            const style = document.getElementById('ruleta-background-style');
-            
-            if (ruleta) {
-                ruleta.classList.remove('with-background');
-            }
-            
-            if (style) {
-                setTimeout(() => {
-                    style.remove();
-                }, 1000); // Esperar a que termine la transición
-            }
-        }
-
         window.addEventListener('load', async () => {
             // Función maestra que inicializa toda la configuración de la página
             await inicializarPagina();
             
             // Registrar eventos después de crear los elementos DOM
             registrarEventos();
-            
-            // Inicializar fondo interactivo reactivo al mouse
-            inicializarFondoInteractivo();
         });
         
         // === FUNCIÓN PARA REGISTRAR EVENTOS ===
