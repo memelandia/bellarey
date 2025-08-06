@@ -1109,7 +1109,7 @@
         }
         
         function setupPrizeSelectorEvents() {
-            const premioItems = document.querySelectorAll('.premio-item');
+            const premioItems = document.querySelectorAll('#premioSelector .premio-item');
             
             premioItems.forEach(item => {
                 item.addEventListener('click', function(e) {
@@ -1665,7 +1665,7 @@ ADMIN_PASS: TEST1234`);
         function manejarCambioTiradas() {
             const tiradas = parseInt(document.getElementById('numTiradas').value);
             const checkboxes = document.querySelectorAll('#premioSelector input');
-            const premioItems = document.querySelectorAll('.premio-item');
+            const premioItems = document.querySelectorAll('#premioSelector .premio-item');
             
             if (isNaN(tiradas) || checkboxes.length === 0) return;
             
