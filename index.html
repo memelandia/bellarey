@@ -253,6 +253,15 @@ text-shadow: 0px 4px 15px rgba(0, 0, 0, 0.4), 0 0 10px rgba(255, 255, 255, 0.3);
             left: 0; 
             pointer-events: none; 
             border-radius: 50%;
+        }
+        
+        #slowRotateContainer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            border-radius: 50%;
             animation: slowRotate 30s linear infinite;
         }
         #ruleta { 
@@ -1023,7 +1032,9 @@ margin-right: 8px;
 </div>
 <div class="ruleta-section">
 <div id="ruleta">
+<div id="slowRotateContainer">
 <canvas id="opciones" width="450" height="450"></canvas>
+</div>
 </div>
 <button id="girarBtn" class="button" disabled>🎯 ¡GIRAR RULETA! 🎯</button>
 </div>
@@ -1467,9 +1478,10 @@ ctx.fillText("💎", centroX, centroY + 4); // +4 para centrar visualmente el em
             const anguloFinal = (360 * 6) + (indiceEnRuletaCompleta * anguloPorPremio) + (anguloPorPremio / 2);
 
             const ruleta = document.getElementById('opciones');
+            const slowContainer = document.getElementById('slowRotateContainer');
             
             // Pausar la animación lenta durante el giro
-            ruleta.style.animationPlayState = 'paused';
+            slowContainer.style.animationPlayState = 'paused';
             
             ruleta.style.transition = "transform 5s cubic-bezier(.17,.67,.83,.67)";
             ruleta.style.transform = `rotate(${anguloFinal}deg)`;
@@ -1494,7 +1506,7 @@ ctx.fillText("💎", centroX, centroY + 4); // +4 para centrar visualmente el em
                 
                 // Reactivar la animación lenta después del giro
                 setTimeout(() => {
-                    ruleta.style.animationPlayState = 'running';
+                    slowContainer.style.animationPlayState = 'running';
                 }, 1000);
                 
                 mostrarPopupPremio(premioGanado);
