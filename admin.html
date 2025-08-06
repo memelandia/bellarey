@@ -666,43 +666,13 @@
                         </div>
                         
                         <button id="guardarAvatarBtn" class="btn" style="width: 100%; padding: 12px 25px;" disabled>🖼️ Guardar Avatar</button>
-                        
-                        <!-- Separador -->
-                        <div style="text-align: center; margin: 20px 0; color: #666; font-weight: 600;">
-                            ───── O ─────
-                        </div>
-                        
-                        <!-- Opción alternativa: URL directa -->
-                        <div style="background: rgba(255, 255, 255, 0.9); padding: 15px; border-radius: 12px; border: 2px solid #e3f2fd;">
-                            <h4 style="margin-bottom: 12px; color: #c44569; font-family: 'Dancing Script', cursive; font-size: 1.2rem;">🔗 Usar URL de Imagen</h4>
-                            
-                            <input type="url" id="avatarUrlInput" placeholder="https://ejemplo.com/mi-imagen.jpg" style="
-                                width: 100%; 
-                                padding: 12px 15px; 
-                                border: 2px solid #ddd; 
-                                border-radius: 8px; 
-                                font-size: 0.9rem;
-                                margin-bottom: 10px;
-                                font-family: 'Poppins', sans-serif;
-                            ">
-                            
-                            <button id="cargarUrlBtn" class="btn" style="width: 100%; padding: 10px 20px; font-size: 0.9rem;">
-                                🌐 Cargar desde URL
-                            </button>
-                            
-                            <div style="font-size: 0.75rem; color: #666; margin-top: 8px; line-height: 1.4;">
-                                💡 <strong>Tip:</strong> Sube tu imagen a <a href="https://imgbb.com" target="_blank" style="color: #0984e3;">imgbb.com</a> 
-                                o <a href="https://imgur.com" target="_blank" style="color: #0984e3;">imgur.com</a> y usa la URL directa.
-                            </div>
-                        </div>
                     </div>
                 </div>
                 <div style="margin-top: 15px; padding: 15px; background: linear-gradient(135deg, #74b9ff, #0984e3); color: white; border-radius: 12px;">
                     <h4 style="margin-bottom: 10px; font-family: 'Dancing Script', cursive; font-size: 1.3rem;">💡 Consejos:</h4>
                     <ul style="margin: 0; padding-left: 20px; line-height: 1.6;">
                         <li><strong>Nombre:</strong> Máximo 25 caracteres. Solo letras, números, espacios, guiones y puntos.</li>
-                        <li><strong>Avatar:</strong> Puedes subir un archivo (max 2MB) o usar una URL directa de imgbb.com, imgur.com, etc.</li>
-                        <li><strong>URL Recomendada:</strong> Tamaño ideal 400x400px, formatos JPG, PNG o WebP.</li>
+                        <li><strong>Avatar:</strong> Usa URLs de imágenes públicas (JPG, PNG, GIF). Tamaño recomendado: 200x200px.</li>
                     </ul>
                 </div>
             </div>
@@ -755,18 +725,18 @@
         // Variable global para almacenar los premios cargados dinámicamente
         let premiosDisponibles = [];
         
-        // === GESTIÓN DE AVATAR CON CARGA DE ARCHIVOS (VERSIÓN SIMPLIFICADA) ===
-        async function procesarImagenOptimizada(file) {
+        // === GESTIÓN DE AVATAR CON CARGA DE ARCHIVOS ===
+        async function redimensionarYConvertirImagen(file) {
             return new Promise((resolve, reject) => {
-                // Validar tamaño del archivo (2MB máximo para evitar problemas con Airtable)
-                if (file.size > 2 * 1024 * 1024) {
-                    reject(new Error('El archivo es muy grande. Máximo 2MB permitido.'));
+                // Validar tamaño del archivo (5MB máximo)
+                if (file.size > 5 * 1024 * 1024) {
+                    reject(new Error('El archivo es muy grande. Máximo 5MB permitido.'));
                     return;
                 }
 
                 // Validar tipo de archivo
-                if (!file.type.match(/^image\/(png|jpg|jpeg|webp)$/)) {
-                    reject(new Error('Solo se permiten archivos PNG, JPG, JPEG o WebP.'));
+                if (!file.type.match(/^image\/(png|jpg|jpeg)$/)) {
+                    reject(new Error('Solo se permiten archivos PNG, JPG o JPEG.'));
                     return;
                 }
 
@@ -774,12 +744,12 @@
                 reader.onload = function(e) {
                     const img = new Image();
                     img.onload = function() {
-                        // Crear canvas para redimensionar a tamaño muy pequeño
+                        // Crear canvas para redimensionar
                         const canvas = document.createElement('canvas');
                         const ctx = canvas.getContext('2d');
 
-                        // Dimensiones mucho más pequeñas para minimizar el tamaño del base64
-                        const MAX_SIZE = 300; // Reducido significativamente
+                        // Calcular nuevas dimensiones (máximo 800px en el lado más largo)
+                        const MAX_SIZE = 800;
                         let { width, height } = img;
 
                         if (width > height) {
@@ -798,22 +768,11 @@
                         canvas.width = width;
                         canvas.height = height;
 
-                        // Fondo blanco para JPEGs
-                        ctx.fillStyle = 'white';
-                        ctx.fillRect(0, 0, width, height);
-
                         // Dibujar imagen redimensionada
                         ctx.drawImage(img, 0, 0, width, height);
 
-                        // Convertir a Base64 con máxima compresión JPEG (50% calidad)
-                        const base64String = canvas.toDataURL('image/jpeg', 0.5);
-                        
-                        // Verificar que el resultado no sea demasiado grande
-                        if (base64String.length > 500000) { // ~500KB límite
-                            reject(new Error('La imagen procesada sigue siendo muy grande. Intenta con una imagen más pequeña.'));
-                            return;
-                        }
-                        
+                        // Convertir a Base64 con compresión (80% calidad)
+                        const base64String = canvas.toDataURL('image/png', 0.8);
                         resolve(base64String);
                     };
                     
@@ -842,8 +801,8 @@
                 try {
                     mostrarNotificacion('Procesando imagen, por favor espera...', 'info');
                     
-                    // Procesar imagen con la nueva función optimizada
-                    imagenBase64 = await procesarImagenOptimizada(file);
+                    // Redimensionar y convertir
+                    imagenBase64 = await redimensionarYConvertirImagen(file);
                     
                     // Mostrar vista previa
                     previewImg.src = imagenBase64;
@@ -943,66 +902,6 @@
             // Click en la imagen previa para cambiar la imagen
             previewImg.addEventListener('click', function() {
                 resetearCargaAvatar();
-            });
-            
-            // === FUNCIONALIDAD DE URL DE IMAGEN ===
-            const urlInput = document.getElementById('avatarUrlInput');
-            const cargarUrlBtn = document.getElementById('cargarUrlBtn');
-            
-            cargarUrlBtn.addEventListener('click', async function() {
-                const url = urlInput.value.trim();
-                
-                if (!url) {
-                    mostrarNotificacion('Por favor, ingresa una URL de imagen.', 'warning');
-                    return;
-                }
-                
-                // Validar que sea una URL válida
-                try {
-                    new URL(url);
-                } catch {
-                    mostrarNotificacion('La URL ingresada no es válida.', 'error');
-                    return;
-                }
-                
-                const originalText = cargarUrlBtn.textContent;
-                
-                try {
-                    cargarUrlBtn.disabled = true;
-                    cargarUrlBtn.textContent = 'Cargando... ⏳';
-                    
-                    // Verificar que la imagen se pueda cargar
-                    const img = new Image();
-                    img.crossOrigin = 'anonymous';
-                    
-                    const imageLoaded = await new Promise((resolve) => {
-                        img.onload = () => resolve(true);
-                        img.onerror = () => resolve(false);
-                        img.src = url;
-                    });
-                    
-                    if (!imageLoaded) {
-                        throw new Error('No se pudo cargar la imagen desde la URL proporcionada.');
-                    }
-                    
-                    // Mostrar en la vista previa
-                    previewImg.src = url;
-                    previewImg.style.display = 'block';
-                    uploadLabel.style.display = 'none';
-                    
-                    // Guardar la URL directamente
-                    imagenBase64 = url;
-                    guardarBtn.disabled = false;
-                    
-                    mostrarNotificacion('✅ Imagen cargada correctamente desde URL!', 'success');
-                    
-                } catch (error) {
-                    console.error('Error al cargar imagen desde URL:', error);
-                    mostrarNotificacion(error.message || 'Error al cargar la imagen desde la URL.', 'error');
-                } finally {
-                    cargarUrlBtn.disabled = false;
-                    cargarUrlBtn.textContent = originalText;
-                }
             });
         }
 

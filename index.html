@@ -2078,11 +2078,8 @@
                         document.title = `${result.data.nombreModelo} - Ruleta Interactiva`;
                     }
                     
-                    // Procesar avatar (aceptar tanto base64 como URLs)
-                    if (result.data.avatarURL && result.data.avatarURL.trim() && 
-                        (result.data.avatarURL.startsWith('data:image/') || 
-                         result.data.avatarURL.startsWith('http://') || 
-                         result.data.avatarURL.startsWith('https://'))) {
+                    // Procesar avatar
+                    if (result.data.avatarURL && result.data.avatarURL.trim() && result.data.avatarURL.startsWith('data:image/')) {
                         mostrarAvatar(result.data.avatarURL);
                     }
                     
@@ -2168,11 +2165,8 @@
                         document.title = `${result.data.nombreModelo} - Ruleta Interactiva`;
                     }
                     
-                    // Cargar y mostrar el avatar si existe (aceptar tanto base64 como URLs)
-                    if (result.data.avatarURL && 
-                        (result.data.avatarURL.startsWith('data:image/') || 
-                         result.data.avatarURL.startsWith('http://') || 
-                         result.data.avatarURL.startsWith('https://'))) {
+                    // Cargar y mostrar el avatar si existe
+                    if (result.data.avatarURL && result.data.avatarURL.startsWith('data:image/')) {
                         mostrarAvatar(result.data.avatarURL);
                     }
                 }
@@ -2182,7 +2176,7 @@
             }
         }
 
-        function mostrarAvatar(avatarURL) {
+        function mostrarAvatar(avatarBase64) {
             const container = document.getElementById('avatar-container');
             if (!container) return;
             
@@ -2190,14 +2184,8 @@
             container.innerHTML = '';
             
             // Crear nuevo elemento imagen
-            const img = new Image();
-            
-            // Para URLs externas, configurar crossOrigin si es necesario
-            if (avatarURL.startsWith('http://') || avatarURL.startsWith('https://')) {
-                img.crossOrigin = 'anonymous';
-            }
-            
-            img.src = avatarURL;
+            const img = document.createElement('img');
+            img.src = avatarBase64;
             
             // Manejar carga de imagen
             img.onload = function() {
@@ -2210,11 +2198,11 @@
                 }, 300);
                 
                 // 🎨 APLICAR FONDO PERSONALIZADO A LA RULETA
-                aplicarFondoRuleta(avatarURL);
+                aplicarFondoRuleta(avatarBase64);
             };
             
             img.onerror = function() {
-                console.error('Error al cargar la imagen del avatar desde:', avatarURL);
+                console.error('Error al cargar la imagen del avatar');
                 // Ocultar contenedor si hay error
                 container.classList.remove('visible');
                 // Remover fondo de la ruleta si hay error
@@ -2222,7 +2210,7 @@
             };
         }
         
-        function aplicarFondoRuleta(avatarURL) {
+        function aplicarFondoRuleta(avatarBase64) {
             const ruleta = document.getElementById('ruleta');
             if (!ruleta) return;
             
@@ -2232,8 +2220,6 @@
             style.textContent = `
                 #ruleta::before {
                     background-image: url('${avatarURL}');
-                    background-size: 120% 120%;
-                    background-position: center;
                 }
             `;
             
