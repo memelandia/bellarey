@@ -1,403 +1,278 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bella Rey - Ruleta Interactiva</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bella Rey - Ruleta Interactiva</title>
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
-    <link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico">
-    <link rel="apple-touch-icon" sizes="180x180" href="images/favicon.ico">
-    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon.ico">
-    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.ico">
-    
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;600;700&display=swap');
-        
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: 'Poppins', sans-serif; text-align: center; min-height: 100vh;
-            background: 
-                radial-gradient(circle at 20% 80%, rgba(255, 107, 157, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(196, 69, 105, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(248, 181, 0, 0.2) 0%, transparent 50%),
-                linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab, #ff9a9e, #8a2be2);
-            background-size: 400% 400%, 400% 400%, 300% 300%, 400% 400%; 
-            animation: gradientMove 15s ease-in-out infinite;
-            position: relative; 
-            overflow-x: hidden;
-        }
-        @keyframes gradientMove { 
-            0% { background-position: 0% 50%, 100% 50%, 50% 0%, 0% 50%; } 
-            25% { background-position: 100% 50%, 0% 50%, 100% 100%, 100% 50%; }
-            50% { background-position: 100% 100%, 100% 0%, 0% 50%, 100% 100%; }
-            75% { background-position: 0% 100%, 50% 100%, 50% 50%, 0% 100%; }
-            100% { background-position: 0% 50%, 100% 50%, 50% 0%, 0% 50%; }
-        }
-        .background-shapes { 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            pointer-events: none; 
-            z-index: -1;
-            overflow: hidden;
-        }
-        
-        .particle { 
-            position: absolute; 
-            pointer-events: none; 
-            opacity: 0.4;
-        }
-        
-        .particle.heart { 
-            font-size: 24px; 
-            color: #ff6b9d; 
-            animation: floatHeart 12s ease-in-out infinite; 
-            filter: drop-shadow(0 0 8px rgba(255, 107, 157, 0.6));
-        }
-        
-        .particle.sparkle { 
-            width: 10px; 
-            height: 10px; 
-            background: radial-gradient(circle, #feca57, #ff9ff3); 
-            border-radius: 50%; 
-            animation: floatSparkle 8s ease-in-out infinite;
-            box-shadow: 0 0 15px rgba(254, 202, 87, 0.8);
-        }
-        
-        .particle.star { 
-            font-size: 20px; 
-            color: #c44569; 
-            animation: floatStar 15s ease-in-out infinite;
-            filter: drop-shadow(0 0 10px rgba(196, 69, 105, 0.7));
-        }
-        
-        .particle.diamond {
-            width: 8px;
-            height: 8px;
-            background: linear-gradient(45deg, #74b9ff, #0984e3);
-            transform: rotate(45deg);
-            animation: floatDiamond 10s ease-in-out infinite;
-            box-shadow: 0 0 12px rgba(116, 185, 255, 0.6);
-        }
-        
-        @keyframes floatHeart {
-            0%, 100% { transform: translateY(0px) scale(1) rotate(0deg); opacity: 0.3; }
-            25% { transform: translateY(-60px) scale(1.3) rotate(10deg); opacity: 0.8; }
-            50% { transform: translateY(-40px) scale(0.9) rotate(-5deg); opacity: 0.6; }
-            75% { transform: translateY(-80px) scale(1.1) rotate(15deg); opacity: 0.7; }
-        }
-        
-        @keyframes floatSparkle {
-            0%, 100% { transform: translateY(0px) scale(1) rotate(0deg); opacity: 0.4; box-shadow: 0 0 15px rgba(254, 202, 87, 0.8); }
-            33% { transform: translateY(-50px) scale(1.6) rotate(120deg); opacity: 1; box-shadow: 0 0 25px rgba(255, 159, 243, 1); }
-            66% { transform: translateY(-30px) scale(0.8) rotate(240deg); opacity: 0.7; box-shadow: 0 0 20px rgba(254, 202, 87, 0.9); }
-        }
-        
-        @keyframes floatStar {
-            0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); opacity: 0.4; }
-            20% { transform: translateY(-45px) rotate(144deg) scale(1.2); opacity: 0.8; }
-            40% { transform: translateY(-80px) rotate(288deg) scale(0.9); opacity: 0.9; }
-            60% { transform: translateY(-60px) rotate(432deg) scale(1.3); opacity: 0.7; }
-            80% { transform: translateY(-35px) rotate(576deg) scale(1.1); opacity: 0.6; }
-        }
-        
-        @keyframes floatDiamond {
-            0%, 100% { transform: translateY(0px) rotate(45deg) scale(1); opacity: 0.5; }
-            25% { transform: translateY(-40px) rotate(135deg) scale(1.4); opacity: 0.9; }
-            50% { transform: translateY(-70px) rotate(225deg) scale(0.8); opacity: 1; }
-            75% { transform: translateY(-50px) rotate(315deg) scale(1.2); opacity: 0.7; }
-        }
-        /* === PARTÍCULAS REACTIVAS AL MOUSE === */
-        .mouse-particle {
-            position: fixed;
-            left: 0;
-            top: 0;
-            border-radius: 50%;
-            pointer-events: none;
-            opacity: 0;
-            transition: transform 1s ease-out, opacity 1s ease-out;
-            z-index: 1;
-        }
-        
-        .shape { 
-            position: absolute; 
-            border-radius: 50%; 
-            opacity: 0.06;
-            background: linear-gradient(135deg, var(--shape-color), transparent);
-            backdrop-filter: blur(2px);
-            animation: float 20s ease-in-out infinite; 
-        }
-        .shape:nth-child(1) { 
-            --shape-color: #ff6b9d;
-            width: 120px; 
-            height: 120px; 
-            top: 8%; 
-            left: 8%; 
-            animation-delay: 0s;
-        }
-        .shape:nth-child(2) { 
-            --shape-color: #c44569;
-            width: 180px; 
-            height: 180px; 
-            top: 15%; 
-            right: 12%; 
-            animation-delay: 3s; 
-        }
-        .shape:nth-child(3) { 
-            --shape-color: #f8b500;
-            width: 90px; 
-            height: 90px; 
-            bottom: 18%; 
-            left: 15%; 
-            animation-delay: 6s; 
-        }
-        .shape:nth-child(4) { 
-            --shape-color: #ff9ff3;
-            width: 150px; 
-            height: 150px; 
-            bottom: 8%; 
-            right: 8%; 
-            animation-delay: 2s; 
-        }
-        
-        @keyframes float {
-            0% { 
-                transform: translateY(0) rotate(0deg) scale(1); 
-                opacity: 0.06;
-            }
-            25% { 
-                transform: translateY(-30px) rotate(90deg) scale(1.1); 
-                opacity: 0.12;
-            }
-            50% { 
-                transform: translateY(-20px) rotate(180deg) scale(0.9); 
-                opacity: 0.08;
-            }
-            75% { 
-                transform: translateY(-40px) rotate(270deg) scale(1.2); 
-                opacity: 0.15;
-            }
-            100% { 
-                transform: translateY(0) rotate(360deg) scale(1); 
-                opacity: 0.06;
-            }
-        }
-        .container {
-            position: relative; z-index: 1; padding: 20px; display: flex; flex-direction: column;
-            align-items: center; justify-content: center; min-height: 100vh;
-            max-width: 1400px; margin: 0 auto; gap: 20px;
-        }
-        .main-content {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            width: 100%; max-width: 1200px; flex: 1; gap: 40px;
-        }
-        @media (min-width: 992px) {
-            .main-content {
-                display: grid; grid-template-columns: 1fr auto 1fr;
-                align-items: center; gap: 60px;
-            }
-            .controls-container { grid-column: 1 / 2; justify-self: end; }
-            .ruleta-section { grid-column: 2 / 3; }
-            .historial-container { grid-column: 3 / 4; justify-self: start; }
-        }
-        .controls-container { display: flex; flex-direction: column; align-items: center; gap: 25px; }
-        .ruleta-section { display: flex; flex-direction: column; align-items: center; gap: 30px; flex-shrink: 0; }
-        .historial-container { display: none; flex-direction: column; align-items: center; gap: 25px; }
-        .historial-container.visible { display: flex; }
-        
-        /* === ESTILOS DEL HISTORIAL DE PREMIOS === */
-        .historial-section {
-            background: rgba(255, 255, 255, 0.95); padding: 25px; border-radius: 25px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1); backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.2); width: 320px; max-height: 500px;
-        }
-        
-        .historial-title {
-            font-family: 'Dancing Script', cursive; 
-            color: #c44569; 
-            font-size: 2rem; 
-            font-weight: 700; 
-            text-shadow: 0px 4px 15px rgba(0, 0, 0, 0.4), 0 0 10px rgba(255, 255, 255, 0.3);
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        
-        .historial-lista {
-            max-height: 380px;
-            overflow-y: auto;
-            padding-right: 10px;
-        }
-        
-        .historial-lista::-webkit-scrollbar {
-            width: 8px;
-        }
-        
-        .historial-lista::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 10px;
-        }
-        
-        .historial-lista::-webkit-scrollbar-thumb {
-            background: linear-gradient(45deg, #ff6b9d, #c44569);
-            border-radius: 10px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-        }
-        
-        .historial-lista::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(45deg, #c44569, #ff6b9d);
-        }
-        
-        .premio-item {
-            background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(196, 69, 105, 0.1));
-            border: 2px solid rgba(255, 107, 157, 0.3);
-            border-radius: 15px;
-            padding: 15px;
-            margin-bottom: 12px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .premio-item:hover {
-            transform: translateX(5px);
-            box-shadow: 0 8px 20px rgba(196, 69, 105, 0.2);
-            border-color: rgba(255, 107, 157, 0.6);
-        }
-        
-        .premio-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s ease;
-        }
-        
-        .premio-item:hover::before {
-            left: 100%;
-        }
-        
-        .premio-nombre {
-            font-weight: 700;
-            color: #c44569;
-            font-size: 0.95rem;
-            margin-bottom: 5px;
-            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
-        }
-        
-        .premio-fecha {
-            font-size: 0.8rem;
-            color: #666;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        .premio-numero {
-            position: absolute;
-            top: 8px;
-            right: 12px;
-            background: linear-gradient(45deg, #ff6b9d, #c44569);
-            color: white;
-            border-radius: 50%;
-            width: 25px;
-            height: 25px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.7rem;
-            font-weight: bold;
-            box-shadow: 0 2px 8px rgba(196, 69, 105, 0.3);
-        }
-        
-        .historial-vacio {
-            text-align: center;
-            color: #999;
-            font-style: italic;
-            padding: 30px 20px;
-            background: rgba(255, 255, 255, 0.5);
-            border-radius: 15px;
-            border: 2px dashed rgba(196, 69, 105, 0.3);
-        }
-        
-        .historial-vacio::before {
-            content: '🎁';
-            display: block;
-            font-size: 2rem;
-            margin-bottom: 10px;
-            opacity: 0.5;
-        }
-        .controls-section {
-            display: flex; flex-direction: column; align-items: center; gap: 20px;
-            background: rgba(255, 255, 255, 0.95); padding: 35px; border-radius: 25px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1); backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.2); width: 320px;
-        }
-        .controls-title { 
-            font-family: 'Dancing Script', cursive; 
-            color: #c44569; 
-            font-size: 2.5rem; 
-            font-weight: 700; 
-            text-shadow: 0px 4px 15px rgba(0, 0, 0, 0.4), 0 0 10px rgba(255, 255, 255, 0.3);
-        }
+<!-- Favicon -->
+<link rel="icon" type="image/x-icon" href="images/favicon.ico">
+<link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="images/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="images/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="images/favicon.ico">
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;600;700&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { 
+font-family: 'Poppins', sans-serif; text-align: center; min-height: 100vh;
+background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab, #ff9a9e, #8a2be2);
+background-size: 400% 400%; 
+animation: gradientMove 10s ease-in-out infinite;
+position: relative; overflow-x: hidden;
+}
+@keyframes gradientMove { 
+0% { background-position: 0% 50%; } 
+25% { background-position: 100% 50%; }
+50% { background-position: 100% 100%; }
+75% { background-position: 0% 100%; }
+100% { background-position: 0% 50%; }
+}
+.background-shapes { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1; }
+.particle { position: absolute; pointer-events: none; opacity: 0.6; animation: floatParticle 8s ease-in-out infinite; }
+.particle.heart { font-size: 20px; color: #ff6b9d; animation: floatHeart 10s ease-in-out infinite; }
+.particle.sparkle { width: 8px; height: 8px; background: radial-gradient(circle, #feca57, #ff9ff3); border-radius: 50%; animation: floatSparkle 6s ease-in-out infinite; }
+.particle.star { font-size: 16px; color: #c44569; animation: floatStar 12s ease-in-out infinite; }
+@keyframes floatParticle {
+0%, 100% { transform: translateY(0px) translateX(0px) rotate(0deg); opacity: 0.3; }
+25% { transform: translateY(-30px) translateX(15px) rotate(90deg); opacity: 0.7; }
+50% { transform: translateY(-20px) translateX(-10px) rotate(180deg); opacity: 0.5; }
+75% { transform: translateY(-40px) translateX(20px) rotate(270deg); opacity: 0.8; }
+}
+@keyframes floatHeart {
+0%, 100% { transform: translateY(0px) scale(1) rotate(0deg); opacity: 0.4; }
+33% { transform: translateY(-50px) scale(1.2) rotate(15deg); opacity: 0.8; }
+66% { transform: translateY(-30px) scale(0.8) rotate(-10deg); opacity: 0.6; }
+}
+@keyframes floatSparkle {
+0%, 100% { transform: translateY(0px) scale(1); opacity: 0.5; box-shadow: 0 0 10px #feca57; }
+50% { transform: translateY(-40px) scale(1.5); opacity: 1; box-shadow: 0 0 20px #ff9ff3; }
+}
+@keyframes floatStar {
+0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); opacity: 0.4; }
+25% { transform: translateY(-35px) rotate(180deg) scale(1.1); opacity: 0.7; }
+50% { transform: translateY(-60px) rotate(360deg) scale(0.9); opacity: 0.9; }
+75% { transform: translateY(-25px) rotate(540deg) scale(1.2); opacity: 0.6; }
+}
+/* === PARTÍCULAS REACTIVAS AL MOUSE === */
+.mouse-particle {
+position: fixed;
+left: 0;
+top: 0;
+border-radius: 50%;
+pointer-events: none;
+opacity: 0;
+transition: transform 1s ease-out, opacity 1s ease-out;
+z-index: 1;
+}
+
+.shape { 
+position: absolute; border-radius: 50%; opacity: 0.08; 
+animation: float 15s ease-in-out infinite; 
+}
+.shape:nth-child(1) { width: 80px; height: 80px; background: #ff6b9d; top: 10%; left: 10%; }
+.shape:nth-child(2) { width: 120px; height: 120px; background: #c44569; top: 20%; right: 15%; animation-delay: 2s; }
+.shape:nth-child(3) { width: 60px; height: 60px; background: #f8b500; bottom: 20%; left: 20%; animation-delay: 4s; }
+.shape:nth-child(4) { width: 100px; height: 100px; background: #ff6b9d; bottom: 10%; right: 10%; animation-delay: 1s; }
+@keyframes float {
+0% { transform: translateY(0) rotate(0deg); }
+33% { transform: translateY(-20px) rotate(45deg); }
+66% { transform: translateY(15px) rotate(-30deg); }
+100% { transform: translateY(0) rotate(0deg); }
+}
+.container {
+position: relative; z-index: 1; padding: 20px; display: flex; flex-direction: column;
+align-items: center; justify-content: center; min-height: 100vh;
+max-width: 1400px; margin: 0 auto; gap: 20px;
+}
+.main-content {
+display: flex; flex-direction: column; align-items: center; justify-content: center;
+width: 100%; max-width: 1200px; flex: 1; gap: 40px;
+}
+@media (min-width: 992px) {
+.main-content {
+display: grid; grid-template-columns: 1fr auto 1fr;
+align-items: center; gap: 60px;
+}
+.controls-container { grid-column: 1 / 2; justify-self: end; }
+.ruleta-section { grid-column: 2 / 3; }
+.historial-container { grid-column: 3 / 4; justify-self: start; }
+}
+.controls-container { display: flex; flex-direction: column; align-items: center; gap: 25px; }
+.ruleta-section { display: flex; flex-direction: column; align-items: center; gap: 30px; flex-shrink: 0; }
+.historial-container { display: none; flex-direction: column; align-items: center; gap: 25px; }
+.historial-container.visible { display: flex; }
+
+/* === ESTILOS DEL HISTORIAL DE PREMIOS === */
+.historial-section {
+background: rgba(255, 255, 255, 0.95); padding: 25px; border-radius: 25px;
+box-shadow: 0 15px 35px rgba(0,0,0,0.1); backdrop-filter: blur(15px);
+border: 1px solid rgba(255, 255, 255, 0.2); width: 320px; max-height: 500px;
+}
+
+.historial-title {
+font-family: 'Dancing Script', cursive; 
+color: #c44569; 
+font-size: 2rem; 
+font-weight: 700; 
+text-shadow: 0px 4px 15px rgba(0, 0, 0, 0.4), 0 0 10px rgba(255, 255, 255, 0.3);
+margin-bottom: 20px;
+text-align: center;
+}
+
+.historial-lista {
+max-height: 380px;
+overflow-y: auto;
+padding-right: 10px;
+}
+
+.historial-lista::-webkit-scrollbar {
+width: 8px;
+}
+
+.historial-lista::-webkit-scrollbar-track {
+background: rgba(255, 255, 255, 0.3);
+border-radius: 10px;
+}
+
+.historial-lista::-webkit-scrollbar-thumb {
+background: linear-gradient(45deg, #ff6b9d, #c44569);
+border-radius: 10px;
+border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.historial-lista::-webkit-scrollbar-thumb:hover {
+background: linear-gradient(45deg, #c44569, #ff6b9d);
+}
+
+.premio-item {
+background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(196, 69, 105, 0.1));
+border: 2px solid rgba(255, 107, 157, 0.3);
+border-radius: 15px;
+padding: 15px;
+margin-bottom: 12px;
+transition: all 0.3s ease;
+position: relative;
+overflow: hidden;
+}
+
+.premio-item:hover {
+transform: translateX(5px);
+box-shadow: 0 8px 20px rgba(196, 69, 105, 0.2);
+border-color: rgba(255, 107, 157, 0.6);
+}
+
+.premio-item::before {
+content: '';
+position: absolute;
+top: 0;
+left: -100%;
+width: 100%;
+height: 100%;
+background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+transition: left 0.5s ease;
+}
+
+.premio-item:hover::before {
+left: 100%;
+}
+
+.premio-nombre {
+font-weight: 700;
+color: #c44569;
+font-size: 0.95rem;
+margin-bottom: 5px;
+text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.premio-fecha {
+font-size: 0.8rem;
+color: #666;
+font-weight: 500;
+display: flex;
+align-items: center;
+gap: 5px;
+}
+
+.premio-numero {
+position: absolute;
+top: 8px;
+right: 12px;
+background: linear-gradient(45deg, #ff6b9d, #c44569);
+color: white;
+border-radius: 50%;
+width: 25px;
+height: 25px;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 0.7rem;
+font-weight: bold;
+box-shadow: 0 2px 8px rgba(196, 69, 105, 0.3);
+}
+
+.historial-vacio {
+text-align: center;
+color: #999;
+font-style: italic;
+padding: 30px 20px;
+background: rgba(255, 255, 255, 0.5);
+border-radius: 15px;
+border: 2px dashed rgba(196, 69, 105, 0.3);
+}
+
+.historial-vacio::before {
+content: '🎁';
+display: block;
+font-size: 2rem;
+margin-bottom: 10px;
+opacity: 0.5;
+}
+.controls-section {
+display: flex; flex-direction: column; align-items: center; gap: 20px;
+background: rgba(255, 255, 255, 0.95); padding: 35px; border-radius: 25px;
+box-shadow: 0 15px 35px rgba(0,0,0,0.1); backdrop-filter: blur(15px);
+border: 1px solid rgba(255, 255, 255, 0.2); width: 320px;
+}
+.controls-title { 
+font-family: 'Dancing Script', cursive; 
+color: #c44569; 
+font-size: 2.5rem; 
+font-weight: 700; 
+text-shadow: 0px 4px 15px rgba(0, 0, 0, 0.4), 0 0 10px rgba(255, 255, 255, 0.3);
+}
+        #ruleta { margin: 0 auto; width: 450px; height: 450px; border: 10px solid #c44569; border-radius: 50%; position: relative; box-shadow: 0 15px 30px rgba(0,0,0,0.2); }
+        #flecha { width: 0; height: 0; border-left: 25px solid transparent; border-right: 25px solid transparent; border-bottom: 50px solid #c44569; position: absolute; left: 50%; top: -50px; transform: translateX(-50%); z-index: 10; }
+        #opciones { position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; border-radius: 50%; }
         #ruleta { 
             margin: 0 auto; 
             width: 450px; 
             height: 450px; 
-            border: 12px solid transparent;
-            background: linear-gradient(white, white) padding-box, 
-                        linear-gradient(45deg, #ff6b9d, #c44569, #f8b500, #ff9ff3) border-box;
+            border: 10px solid #c44569; 
             border-radius: 50%; 
             position: relative; 
-            box-shadow: 
-                0 0 0 4px rgba(255, 255, 255, 0.8),
-                0 0 0 8px rgba(196, 69, 105, 0.3),
-                0 15px 35px rgba(0,0,0,0.2),
-                inset 0 0 0 3px rgba(255, 255, 255, 0.5);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
             overflow: hidden;
-            background-clip: padding-box;
+            background: linear-gradient(135deg, #ff6b9d, #c44569);
         }
         
         #ruleta::before {
             content: '';
             position: absolute;
-            top: -6px;
-            left: -6px;
-            width: calc(100% + 12px);
-            height: calc(100% + 12px);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
             border-radius: 50%;
             opacity: 0;
-            transition: opacity 1.2s ease-in-out;
+            transition: opacity 1s ease-in-out;
             z-index: 1;
-            filter: blur(12px) brightness(0.3) contrast(1.4) saturate(1.2);
-        }
-        
-        #ruleta::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(
-                circle at center,
-                rgba(255, 255, 255, 0.1) 0%,
-                rgba(196, 69, 105, 0.05) 30%,
-                rgba(0, 0, 0, 0.1) 100%
-            );
-            border-radius: 50%;
-            z-index: 11;
-            pointer-events: none;
+            filter: blur(8px) brightness(0.4) contrast(1.2);
         }
         
         #ruleta.with-background::before {
@@ -407,28 +282,15 @@
         #flecha { 
             width: 0; 
             height: 0; 
-            border-left: 28px solid transparent; 
-            border-right: 28px solid transparent; 
-            border-bottom: 55px solid #c44569; 
+            border-left: 25px solid transparent; 
+            border-right: 25px solid transparent; 
+            border-bottom: 50px solid #c44569; 
             position: absolute; 
             left: 50%; 
-            top: -55px; 
+            top: -50px; 
             transform: translateX(-50%); 
-            z-index: 20;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4)) drop-shadow(0 0 10px rgba(196, 69, 105, 0.6));
-        }
-        
-        #flecha::before {
-            content: '';
-            position: absolute;
-            top: 8px;
-            left: -20px;
-            width: 0;
-            height: 0;
-            border-left: 20px solid transparent;
-            border-right: 20px solid transparent;
-            border-bottom: 35px solid rgba(255, 255, 255, 0.3);
-            z-index: -1;
+            z-index: 15;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
         }
         
         #opciones { 
@@ -441,1774 +303,1624 @@
             border-radius: 50%;
             z-index: 10;
         }
-        #mensaje { 
-            margin-top: 10px; 
-            font-size: 1.1rem; 
-            color: #c44569; 
-            font-weight: 600; 
-            background: rgba(255, 255, 255, 0.95); 
-            padding: 15px 25px; 
-            border-radius: 20px; 
-            display: inline-block; 
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15); 
-            min-height: 35px; 
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
-        }
-        .form-title { 
-            font-family: 'Dancing Script', cursive; 
-            font-size: 1.6rem; 
-            color: #c44569; 
-            margin-bottom: 10px; 
-            text-shadow: 2px 2px 5px rgba(0,0,0,0.15);
-        }
-        #codigo { 
-            padding: 18px 20px; 
-            font-size: 1.1rem; 
-            border: 3px solid #ff6b9d; 
-            border-radius: 20px; 
-            width: 100%; 
-            text-align: center; 
-            transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.95);
-            font-weight: 600;
-        }
-        
-        #codigo:focus {
-            outline: none;
-            background: white;
-            box-shadow: 0 0 30px rgba(196, 69, 105, 0.5);
-            border-color: #c44569;
-            transform: translateY(-2px);
-        }
-        #validarBtn { 
-            padding: 15px 25px; 
-            font-size: 1rem; 
-            background: linear-gradient(45deg, #ff6b9d, #c44569); 
-            color: white; 
-            border: none; 
-            border-radius: 20px; 
-            cursor: pointer; 
-            font-weight: 600; 
-            width: 100%; 
-            text-transform: uppercase; 
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(196, 69, 105, 0.3);
-        }
-        
-        #validarBtn:hover:not(:disabled) {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(196, 69, 105, 0.4);
-        }
-        #girarBtn { 
-            padding: 18px 50px; 
-            font-size: 1.2rem; 
-            background: linear-gradient(45deg, #ff6b9d, #c44569, #ff6b9d); 
-            color: white; 
-            border: none; 
-            border-radius: 30px; 
-            cursor: pointer; 
-            font-weight: 700; 
-            min-width: 280px; 
-            transition: all 0.3s ease;
-            box-shadow: 0 6px 20px rgba(196, 69, 105, 0.4);
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
-        }
-        
-        #girarBtn:hover:not(:disabled) {
-            transform: translateY(-4px) scale(1.02);
-            box-shadow: 0 12px 30px rgba(196, 69, 105, 0.5);
-        }
-        #girarBtn:disabled { background: linear-gradient(45deg, #ccc, #999); cursor: not-allowed; }
-        
-        .button {
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            cursor: pointer;
-        }
-        
-        .button:hover:not(:disabled) {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
-            filter: brightness(1.1);
-        }
-        .popup-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(8px); display: flex; justify-content: center;
-            align-items: center; z-index: 1000; opacity: 0; visibility: hidden; transition: all 0.3s ease;
-        }
-        .popup-overlay.show { opacity: 1; visibility: visible; }
-        .popup-content {
-            background: linear-gradient(135deg, #ff6b9d, #c44569); border-radius: 30px; padding: 40px; text-align: center;
-            max-width: 500px; width: 90%; transform: scale(0.5); transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-        }
-        .popup-overlay.show .popup-content { transform: scale(1); }
-        .popup-title { font-family: 'Dancing Script', cursive; font-size: 3rem; color: white; margin-bottom: 20px; }
-        .popup-prize { font-size: 1.5rem; color: white; font-weight: 700; margin: 20px 0; padding: 15px; background: rgba(255,255,255,0.2); border-radius: 15px; }
-        .popup-instructions { font-size: 0.9rem; color: white; opacity: 0.9; margin-top: 25px; font-weight: 500; }
-        .popup-close { background: white; color: #c44569; border: none; padding: 15px 30px; border-radius: 25px; font-weight: 700; font-size: 1.1rem; cursor: pointer; margin-top: 20px; }
-        
-        @keyframes fadeIn {
-            0% { opacity: 0; transform: translateY(10px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-        
-        @keyframes fadeInUp {
-            0% { opacity: 0; transform: translateY(30px) scale(0.9); }
-            100% { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        
-        .mensaje-update {
-            animation: fadeIn 0.5s ease-in-out;
-        }
-        
-        /* === CONTENEDOR DEL AVATAR MEJORADO === */
-        #avatar-container {
-            position: absolute;
-            right: 5%;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 380px;
-            height: 520px;
-            z-index: 0;
-            opacity: 0;
-            transition: all 1.8s cubic-bezier(0.25, 0.8, 0.25, 1);
-            border-radius: 30px;
-            overflow: hidden;
-            pointer-events: none;
-            background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(196, 69, 105, 0.1));
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 
-                0 25px 50px rgba(0, 0, 0, 0.15),
-                0 0 0 1px rgba(255, 255, 255, 0.1),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3);
-        }
+#mensaje { 
+margin-top: 10px; 
+font-size: 1.1rem; 
+color: #c44569; 
+font-weight: 600; 
+background: rgba(255, 255, 255, 0.95); 
+padding: 15px 25px; 
+border-radius: 20px; 
+display: inline-block; 
+box-shadow: 0 8px 20px rgba(0,0,0,0.15); 
+min-height: 35px; 
+backdrop-filter: blur(10px);
+border: 2px solid rgba(255, 255, 255, 0.3);
+text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+}
+.form-title { 
+font-family: 'Dancing Script', cursive; 
+font-size: 1.6rem; 
+color: #c44569; 
+margin-bottom: 10px; 
+text-shadow: 2px 2px 5px rgba(0,0,0,0.15);
+}
+#codigo { 
+padding: 18px 20px; 
+font-size: 1.1rem; 
+border: 3px solid #ff6b9d; 
+border-radius: 20px; 
+width: 100%; 
+text-align: center; 
+transition: all 0.3s ease;
+background: rgba(255, 255, 255, 0.95);
+font-weight: 600;
+}
 
-        #avatar-container.visible {
-            opacity: 1;
-            transform: translateY(-50%) scale(1.02);
-        }
+#codigo:focus {
+outline: none;
+background: white;
+box-shadow: 0 0 30px rgba(196, 69, 105, 0.5);
+border-color: #c44569;
+transform: translateY(-2px);
+}
+#validarBtn { 
+padding: 15px 25px; 
+font-size: 1rem; 
+background: linear-gradient(45deg, #ff6b9d, #c44569); 
+color: white; 
+border: none; 
+border-radius: 20px; 
+cursor: pointer; 
+font-weight: 600; 
+width: 100%; 
+text-transform: uppercase; 
+transition: all 0.3s ease;
+box-shadow: 0 4px 15px rgba(196, 69, 105, 0.3);
+}
 
-        #avatar-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                135deg,
-                rgba(255, 107, 157, 0.1) 0%,
-                rgba(196, 69, 105, 0.05) 50%,
-                rgba(255, 159, 243, 0.1) 100%
-            );
-            z-index: 2;
-            border-radius: 28px;
-            pointer-events: none;
-        }
+#validarBtn:hover:not(:disabled) {
+transform: translateY(-3px);
+box-shadow: 0 8px 25px rgba(196, 69, 105, 0.4);
+}
+#girarBtn { 
+padding: 18px 50px; 
+font-size: 1.2rem; 
+background: linear-gradient(45deg, #ff6b9d, #c44569, #ff6b9d); 
+color: white; 
+border: none; 
+border-radius: 30px; 
+cursor: pointer; 
+font-weight: 700; 
+min-width: 280px; 
+transition: all 0.3s ease;
+box-shadow: 0 6px 20px rgba(196, 69, 105, 0.4);
+text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+}
 
-        #avatar-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 28px;
-            position: relative;
-            z-index: 1;
-            filter: 
-                grayscale(0.05) 
-                brightness(0.95) 
-                contrast(1.15) 
-                saturate(1.1)
-                sepia(0.05);
-            transition: filter 0.6s ease;
-            mask-image: linear-gradient(
-                to bottom, 
-                transparent 0%, 
-                black 15%, 
-                black 85%, 
-                transparent 100%
-            );
-            -webkit-mask-image: linear-gradient(
-                to bottom, 
-                transparent 0%, 
-                black 15%, 
-                black 85%, 
-                transparent 100%
-            );
-        }
+#girarBtn:hover:not(:disabled) {
+transform: translateY(-4px) scale(1.02);
+box-shadow: 0 12px 30px rgba(196, 69, 105, 0.5);
+}
+#girarBtn:disabled { background: linear-gradient(45deg, #ccc, #999); cursor: not-allowed; }
 
-        #avatar-container:hover img {
-            filter: 
-                grayscale(0) 
-                brightness(1) 
-                contrast(1.2) 
-                saturate(1.2)
-                sepia(0);
-        }
+.button {
+transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+cursor: pointer;
+}
 
-        /* Efecto de brillo sutil */
-        #avatar-container::after {
-            content: '';
-            position: absolute;
-            top: 10%;
-            left: 10%;
-            width: 80%;
-            height: 40%;
-            background: linear-gradient(
-                135deg,
-                rgba(255, 255, 255, 0.3) 0%,
-                rgba(255, 255, 255, 0.1) 50%,
-                transparent 100%
-            );
-            border-radius: 50%;
-            filter: blur(20px);
-            z-index: 3;
-            pointer-events: none;
-            opacity: 0.7;
-        }
-        
-        /* === DISEÑO RESPONSIVO COMPLETO === */
-        
-        /* Pantallas grandes */
-        @media (max-width: 1200px) {
-            #avatar-container {
-                width: 320px;
-                height: 450px;
-                right: 3%;
-                border-radius: 25px;
-                box-shadow: 
-                    0 20px 40px rgba(0, 0, 0, 0.12),
-                    0 0 0 1px rgba(255, 255, 255, 0.1);
-            }
-            
-            #avatar-container img {
-                border-radius: 23px;
-            }
-        }
-        
-        /* Tablets y pantallas medianas */
-        @media (max-width: 992px) {
-            .main-content {
-                gap: 30px;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .historial-container {
-                order: 4; /* Después del avatar */
-            }
-            
-            .historial-section {
-                width: 300px;
-                padding: 20px;
-                max-height: 400px;
-            }
-            
-            .historial-title {
-                font-size: 1.8rem;
-            }
-            
-            .historial-lista {
-                max-height: 300px;
-            }
-            
-            #avatar-container {
-                position: relative;
-                right: auto;
-                top: auto;
-                transform: none;
-                width: 280px;
-                height: 380px;
-                margin: 20px auto;
-                order: 3; /* Después de la ruleta y antes de controles */
-                border-radius: 20px;
-                box-shadow: 
-                    0 15px 30px rgba(0, 0, 0, 0.1),
-                    0 0 0 1px rgba(255, 255, 255, 0.1);
-            }
-            
-            #avatar-container img {
-                border-radius: 18px;
-            }
-            
-            .controls-title {
-                font-size: 2.2rem;
-            }
-            
-            .form-title {
-                font-size: 1.6rem;
-            }
-            
-            #codigo {
-                font-size: 1rem;
-                padding: 16px 18px;
-            }
-            
-            #validarBtn {
-                font-size: 0.95rem;
-            }
-            
-            #ruleta {
-                width: 400px;
-                height: 400px;
-                border-width: 8px;
-            }
-            
-            #flecha {
-                border-left-width: 22px;
-                border-right-width: 22px;
-                border-bottom-width: 45px;
-                top: -45px;
-            }
-            
-            .controls-section {
-                width: 300px;
-                padding: 30px;
-            }
-            
-            #girarBtn {
-                min-width: 250px;
-                padding: 16px 40px;
-                font-size: 1.1rem;
-            }
-        }
-        
-        /* Tablets pequeñas y móviles grandes */
-        @media (max-width: 768px) {
-            .container {
-                padding: 15px;
-                gap: 15px;
-            }
-            
-            .main-content {
-                gap: 25px;
-            }
-            
-            .historial-section {
-                width: 280px;
-                padding: 18px;
-                max-height: 350px;
-            }
-            
-            .historial-title {
-                font-size: 1.6rem;
-                margin-bottom: 15px;
-            }
-            
-            .historial-lista {
-                max-height: 250px;
-            }
-            
-            .premio-item {
-                padding: 12px;
-                margin-bottom: 10px;
-            }
-            
-            .premio-nombre {
-                font-size: 0.9rem;
-            }
-            
-            .premio-fecha {
-                font-size: 0.75rem;
-            }
-            
-            #avatar-container {
-                width: 200px;
-                height: 280px;
-                margin: 15px auto;
-            }
-            
-            .controls-title {
-                font-size: 2rem;
-                margin-bottom: 15px;
-            }
-            
-            .form-title {
-                font-size: 1.6rem;
-                margin-bottom: 12px;
-            }
-            
-            #codigo {
-                font-size: 0.95rem;
-                padding: 15px 18px;
-            }
-            
-            #validarBtn {
-                font-size: 0.9rem;
-                padding: 14px 22px;
-            }
-            
-            #mensaje {
-                font-size: 1rem;
-                padding: 12px 20px;
-            }
-            
-            #ruleta {
-                width: 350px;
-                height: 350px;
-                border-width: 7px;
-            }
-            
+.button:hover:not(:disabled) {
+transform: translateY(-3px) scale(1.05);
+box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+filter: brightness(1.1);
+}
+.popup-overlay {
+position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(8px); display: flex; justify-content: center;
+align-items: center; z-index: 1000; opacity: 0; visibility: hidden; transition: all 0.3s ease;
+}
+.popup-overlay.show { opacity: 1; visibility: visible; }
+.popup-content {
+background: linear-gradient(135deg, #ff6b9d, #c44569); border-radius: 30px; padding: 40px; text-align: center;
+max-width: 500px; width: 90%; transform: scale(0.5); transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+.popup-overlay.show .popup-content { transform: scale(1); }
+.popup-title { font-family: 'Dancing Script', cursive; font-size: 3rem; color: white; margin-bottom: 20px; }
+.popup-prize { font-size: 1.5rem; color: white; font-weight: 700; margin: 20px 0; padding: 15px; background: rgba(255,255,255,0.2); border-radius: 15px; }
+.popup-instructions { font-size: 0.9rem; color: white; opacity: 0.9; margin-top: 25px; font-weight: 500; }
+.popup-close { background: white; color: #c44569; border: none; padding: 15px 30px; border-radius: 25px; font-weight: 700; font-size: 1.1rem; cursor: pointer; margin-top: 20px; }
+
+@keyframes fadeIn {
+0% { opacity: 0; transform: translateY(10px); }
+100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+0% { opacity: 0; transform: translateY(30px) scale(0.9); }
+100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.mensaje-update {
+animation: fadeIn 0.5s ease-in-out;
+}
+
+/* === CONTENEDOR DEL AVATAR === */
+#avatar-container {
+position: absolute;
+right: 5%;
+top: 50%;
+transform: translateY(-50%);
+width: 350px;
+height: 500px;
+z-index: 0;
+opacity: 0;
+transition: opacity 1.5s ease-in-out;
+border-radius: 20px;
+overflow: hidden;
+pointer-events: none;
+}
+
+#avatar-container.visible {
+opacity: 1;
+}
+
+#avatar-container img {
+width: 100%;
+height: 100%;
+object-fit: cover;
+border-radius: 20px;
+/* Efecto de fusión con el fondo */
+filter: grayscale(0.1) brightness(0.9) contrast(1.1);
+/* Máscara de gradiente para difuminar bordes superior e inferior */
+mask-image: linear-gradient(to top, transparent 0%, black 25%, black 75%, transparent 100%);
+-webkit-mask-image: linear-gradient(to top, transparent 0%, black 25%, black 75%, transparent 100%);
+}
+
+/* === DISEÑO RESPONSIVO COMPLETO === */
+
+/* Pantallas grandes */
+@media (max-width: 1200px) {
+#avatar-container {
+width: 300px;
+height: 400px;
+right: 2%;
+}
+}
+
+/* Tablets y pantallas medianas */
+@media (max-width: 992px) {
+.main-content {
+gap: 30px;
+display: flex;
+flex-direction: column;
+align-items: center;
+}
+
+.historial-container {
+order: 4; /* Después del avatar */
+}
+
+.historial-section {
+width: 300px;
+padding: 20px;
+max-height: 400px;
+}
+
+.historial-title {
+font-size: 1.8rem;
+}
+
+.historial-lista {
+max-height: 300px;
+}
+
+#avatar-container {
+position: relative;
+right: auto;
+top: auto;
+transform: none;
+width: 250px;
+height: 350px;
+margin: 20px auto;
+order: 3; /* Después de la ruleta y antes de controles */
+}
+
+.controls-title {
+font-size: 2.2rem;
+}
+
+.form-title {
+font-size: 1.6rem;
+}
+
+#codigo {
+font-size: 1rem;
+padding: 16px 18px;
+}
+
+#validarBtn {
+font-size: 0.95rem;
+}
+
+#ruleta {
+width: 400px;
+height: 400px;
+border-width: 8px;
+}
+
+#flecha {
+border-left-width: 22px;
+border-right-width: 22px;
+border-bottom-width: 45px;
+top: -45px;
+}
+
+.controls-section {
+width: 300px;
+padding: 30px;
+}
+
+#girarBtn {
+min-width: 250px;
+padding: 16px 40px;
+font-size: 1.1rem;
+}
+}
+
+/* Tablets pequeñas y móviles grandes */
+@media (max-width: 768px) {
+.container {
+padding: 15px;
+gap: 15px;
+}
+
+.main-content {
+gap: 25px;
+}
+
+.historial-section {
+width: 280px;
+padding: 18px;
+max-height: 350px;
+}
+
+.historial-title {
+font-size: 1.6rem;
+margin-bottom: 15px;
+}
+
+.historial-lista {
+max-height: 250px;
+}
+
+.premio-item {
+padding: 12px;
+margin-bottom: 10px;
+}
+
+.premio-nombre {
+font-size: 0.9rem;
+}
+
+.premio-fecha {
+font-size: 0.75rem;
+}
+
+#avatar-container {
+width: 200px;
+height: 280px;
+margin: 15px auto;
+}
+
+.controls-title {
+font-size: 2rem;
+margin-bottom: 15px;
+}
+
+.form-title {
+font-size: 1.6rem;
+margin-bottom: 12px;
+}
+
+#codigo {
+font-size: 0.95rem;
+padding: 15px 18px;
+}
+
+#validarBtn {
+font-size: 0.9rem;
+padding: 14px 22px;
+}
+
+#mensaje {
+font-size: 1rem;
+padding: 12px 20px;
+}
+
+#ruleta {
+width: 350px;
+height: 350px;
+border-width: 7px;
+}
+
             #ruleta::before {
                 filter: blur(6px) brightness(0.35) contrast(1.3);
             }
             
-            #flecha {
-                border-left-width: 20px;
-                border-right-width: 20px;
-                border-bottom-width: 40px;
-                top: -40px;
-            }
-            
-            .controls-section {
-                width: 280px;
-                padding: 25px;
-                gap: 18px;
-            }
-            
-            .form-title {
-                font-size: 1.5rem;
-            }
-            
-            #codigo {
-                padding: 14px 18px;
-                font-size: 1rem;
-            }
-            
-            #validarBtn {
-                padding: 14px 22px;
-                font-size: 0.95rem;
-            }
-            
-            #girarBtn {
-                min-width: 220px;
-                padding: 15px 35px;
-                font-size: 0.95rem;
-            }
-            
-            #mensaje {
-                font-size: 0.9rem;
-                padding: 10px 16px;
-            }
-            
-            .popup-content {
-                padding: 30px;
-                max-width: 400px;
-            }
-            
-            .popup-title {
-                font-size: 2.5rem;
-            }
-            
-            .popup-prize {
-                font-size: 1.3rem;
-                padding: 12px;
-            }
-            
-            .popup-close {
-                padding: 12px 25px;
-                font-size: 1rem;
-            }
-        }
-        
-        /* Móviles pequeños */
-        @media (max-width: 480px) {
-            .container {
-                padding: 10px;
-            }
-            
-            .main-content {
-                gap: 20px;
-            }
-            
-            #avatar-container {
-                width: 150px;
-                height: 200px;
-                margin: 10px auto;
-            }
-            
-            .historial-section {
-                width: 260px;
-                padding: 15px;
-                max-height: 300px;
-            }
-            
-            .historial-title {
-                font-size: 1.4rem;
-                margin-bottom: 12px;
-            }
-            
-            .historial-lista {
-                max-height: 200px;
-            }
-            
-            .premio-item {
-                padding: 10px;
-                margin-bottom: 8px;
-            }
-            
-            .premio-nombre {
-                font-size: 0.85rem;
-            }
-            
-            .premio-fecha {
-                font-size: 0.7rem;
-            }
-            
-            .premio-numero {
-                width: 20px;
-                height: 20px;
-                font-size: 0.6rem;
-            }
-            
-            .controls-title {
-                font-size: 1.8rem;
-                text-align: center;
-                margin-bottom: 10px;
-            }
-            
-            #ruleta {
-                width: 280px;
-                height: 280px;
-                border-width: 6px;
-            }
-            
+#flecha {
+border-left-width: 20px;
+border-right-width: 20px;
+border-bottom-width: 40px;
+top: -40px;
+}
+
+.controls-section {
+width: 280px;
+padding: 25px;
+gap: 18px;
+}
+
+.form-title {
+font-size: 1.5rem;
+}
+
+#codigo {
+padding: 14px 18px;
+font-size: 1rem;
+}
+
+#validarBtn {
+padding: 14px 22px;
+font-size: 0.95rem;
+}
+
+#girarBtn {
+min-width: 220px;
+padding: 15px 35px;
+font-size: 0.95rem;
+}
+
+#mensaje {
+font-size: 0.9rem;
+padding: 10px 16px;
+}
+
+.popup-content {
+padding: 30px;
+max-width: 400px;
+}
+
+.popup-title {
+font-size: 2.5rem;
+}
+
+.popup-prize {
+font-size: 1.3rem;
+padding: 12px;
+}
+
+.popup-close {
+padding: 12px 25px;
+font-size: 1rem;
+}
+}
+
+/* Móviles pequeños */
+@media (max-width: 480px) {
+.container {
+padding: 10px;
+}
+
+.main-content {
+gap: 20px;
+}
+
+#avatar-container {
+width: 150px;
+height: 200px;
+margin: 10px auto;
+}
+
+.historial-section {
+width: 260px;
+padding: 15px;
+max-height: 300px;
+}
+
+.historial-title {
+font-size: 1.4rem;
+margin-bottom: 12px;
+}
+
+.historial-lista {
+max-height: 200px;
+}
+
+.premio-item {
+padding: 10px;
+margin-bottom: 8px;
+}
+
+.premio-nombre {
+font-size: 0.85rem;
+}
+
+.premio-fecha {
+font-size: 0.7rem;
+}
+
+.premio-numero {
+width: 20px;
+height: 20px;
+font-size: 0.6rem;
+}
+
+.controls-title {
+font-size: 1.8rem;
+text-align: center;
+margin-bottom: 10px;
+}
+
+#ruleta {
+width: 280px;
+height: 280px;
+border-width: 6px;
+}
+
             #ruleta::before {
                 filter: blur(5px) brightness(0.3) contrast(1.4);
             }
             
-            #flecha {
-                border-left-width: 18px;
-                border-right-width: 18px;
-                border-bottom-width: 35px;
-                top: -35px;
-            }
-            
-            .controls-section {
-                width: 260px;
-                padding: 20px;
-                gap: 15px;
-            }
-            
-            .form-title {
-                font-size: 1.4rem;
-            }
-            
-            #codigo {
-                padding: 12px 15px;
-                font-size: 0.95rem;
-            }
-            
-            #validarBtn {
-                padding: 12px 18px;
-                font-size: 0.9rem;
-            }
-            
-            #girarBtn {
-                min-width: 200px;
-                padding: 14px 30px;
-                font-size: 0.9rem;
-            }
-            
-            #mensaje {
-                font-size: 0.85rem;
-                padding: 8px 14px;
-                margin-top: 8px;
-            }
-            
-            .popup-content {
-                padding: 25px;
-                max-width: 340px;
-            }
-            
-            .popup-title {
-                font-size: 2.2rem;
-                margin-bottom: 15px;
-            }
-            
-            .popup-prize {
-                font-size: 1.2rem;
-                padding: 10px;
-                margin: 15px 0;
-            }
-            
-            .popup-instructions {
-                font-size: 0.8rem;
-                margin-top: 20px;
-            }
-            
-            .popup-close {
-                padding: 10px 20px;
-                font-size: 0.95rem;
-            }
-            
-            /* Ajustar formas de fondo para móviles */
-            .shape:nth-child(1) { width: 50px; height: 50px; }
-            .shape:nth-child(2) { width: 70px; height: 70px; }
-            .shape:nth-child(3) { width: 40px; height: 40px; }
-            .shape:nth-child(4) { width: 60px; height: 60px; }
-            
-            .particle.heart { font-size: 16px; }
-            .particle.sparkle { width: 6px; height: 6px; }
-            .particle.star { font-size: 12px; }
-        }
-        
-        /* Móviles muy pequeños */
-        @media (max-width: 360px) {
-            .controls-title {
-                font-size: 1.6rem;
-            }
-            
-            #ruleta {
-                width: 250px;
-                height: 250px;
-                border-width: 5px;
-            }
-            
+#flecha {
+border-left-width: 18px;
+border-right-width: 18px;
+border-bottom-width: 35px;
+top: -35px;
+}
+
+.controls-section {
+width: 260px;
+padding: 20px;
+gap: 15px;
+}
+
+.form-title {
+font-size: 1.4rem;
+}
+
+#codigo {
+padding: 12px 15px;
+font-size: 0.95rem;
+}
+
+#validarBtn {
+padding: 12px 18px;
+font-size: 0.9rem;
+}
+
+#girarBtn {
+min-width: 200px;
+padding: 14px 30px;
+font-size: 0.9rem;
+}
+
+#mensaje {
+font-size: 0.85rem;
+padding: 8px 14px;
+margin-top: 8px;
+}
+
+.popup-content {
+padding: 25px;
+max-width: 340px;
+}
+
+.popup-title {
+font-size: 2.2rem;
+margin-bottom: 15px;
+}
+
+.popup-prize {
+font-size: 1.2rem;
+padding: 10px;
+margin: 15px 0;
+}
+
+.popup-instructions {
+font-size: 0.8rem;
+margin-top: 20px;
+}
+
+.popup-close {
+padding: 10px 20px;
+font-size: 0.95rem;
+}
+
+/* Ajustar formas de fondo para móviles */
+.shape:nth-child(1) { width: 50px; height: 50px; }
+.shape:nth-child(2) { width: 70px; height: 70px; }
+.shape:nth-child(3) { width: 40px; height: 40px; }
+.shape:nth-child(4) { width: 60px; height: 60px; }
+
+.particle.heart { font-size: 16px; }
+.particle.sparkle { width: 6px; height: 6px; }
+.particle.star { font-size: 12px; }
+}
+
+/* Móviles muy pequeños */
+@media (max-width: 360px) {
+.controls-title {
+font-size: 1.6rem;
+}
+
+#ruleta {
+width: 250px;
+height: 250px;
+border-width: 5px;
+}
+
             #ruleta::before {
                 filter: blur(4px) brightness(0.25) contrast(1.5);
             }
             
-            #flecha {
-                border-left-width: 15px;
-                border-right-width: 15px;
-                border-bottom-width: 30px;
-                top: -30px;
-            }
-            
-            .controls-section {
-                width: 240px;
-                padding: 18px;
-            }
-            
-            #girarBtn {
-                min-width: 180px;
-                padding: 12px 25px;
-                font-size: 0.85rem;
-            }
-            
-            .popup-content {
-                padding: 20px;
-                max-width: 300px;
-            }
-            
-            .popup-title {
-                font-size: 2rem;
-            }
-        }
-        
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } }
-        
-        /* === SISTEMA DE NOTIFICACIONES === */
-        .notification-banner {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 10000;
-            display: none;
-            transform: translateY(-100%);
-            transition: transform 0.3s ease;
-        }
+#flecha {
+border-left-width: 15px;
+border-right-width: 15px;
+border-bottom-width: 30px;
+top: -30px;
+}
 
-        .notification-banner.show {
-            transform: translateY(0);
-        }
+.controls-section {
+width: 240px;
+padding: 18px;
+}
 
-        .notification-banner.success {
-            background: linear-gradient(135deg, #5cb85c, #449d44);
-        }
+#girarBtn {
+min-width: 180px;
+padding: 12px 25px;
+font-size: 0.85rem;
+}
 
-        .notification-banner.error {
-            background: linear-gradient(135deg, #d9534f, #c9302c);
-        }
+.popup-content {
+padding: 20px;
+max-width: 300px;
+}
 
-        .notification-banner.warning {
-            background: linear-gradient(135deg, #f0ad4e, #ec971f);
-        }
+.popup-title {
+font-size: 2rem;
+}
+}
 
-        .notification-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } }
 
-        .notification-text {
-            color: white;
-            font-weight: 600;
-            font-size: 1rem;
-            flex-grow: 1;
-        }
+/* === SISTEMA DE NOTIFICACIONES === */
+.notification-banner {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+z-index: 10000;
+display: none;
+transform: translateY(-100%);
+transition: transform 0.3s ease;
+}
 
-        .notification-close {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            font-weight: bold;
-            cursor: pointer;
-            padding: 0 10px;
-            opacity: 0.8;
-            transition: opacity 0.3s ease;
-        }
+.notification-banner.show {
+transform: translateY(0);
+}
 
-        .notification-close:hover {
-            opacity: 1;
-        }
+.notification-banner.success {
+background: linear-gradient(135deg, #5cb85c, #449d44);
+}
 
-        /* === INDICADORES DE CARGA === */
-        .loading {
-            position: relative;
-            pointer-events: none;
-        }
+.notification-banner.error {
+background: linear-gradient(135deg, #d9534f, #c9302c);
+}
 
-        .loading::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 20px;
-            height: 20px;
-            margin: -10px 0 0 -10px;
-            border: 2px solid transparent;
-            border-top-color: currentColor;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
+.notification-banner.warning {
+background: linear-gradient(135deg, #f0ad4e, #ec971f);
+}
 
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
+.notification-content {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 15px 20px;
+max-width: 1200px;
+margin: 0 auto;
+}
 
-        .spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 2px solid transparent;
-            border-top-color: currentColor;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-right: 8px;
-        }
-    </style>
+.notification-text {
+color: white;
+font-weight: 600;
+font-size: 1rem;
+flex-grow: 1;
+}
+
+.notification-close {
+background: none;
+border: none;
+color: white;
+font-size: 1.5rem;
+font-weight: bold;
+cursor: pointer;
+padding: 0 10px;
+opacity: 0.8;
+transition: opacity 0.3s ease;
+}
+
+.notification-close:hover {
+opacity: 1;
+}
+
+/* === INDICADORES DE CARGA === */
+.loading {
+position: relative;
+pointer-events: none;
+}
+
+.loading::after {
+content: '';
+position: absolute;
+top: 50%;
+left: 50%;
+width: 20px;
+height: 20px;
+margin: -10px 0 0 -10px;
+border: 2px solid transparent;
+border-top-color: currentColor;
+border-radius: 50%;
+animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+to {
+transform: rotate(360deg);
+}
+}
+
+.spinner {
+display: inline-block;
+width: 20px;
+height: 20px;
+border: 2px solid transparent;
+border-top-color: currentColor;
+border-radius: 50%;
+animation: spin 1s linear infinite;
+margin-right: 8px;
+}
+</style>
 </head>
 <body>
-    <!-- Banner de notificaciones -->
-    <div id="notification-banner" class="notification-banner">
-        <div class="notification-content">
-            <span class="notification-text"></span>
-            <button class="notification-close" onclick="cerrarNotificacion()">×</button>
-        </div>
-    </div>
-    
-    <div class="background-shapes">
-        <div class="shape"></div> <div class="shape"></div> <div class="shape"></div> <div class="shape"></div>
-        <!-- Partículas dinámicas se crearán por JavaScript -->
-    </div>
+<!-- Banner de notificaciones -->
+<div id="notification-banner" class="notification-banner">
+<div class="notification-content">
+<span class="notification-text"></span>
+<button class="notification-close" onclick="cerrarNotificacion()">×</button>
+</div>
+</div>
 
-    <div id="popup-overlay" class="popup-overlay">
-        <div class="popup-content">
-            <div class="popup-title">¡FELICITACIONES!</div>
-            <div id="popup-prize" class="popup-prize"></div>
-            <p class="popup-instructions">Recuerda enviarme una captura de pantalla para cobrar tu premio!</p>
-            <button id="popupCloseBtn" class="popup-close button">✨ ¡Genial! ✨</button>
-        </div>
-    </div>
-    
-    <div class="container">
-        <div style="position: absolute; top: 20px; right: 20px; z-index: 100;">
-            <a href="admin.html" style="color: rgba(196, 69, 105, 0.4); text-decoration: none; font-size: 1.2em;">⚙️</a>
-        </div>
-        <div class="main-content">
-            <div class="controls-container">
-                <div class="controls-title" id="tituloModelo">Bella Rey</div>
-                <div class="controls-section">
-                    <div class="form-title">💝 Código Exclusivo</div>
-                    <div id="formulario">
-                        <input type="text" id="codigo" placeholder="Introduce tu código exclusivo" maxlength="20">
-                        <button id="validarBtn" class="button">✨ Validar Código ✨</button>
-                    </div>
-                </div>
-            </div>
-            <div class="ruleta-section">
-                <div id="ruleta">
-                    <canvas id="opciones" width="450" height="450"></canvas>
-                </div>
-                <button id="girarBtn" class="button" disabled>🎯 ¡GIRAR RULETA! 🎯</button>
-            </div>
-            <!-- Nuevo contenedor para avatar -->
-            <div id="avatar-container"></div>
-            <!-- Historial de premios -->
-            <div class="historial-container" id="historial-container">
-                <div class="historial-section">
-                    <div class="historial-title">🏆 Mis Premios</div>
-                    <div class="historial-lista" id="historial-lista">
-                        <div class="historial-vacio" id="historial-vacio">
-                            Aún no has ganado premios.<br>
-                            ¡Gira la ruleta para empezar!
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="message-section">
-            <div id="mensaje">✨ Ingresa tu código para comenzar la experiencia mágica ✨</div>
-        </div>
-    </div>
+<div class="background-shapes">
+<div class="shape"></div> <div class="shape"></div> <div class="shape"></div> <div class="shape"></div>
+<!-- Partículas dinámicas se crearán por JavaScript -->
+</div>
 
-    <script>
-        // Variables globales para premios dinámicos
-        let premiosDisponibles = [];
-        const coloresPremios = [ "#ff6b9d", "#c44569", "#f8b500", "#ff9ff3", "#54a0ff", "#5f27cd", "#ff9f43", "#10ac84", "#ee5a24", "#0abde3", "#feca57", "#ff6348" ];
-        
-        // Eliminado: const codigosValidosDefault - ahora usamos solo el backend
-        // Eliminado: let codigosValidos = {} - ahora usamos solo el backend
-        
-        let premiosActuales = [];
-        let tiradasRestantes = 0;
-        let nombreUsuario = "";
-        let codigoActual = "";
-        
-        // Variables para el historial de premios
-        let historialPremios = [];
-        let contadorPremios = 0;
+<div id="popup-overlay" class="popup-overlay">
+<div class="popup-content">
+<div class="popup-title">¡FELICITACIONES!</div>
+<div id="popup-prize" class="popup-prize"></div>
+<p class="popup-instructions">Recuerda enviarme una captura de pantalla para cobrar tu premio!</p>
+<button id="popupCloseBtn" class="popup-close button">✨ ¡Genial! ✨</button>
+</div>
+</div>
 
-        const soundClick = new Audio('sounds/click.wav');
-        const soundWin = new Audio('sounds/win.wav');
-        const soundSpin = new Audio('sounds/spin.wav');
-        
-        // === SISTEMA DE NOTIFICACIONES ===
-        function mostrarNotificacion(mensaje, tipo = 'success') {
-            const banner = document.getElementById('notification-banner');
-            const textElement = banner.querySelector('.notification-text');
-            
-            // Configurar el mensaje
-            textElement.textContent = mensaje;
-            
-            // Limpiar clases anteriores y añadir la nueva
-            banner.className = `notification-banner ${tipo}`;
-            
-            // Mostrar con animación
-            banner.style.display = 'flex';
-            setTimeout(() => {
-                banner.classList.add('show');
-            }, 10);
-            
-            // Auto-ocultar después de 4 segundos
-            setTimeout(() => {
-                cerrarNotificacion();
-            }, 4000);
-        }
-        
-        function cerrarNotificacion() {
-            const banner = document.getElementById('notification-banner');
-            banner.classList.remove('show');
-            
-            setTimeout(() => {
-                banner.style.display = 'none';
-            }, 400);
-        }
-        
-        // === FUNCIONES DEL HISTORIAL DE PREMIOS ===
-        function inicializarHistorial() {
-            // Cargar historial desde localStorage
-            const historialGuardado = localStorage.getItem(`historial_${codigoActual}`);
-            if (historialGuardado) {
-                try {
-                    historialPremios = JSON.parse(historialGuardado);
-                    contadorPremios = historialPremios.length;
-                    actualizarHistorialVisual();
-                } catch (error) {
-                    console.error('Error al cargar historial guardado:', error);
-                    historialPremios = [];
-                    contadorPremios = 0;
-                }
-            } else {
-                historialPremios = [];
-                contadorPremios = 0;
-            }
-            
-            // Mostrar el historial si hay premios o si se ha validado un código
-            if (codigoActual) {
-                mostrarHistorial();
-            }
-        }
-        
-        function agregarPremioAlHistorial(premio) {
-            contadorPremios++;
-            const nuevoPremio = {
-                id: contadorPremios,
-                nombre: premio,
-                fecha: new Date().toLocaleString('es-ES', {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                }),
-                timestamp: Date.now()
-            };
-            
-            // Agregar al inicio del array para mostrar los más recientes primero
-            historialPremios.unshift(nuevoPremio);
-            
-            // Guardar en localStorage
-            try {
-                localStorage.setItem(`historial_${codigoActual}`, JSON.stringify(historialPremios));
-            } catch (error) {
-                console.error('Error al guardar historial:', error);
-            }
-            
-            // Actualizar la visualización
-            actualizarHistorialVisual();
-            
-            // Mostrar el historial si estaba oculto
-            mostrarHistorial();
-        }
-        
-        function actualizarHistorialVisual() {
-            const historialLista = document.getElementById('historial-lista');
-            const historialVacio = document.getElementById('historial-vacio');
-            
-            if (!historialLista) return;
-            
-            if (historialPremios.length === 0) {
-                if (historialVacio) {
-                    historialVacio.style.display = 'block';
-                }
-                return;
-            }
-            
-            // Ocultar mensaje de historial vacío
-            if (historialVacio) {
-                historialVacio.style.display = 'none';
-            }
-            
-            // Crear HTML para cada premio
-            let historialHTML = '';
-            historialPremios.forEach((premio, index) => {
-                historialHTML += `
-                    <div class="premio-item" style="animation: fadeInUp 0.5s ease ${index * 0.1}s both;">
-                        <div class="premio-numero">${premio.id}</div>
-                        <div class="premio-nombre">${premio.nombre}</div>
-                        <div class="premio-fecha">
-                            🕐 ${premio.fecha}
-                        </div>
-                    </div>
-                `;
-            });
-            
-            historialLista.innerHTML = historialHTML;
-            
-            // Hacer scroll al elemento más reciente si es necesario
-            if (historialPremios.length > 0) {
-                setTimeout(() => {
-                    historialLista.scrollTop = 0;
-                }, 100);
-            }
-        }
-        
-        function mostrarHistorial() {
-            const historialContainer = document.getElementById('historial-container');
-            if (historialContainer) {
-                historialContainer.classList.add('visible');
-            }
-        }
-        
-        function ocultarHistorial() {
-            const historialContainer = document.getElementById('historial-container');
-            if (historialContainer) {
-                historialContainer.classList.remove('visible');
-            }
-        }
-        
-        function limpiarHistorial() {
-            historialPremios = [];
-            contadorPremios = 0;
-            
-            try {
-                localStorage.removeItem(`historial_${codigoActual}`);
-            } catch (error) {
-                console.error('Error al limpiar historial:', error);
-            }
-            
-            actualizarHistorialVisual();
-        }
-        
-        // Comentada: función cargarCodigosPersonalizados() - ahora usamos el backend
-        /*
-        function cargarCodigosPersonalizados() {
-            let todosLosCodigos = {...codigosValidosDefault};
-            const codigosGuardados = localStorage.getItem('codigosPersonalizados');
-            if (codigosGuardados) {
-                Object.assign(todosLosCodigos, JSON.parse(codigosGuardados));
-            }
-            codigosValidos = todosLosCodigos;
-        }
-        */
+<div class="container">
+<div style="position: absolute; top: 20px; right: 20px; z-index: 100;">
+<a href="admin.html" style="color: rgba(196, 69, 105, 0.4); text-decoration: none; font-size: 1.2em;">⚙️</a>
+</div>
+<div class="main-content">
+<div class="controls-container">
+<div class="controls-title" id="tituloModelo">Bella Rey</div>
+<div class="controls-section">
+<div class="form-title">💝 Código Exclusivo</div>
+<div id="formulario">
+<input type="text" id="codigo" placeholder="Introduce tu código exclusivo" maxlength="20">
+<button id="validarBtn" class="button">✨ Validar Código ✨</button>
+</div>
+</div>
+</div>
+<div class="ruleta-section">
+<div id="ruleta">
+<canvas id="opciones" width="450" height="450"></canvas>
+</div>
+<button id="girarBtn" class="button" disabled>🎯 ¡GIRAR RULETA! 🎯</button>
+</div>
+<!-- Nuevo contenedor para avatar -->
+<div id="avatar-container"></div>
+<!-- Historial de premios -->
+<div class="historial-container" id="historial-container">
+<div class="historial-section">
+<div class="historial-title">🏆 Mis Premios</div>
+<div class="historial-lista" id="historial-lista">
+<div class="historial-vacio" id="historial-vacio">
+Aún no has ganado premios.<br>
+¡Gira la ruleta para empezar!
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="message-section">
+<div id="mensaje">✨ Ingresa tu código para comenzar la experiencia mágica ✨</div>
+</div>
+</div>
 
-        // Nueva función que usa el backend para marcar códigos como usados
-        // FUNCIÓN DEPRECADA - Ahora se maneja automáticamente con gastar-tiro.js
-        /*
-        async function marcarCodigoComoUsado(codigo) {
-            try {
-                const response = await fetch('/.netlify/functions/expire-code', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ codigoId: codigo })
-                });
+<script>
+// Variables globales para premios dinámicos
+let premiosDisponibles = [];
+const coloresPremios = [ "#ff6b9d", "#c44569", "#f8b500", "#ff9ff3", "#54a0ff", "#5f27cd", "#ff9f43", "#10ac84", "#ee5a24", "#0abde3", "#feca57", "#ff6348" ];
 
-                const result = await response.json();
+// Eliminado: const codigosValidosDefault - ahora usamos solo el backend
+// Eliminado: let codigosValidos = {} - ahora usamos solo el backend
+
+let premiosActuales = [];
+let tiradasRestantes = 0;
+let nombreUsuario = "";
+let codigoActual = "";
+
+// Variables para el historial de premios
+let historialPremios = [];
+let contadorPremios = 0;
+
+const soundClick = new Audio('sounds/click.wav');
+const soundWin = new Audio('sounds/win.wav');
+const soundSpin = new Audio('sounds/spin.wav');
+
+// === SISTEMA DE NOTIFICACIONES ===
+function mostrarNotificacion(mensaje, tipo = 'success') {
+const banner = document.getElementById('notification-banner');
+const textElement = banner.querySelector('.notification-text');
+
+// Configurar el mensaje
+textElement.textContent = mensaje;
+
+// Limpiar clases anteriores y añadir la nueva
+banner.className = `notification-banner ${tipo}`;
+
+// Mostrar con animación
+banner.style.display = 'flex';
+setTimeout(() => {
+banner.classList.add('show');
+}, 10);
+
+// Auto-ocultar después de 4 segundos
+setTimeout(() => {
+cerrarNotificacion();
+}, 4000);
+}
+
+function cerrarNotificacion() {
+const banner = document.getElementById('notification-banner');
+banner.classList.remove('show');
+
+setTimeout(() => {
+banner.style.display = 'none';
+}, 400);
+}
+
+// === FUNCIONES DEL HISTORIAL DE PREMIOS ===
+function inicializarHistorial() {
+// Cargar historial desde localStorage
+const historialGuardado = localStorage.getItem(`historial_${codigoActual}`);
+if (historialGuardado) {
+try {
+historialPremios = JSON.parse(historialGuardado);
+contadorPremios = historialPremios.length;
+actualizarHistorialVisual();
+} catch (error) {
+console.error('Error al cargar historial guardado:', error);
+historialPremios = [];
+contadorPremios = 0;
+}
+} else {
+historialPremios = [];
+contadorPremios = 0;
+}
+
+// Mostrar el historial si hay premios o si se ha validado un código
+if (codigoActual) {
+mostrarHistorial();
+}
+}
+
+function agregarPremioAlHistorial(premio) {
+contadorPremios++;
+const nuevoPremio = {
+id: contadorPremios,
+nombre: premio,
+fecha: new Date().toLocaleString('es-ES', {
+day: '2-digit',
+month: '2-digit',
+year: 'numeric',
+hour: '2-digit',
+minute: '2-digit'
+}),
+timestamp: Date.now()
+};
+
+// Agregar al inicio del array para mostrar los más recientes primero
+historialPremios.unshift(nuevoPremio);
+
+// Guardar en localStorage
+try {
+localStorage.setItem(`historial_${codigoActual}`, JSON.stringify(historialPremios));
+} catch (error) {
+console.error('Error al guardar historial:', error);
+}
+
+// Actualizar la visualización
+actualizarHistorialVisual();
+
+// Mostrar el historial si estaba oculto
+mostrarHistorial();
+}
+
+function actualizarHistorialVisual() {
+const historialLista = document.getElementById('historial-lista');
+const historialVacio = document.getElementById('historial-vacio');
+
+if (!historialLista) return;
+
+if (historialPremios.length === 0) {
+if (historialVacio) {
+historialVacio.style.display = 'block';
+}
+return;
+}
+
+// Ocultar mensaje de historial vacío
+if (historialVacio) {
+historialVacio.style.display = 'none';
+}
+
+// Crear HTML para cada premio
+let historialHTML = '';
+historialPremios.forEach((premio, index) => {
+historialHTML += `
+                   <div class="premio-item" style="animation: fadeInUp 0.5s ease ${index * 0.1}s both;">
+                       <div class="premio-numero">${premio.id}</div>
+                       <div class="premio-nombre">${premio.nombre}</div>
+                       <div class="premio-fecha">
+                           🕐 ${premio.fecha}
+                       </div>
+                   </div>
+               `;
+});
+
+historialLista.innerHTML = historialHTML;
+
+// Hacer scroll al elemento más reciente si es necesario
+if (historialPremios.length > 0) {
+setTimeout(() => {
+historialLista.scrollTop = 0;
+}, 100);
+}
+}
+
+function mostrarHistorial() {
+const historialContainer = document.getElementById('historial-container');
+if (historialContainer) {
+historialContainer.classList.add('visible');
+}
+}
+
+function ocultarHistorial() {
+const historialContainer = document.getElementById('historial-container');
+if (historialContainer) {
+historialContainer.classList.remove('visible');
+}
+}
+
+function limpiarHistorial() {
+historialPremios = [];
+contadorPremios = 0;
+
+try {
+localStorage.removeItem(`historial_${codigoActual}`);
+} catch (error) {
+console.error('Error al limpiar historial:', error);
+}
+
+actualizarHistorialVisual();
+}
+
+// Comentada: función cargarCodigosPersonalizados() - ahora usamos el backend
+/*
+       function cargarCodigosPersonalizados() {
+           let todosLosCodigos = {...codigosValidosDefault};
+           const codigosGuardados = localStorage.getItem('codigosPersonalizados');
+           if (codigosGuardados) {
+               Object.assign(todosLosCodigos, JSON.parse(codigosGuardados));
+           }
+           codigosValidos = todosLosCodigos;
+       }
+       */
+
+// Nueva función que usa el backend para marcar códigos como usados
+// FUNCIÓN DEPRECADA - Ahora se maneja automáticamente con gastar-tiro.js
+/*
+       async function marcarCodigoComoUsado(codigo) {
+           try {
+               const response = await fetch('/.netlify/functions/expire-code', {
+                   method: 'POST',
+                   headers: {
+                       'Content-Type': 'application/json',
+                   },
+                   body: JSON.stringify({ codigoId: codigo })
+               });
+
+               const result = await response.json();
+               
+               if (!response.ok || !result.success) {
+                   console.error('Error al marcar código como usado:', result.message);
+                   // No mostramos error al usuario para no interrumpir la experiencia
+               }
+           } catch (error) {
+               console.error('Error de conexión al marcar código como usado:', error);
+               // No mostramos error al usuario para no interrumpir la experiencia
+           }
+       }
+       */
+
+function dibujarRuletaCompleta() {
+// Solo dibujar usando premiosDisponibles (ya cargados por inicializarPagina)
+if (!premiosDisponibles || premiosDisponibles.length === 0) {
+console.error('No hay premios disponibles para dibujar la ruleta');
+mostrarNotificacion('Error: No hay premios configurados para la ruleta.', 'error');
+return;
+}
+
+const canvas = document.getElementById('opciones');
+if (!canvas) {
+console.error('Canvas #opciones no encontrado');
+return;
+}
+
+const ctx = canvas.getContext('2d');
+const total = premiosDisponibles.length;
+const radio = 220;
+const centroX = 225;
+const centroY = 225;
+
+ctx.clearRect(0, 0, 450, 450);
+
+for (let i = 0; i < total; i++) {
+const anguloInicio = (2 * Math.PI / total) * i;
+const anguloFin = (2 * Math.PI / total) * (i + 1);
+
+ctx.save();
+ctx.beginPath();
+ctx.moveTo(centroX, centroY);
+ctx.arc(centroX, centroY, radio, anguloInicio, anguloFin);
+ctx.closePath();
+                ctx.fillStyle = coloresPremios[i % coloresPremios.length];
                 
-                if (!response.ok || !result.success) {
-                    console.error('Error al marcar código como usado:', result.message);
-                    // No mostramos error al usuario para no interrumpir la experiencia
-                }
-            } catch (error) {
-                console.error('Error de conexión al marcar código como usado:', error);
-                // No mostramos error al usuario para no interrumpir la experiencia
-            }
-        }
-        */
-
-        function dibujarRuletaCompleta() {
-            // Solo dibujar usando premiosDisponibles (ya cargados por inicializarPagina)
-            if (!premiosDisponibles || premiosDisponibles.length === 0) {
-                console.error('No hay premios disponibles para dibujar la ruleta');
-                mostrarNotificacion('Error: No hay premios configurados para la ruleta.', 'error');
-                return;
-            }
-            
-            const canvas = document.getElementById('opciones');
-            if (!canvas) {
-                console.error('Canvas #opciones no encontrado');
-                return;
-            }
-            
-            const ctx = canvas.getContext('2d');
-            const total = premiosDisponibles.length;
-            const radio = 220;
-            const centroX = 225;
-            const centroY = 225;
-            
-            ctx.clearRect(0, 0, 450, 450);
-
-            for (let i = 0; i < total; i++) {
-                const anguloInicio = (2 * Math.PI / total) * i;
-                const anguloFin = (2 * Math.PI / total) * (i + 1);
-                
-                ctx.save();
-                ctx.beginPath();
-                ctx.moveTo(centroX, centroY);
-                ctx.arc(centroX, centroY, radio, anguloInicio, anguloFin);
-                ctx.closePath();
-                
-                // 🎨 GRADIENTES ELEGANTES PARA CADA SECTOR
-                const gradient = ctx.createRadialGradient(centroX, centroY, 0, centroX, centroY, radio);
+                // 🎨 COLORES CON MEJOR TRANSPARENCIA PARA EL FONDO PERSONALIZADO
                 const baseColor = coloresPremios[i % coloresPremios.length];
+                ctx.fillStyle = baseColor + 'E6'; // Agregar transparencia para que se vea el fondo
+ctx.fill();
                 
-                gradient.addColorStop(0, baseColor + 'F0'); // Centro más opaco
-                gradient.addColorStop(0.7, baseColor + 'D0'); // Medio semi-transparente
-                gradient.addColorStop(1, baseColor + 'B0'); // Borde más transparente
-                
-                ctx.fillStyle = gradient;
-                ctx.fill();
-                
-                // 🎨 SOMBRA INTERNA PARA PROFUNDIDAD
-                const shadowGradient = ctx.createRadialGradient(centroX, centroY, radio * 0.3, centroX, centroY, radio);
-                shadowGradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
-                shadowGradient.addColorStop(1, 'rgba(0, 0, 0, 0.2)');
-                ctx.fillStyle = shadowGradient;
-                ctx.fill();
-                
-                ctx.clip();
-                
-                // 🎨 TEXTO CON MEJOR CONTRASTE Y EFECTOS
-                ctx.fillStyle = "#ffffff";
-                ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
-                ctx.shadowBlur = 6;
-                ctx.shadowOffsetX = 2;
-                ctx.shadowOffsetY = 2;
-                
-                const anguloMedio = (anguloInicio + anguloFin) / 2;
-                const distanciaTexto = radio * 0.65;
-                const textoX = centroX + Math.cos(anguloMedio) * distanciaTexto;
-                const textoY = centroY + Math.sin(anguloMedio) * distanciaTexto;
-                
-                ctx.translate(textoX, textoY);
-                let rotacion = anguloMedio;
-                if (rotacion > Math.PI/2 && rotacion < 3*Math.PI/2) rotacion += Math.PI;
-                ctx.rotate(rotacion);
-                
-                let textoLimpio = premiosDisponibles[i].replace(/[\u{1F300}-\u{1F9FF}]/gu, '').trim().toUpperCase();
-                const palabras = textoLimpio.split(' ');
-                let lineas = [], lineaActual = '';
-                palabras.forEach(palabra => {
-                    if ((lineaActual + palabra).length > 10 && lineaActual) {
-                        lineas.push(lineaActual.trim());
-                        lineaActual = palabra + ' ';
-                    } else {
-                        lineaActual += palabra + ' ';
-                    }
-                });
-                lineas.push(lineaActual.trim());
-
-                ctx.textAlign = "center";
-                ctx.textBaseline = "middle";
-                
-                // Tamaño de fuente responsivo basado en el ancho de pantalla
-                let fontSize = 16;
-                let lineHeight = 18;
-                
-                if (window.innerWidth <= 360) {
-                    fontSize = 11;
-                    lineHeight = 13;
-                } else if (window.innerWidth <= 480) {
-                    fontSize = 12;
-                    lineHeight = 14;
-                } else if (window.innerWidth <= 768) {
-                    fontSize = 14;
-                    lineHeight = 16;
-                } else if (window.innerWidth <= 992) {
-                    fontSize = 15;
-                    lineHeight = 17;
-                }
-                
-                ctx.font = `bold ${fontSize}px Poppins, sans-serif`;
-                
-                const startY = -(lineas.length - 1) * lineHeight / 2;
-                lineas.forEach((linea, index) => ctx.fillText(linea, 0, startY + (index * lineHeight)));
-                ctx.restore();
-            }
-            
-            // 🎨 LÍNEAS DE SEPARACIÓN CON GRADIENTE
-            for (let i = 0; i < total; i++) {
-                const anguloFin = (2 * Math.PI / total) * (i + 1);
-                const lineGradient = ctx.createLinearGradient(
-                    centroX, centroY, 
-                    centroX + radio * Math.cos(anguloFin), 
-                    centroY + radio * Math.sin(anguloFin)
-                );
-                lineGradient.addColorStop(0, 'rgba(255, 255, 255, 0.9)');
-                lineGradient.addColorStop(1, 'rgba(255, 255, 255, 0.3)');
-                
-                ctx.strokeStyle = lineGradient;
-                ctx.lineWidth = 3;
-                ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
+                // 🎨 SOMBRA SUTIL PARA MEJOR DEFINICIÓN
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
                 ctx.shadowBlur = 3;
                 ctx.shadowOffsetX = 1;
                 ctx.shadowOffsetY = 1;
+                ctx.fill();
                 
-                ctx.beginPath();
-                ctx.moveTo(centroX, centroY);
-                ctx.lineTo(centroX + radio * Math.cos(anguloFin), centroY + radio * Math.sin(anguloFin));
-                ctx.stroke();
-            }
+ctx.clip();
 
-            // 🎨 CÍRCULO CENTRAL CON EFECTO DIAMANTE
-            let circleRadius = 45;
-            let emojiSize = 42;
-            
-            if (window.innerWidth <= 360) {
-                circleRadius = 30;
-                emojiSize = 30;
-            } else if (window.innerWidth <= 480) {
-                circleRadius = 35;
-                emojiSize = 35;
-            } else if (window.innerWidth <= 768) {
-                circleRadius = 38;
-                emojiSize = 38;
-            } else if (window.innerWidth <= 992) {
-                circleRadius = 42;
-                emojiSize = 42;
-            }
+                // 🎨 TEXTO CON MEJOR CONTRASTE
+ctx.fillStyle = "#ffffff";
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+                ctx.shadowBlur = 4;
+                ctx.shadowOffsetX = 2;
+                ctx.shadowOffsetY = 2;
+                
+const anguloMedio = (anguloInicio + anguloFin) / 2;
+const distanciaTexto = radio * 0.65;
+const textoX = centroX + Math.cos(anguloMedio) * distanciaTexto;
+const textoY = centroY + Math.sin(anguloMedio) * distanciaTexto;
 
-            // Círculo exterior con gradiente diamante
-            const outerGradient = ctx.createRadialGradient(centroX, centroY, 0, centroX, centroY, circleRadius + 8);
-            outerGradient.addColorStop(0, 'rgba(255, 255, 255, 0.8)');
-            outerGradient.addColorStop(0.7, 'rgba(196, 69, 105, 0.6)');
-            outerGradient.addColorStop(1, 'rgba(196, 69, 105, 0.9)');
+ctx.translate(textoX, textoY);
+let rotacion = anguloMedio;
+if (rotacion > Math.PI/2 && rotacion < 3*Math.PI/2) rotacion += Math.PI;
+ctx.rotate(rotacion);
+
+let textoLimpio = premiosDisponibles[i].replace(/[\u{1F300}-\u{1F9FF}]/gu, '').trim().toUpperCase();
+const palabras = textoLimpio.split(' ');
+let lineas = [], lineaActual = '';
+palabras.forEach(palabra => {
+if ((lineaActual + palabra).length > 10 && lineaActual) {
+lineas.push(lineaActual.trim());
+lineaActual = palabra + ' ';
+} else {
+lineaActual += palabra + ' ';
+}
+});
+lineas.push(lineaActual.trim());
+
+ctx.textAlign = "center";
+ctx.textBaseline = "middle";
+
+// Tamaño de fuente responsivo basado en el ancho de pantalla
+let fontSize = 16;
+let lineHeight = 18;
+
+if (window.innerWidth <= 360) {
+fontSize = 11;
+lineHeight = 13;
+} else if (window.innerWidth <= 480) {
+fontSize = 12;
+lineHeight = 14;
+} else if (window.innerWidth <= 768) {
+fontSize = 14;
+lineHeight = 16;
+} else if (window.innerWidth <= 992) {
+fontSize = 15;
+lineHeight = 17;
+}
+
+ctx.font = `bold ${fontSize}px Poppins, sans-serif`;
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
+                ctx.shadowBlur = 4;
+                ctx.shadowOffsetX = 1;
+                ctx.shadowOffsetY = 1;
+
+const startY = -(lineas.length - 1) * lineHeight / 2;
+lineas.forEach((linea, index) => ctx.fillText(linea, 0, startY + (index * lineHeight)));
+ctx.restore();
+}
+
+            ctx.strokeStyle = "#ffffff";
+            ctx.lineWidth = 3;
+            // 🎨 LÍNEAS DE SEPARACIÓN MÁS ELEGANTES
+            ctx.strokeStyle = "rgba(255, 255, 255, 0.8)";
+            ctx.lineWidth = 2;
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+            ctx.shadowBlur = 2;
+            ctx.shadowOffsetX = 1;
+            ctx.shadowOffsetY = 1;
             
-            ctx.beginPath();
-            ctx.arc(centroX, centroY, circleRadius + 8, 0, 2 * Math.PI);
-            ctx.fillStyle = outerGradient;
-            ctx.fill();
+for (let i = 0; i < total; i++) {
+const anguloFin = (2 * Math.PI / total) * (i + 1);
+ctx.beginPath();
+ctx.moveTo(centroX, centroY);
+ctx.lineTo(centroX + radio * Math.cos(anguloFin), centroY + radio * Math.sin(anguloFin));
+ctx.stroke();
+}
+
+            // Círculo central responsivo
+            // 🎨 CÍRCULO CENTRAL CON EFECTO GLASSMORPHISM
+let circleRadius = 40;
+let emojiSize = 40;
+
+if (window.innerWidth <= 360) {
+circleRadius = 28;
+emojiSize = 28;
+} else if (window.innerWidth <= 480) {
+circleRadius = 32;
+emojiSize = 32;
+} else if (window.innerWidth <= 768) {
+circleRadius = 35;
+emojiSize = 35;
+} else if (window.innerWidth <= 992) {
+circleRadius = 38;
+emojiSize = 38;
+}
+
+            // Círculo con efecto de vidrio
+ctx.beginPath();
+ctx.arc(centroX, centroY, circleRadius, 0, 2 * Math.PI);
+            ctx.fillStyle = "#c44569";
             
-            // Círculo principal con efecto de vidrio
-            const gradient = ctx.createRadialGradient(centroX - 10, centroY - 10, 0, centroX, centroY, circleRadius);
-            gradient.addColorStop(0, 'rgba(255, 255, 255, 0.9)');
-            gradient.addColorStop(0.3, 'rgba(196, 69, 105, 0.8)');
-            gradient.addColorStop(0.7, 'rgba(196, 69, 105, 0.6)');
-            gradient.addColorStop(1, 'rgba(196, 69, 105, 0.9)');
+            // Gradiente radial para efecto de vidrio
+            const gradient = ctx.createRadialGradient(centroX, centroY, 0, centroX, centroY, circleRadius);
+            gradient.addColorStop(0, 'rgba(196, 69, 105, 0.9)');
+            gradient.addColorStop(0.7, 'rgba(196, 69, 105, 0.7)');
+            gradient.addColorStop(1, 'rgba(196, 69, 105, 0.5)');
             
-            ctx.beginPath();
-            ctx.arc(centroX, centroY, circleRadius, 0, 2 * Math.PI);
             ctx.fillStyle = gradient;
-            ctx.fill();
+ctx.fill();
             
-            // Borde brillante
-            ctx.strokeStyle = "rgba(255, 255, 255, 0.9)";
-            ctx.lineWidth = 4;
-            ctx.shadowColor = 'rgba(196, 69, 105, 0.8)';
-            ctx.shadowBlur = 8;
-            ctx.stroke();
-            
-            // Highlight superior
-            const highlightGradient = ctx.createRadialGradient(centroX - 8, centroY - 12, 0, centroX, centroY, circleRadius * 0.6);
-            highlightGradient.addColorStop(0, 'rgba(255, 255, 255, 0.6)');
-            highlightGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-            
-            ctx.beginPath();
-            ctx.arc(centroX, centroY, circleRadius, 0, 2 * Math.PI);
-            ctx.fillStyle = highlightGradient;
-            ctx.fill();
-            
-            // Emoji central con efecto especial
-            ctx.fillStyle = "#ffffff";
-            ctx.font = `bold ${emojiSize}px Poppins, sans-serif`;
+            // Borde con sombra
+            ctx.strokeStyle = "rgba(255, 255, 255, 0.8)";
+            ctx.lineWidth = 3;
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+            ctx.shadowBlur = 5;
+ctx.stroke();
+
+            // Emoji central
+ctx.fillStyle = "#ffffff";
+ctx.font = `bold ${emojiSize}px Poppins, sans-serif`;
+            ctx.shadowColor = 'transparent';
             ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
-            ctx.shadowBlur = 4;
-            ctx.shadowOffsetX = 2;
-            ctx.shadowOffsetY = 2;
-            ctx.textBaseline = "middle";
-            ctx.textAlign = "center";
-            ctx.fillText("💎", centroX, centroY + 4);
-        }
+            ctx.shadowBlur = 3;
+            ctx.shadowOffsetX = 1;
+            ctx.shadowOffsetY = 1;
+ctx.textBaseline = "middle";
+ctx.textAlign = "center";
+ctx.fillText("💎", centroX, centroY + 4); // +4 para centrar visualmente el emoji
+}
 
-        async function girarRuleta() {
-            if (tiradasRestantes <= 0 || premiosActuales.length === 0) return;
-            
-            // Configurar estado de carga del botón
-            const girarBtn = document.getElementById('girarBtn');
-            girarBtn.disabled = true;
-            girarBtn.textContent = 'Girando... 🎲';
-            
-            soundSpin.loop = true;
-            soundSpin.play();
-            const indiceGanadorEnPool = Math.floor(Math.random() * premiosActuales.length);
-            const premioGanado = premiosActuales[indiceGanadorEnPool];
-            const indiceEnRuletaCompleta = premiosDisponibles.findIndex(p => p === premioGanado);
+async function girarRuleta() {
+if (tiradasRestantes <= 0 || premiosActuales.length === 0) return;
 
-            if (indiceEnRuletaCompleta === -1) {
-                mostrarNotificacion("Error de configuración. Por favor, intenta de nuevo.", "error");
-                soundSpin.pause();
-                return;
-            }
-            const anguloPorPremio = 360 / premiosDisponibles.length;
-            const anguloFinal = (360 * 6) + (indiceEnRuletaCompleta * anguloPorPremio) + (anguloPorPremio / 2);
+// Configurar estado de carga del botón
+const girarBtn = document.getElementById('girarBtn');
+girarBtn.disabled = true;
+girarBtn.textContent = 'Girando... 🎲';
 
-            const ruleta = document.getElementById('opciones');
-            ruleta.style.transition = "transform 5s cubic-bezier(.17,.67,.83,.67)";
-            ruleta.style.transform = `rotate(${anguloFinal}deg)`;
-            document.getElementById('girarBtn').disabled = true;
-            mostrarMensaje("🎯 ¡La ruleta está girando mágicamente! ✨");
+soundSpin.loop = true;
+soundSpin.play();
+const indiceGanadorEnPool = Math.floor(Math.random() * premiosActuales.length);
+const premioGanado = premiosActuales[indiceGanadorEnPool];
+const indiceEnRuletaCompleta = premiosDisponibles.findIndex(p => p === premioGanado);
 
-            setTimeout(async () => {
-                soundSpin.pause();
-                soundSpin.currentTime = 0;
-                soundWin.play();
-                
-                // 🎊 CELEBRACIÓN CON CONFETI 🎊
-                confetti({
-                    particleCount: 200,
-                    spread: 100,
-                    origin: { y: 0.6 },
-                    gravity: 0.8
-                });
+if (indiceEnRuletaCompleta === -1) {
+mostrarNotificacion("Error de configuración. Por favor, intenta de nuevo.", "error");
+soundSpin.pause();
+return;
+}
+const anguloPorPremio = 360 / premiosDisponibles.length;
+const anguloFinal = (360 * 6) + (indiceEnRuletaCompleta * anguloPorPremio) + (anguloPorPremio / 2);
 
-                ruleta.style.transition = "";
-                ruleta.style.transform = `rotate(${ (indiceEnRuletaCompleta * anguloPorPremio) + (anguloPorPremio / 2) }deg)`;
-                mostrarPopupPremio(premioGanado);
-                mostrarMensaje(`🎉 ¡Felicidades ${nombreUsuario}! Ganaste: <b>${premioGanado}</b>`);
-                
-                // Agregar el premio al historial
-                agregarPremioAlHistorial(premioGanado);
-                
-                tiradasRestantes--;
-                
-                // Gastar el tiro en el backend
-                try {
-                    const response = await fetch('/.netlify/functions/gastar-tiro', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ codigoId: codigoActual })
-                    });
-                    
-                    const result = await response.json();
-                    if (response.ok && result.success) {
-                        console.log('Tiro gastado exitosamente:', result);
-                        // Actualizar tiradasRestantes con la información del backend
-                        if (result.tiradasRestantes !== undefined) {
-                            tiradasRestantes = result.tiradasRestantes;
-                        }
-                    } else {
-                        console.error('Error al gastar tiro:', result.message);
-                        mostrarNotificacion('Hubo un problema al registrar tu tirada. Contacta a soporte si persiste.', 'warning');
-                    }
-                } catch (error) {
-                    console.error('Error de conexión al gastar tiro:', error);
-                    mostrarNotificacion('Error de conexión al registrar la tirada. Tu premio sigue siendo válido.', 'warning');
-                }
-                
-                if (tiradasRestantes > 0) {
-                    setTimeout(() => {
-                        const girarBtn = document.getElementById('girarBtn');
-                        girarBtn.disabled = false;
-                        girarBtn.textContent = '✨ Girar Ruleta ✨';
-                        mostrarMensaje(`✨ ¡Tienes ${tiradasRestantes} tirada(s) más! Sigue participando 🌟`);
-                    }, 3000);
-                } else {
-                    setTimeout(() => {
-                        mostrarMensaje(`🌟 ¡Gracias por participar ${nombreUsuario}! Ha sido una experiencia mágica 💖`);
-                        mostrarNotificacion(`¡Gracias por participar, ${nombreUsuario}! 🌟`, 'success');
-                    }, 3000);
-                }
-            }, 5200);
-        }
-        
-        async function validarCodigo() {
-            soundClick.play();
-            const codigoInput = document.getElementById('codigo');
-            const validarBtn = document.getElementById('validarBtn');
-            const codigo = codigoInput.value.trim().toUpperCase();
+const ruleta = document.getElementById('opciones');
+ruleta.style.transition = "transform 5s cubic-bezier(.17,.67,.83,.67)";
+ruleta.style.transform = `rotate(${anguloFinal}deg)`;
+document.getElementById('girarBtn').disabled = true;
+mostrarMensaje("🎯 ¡La ruleta está girando mágicamente! ✨");
 
-            if (!codigo) {
-                mostrarMensaje("❌ Por favor ingresa un código.");
-                codigoInput.style.animation = 'shake 0.5s ease-in-out';
-                setTimeout(() => { codigoInput.style.animation = ''; }, 500);
-                return;
-            }
+setTimeout(async () => {
+soundSpin.pause();
+soundSpin.currentTime = 0;
+soundWin.play();
 
-            validarBtn.disabled = true;
-            validarBtn.textContent = '⏳ Validando...';
-            mostrarMensaje("🔍 Validando tu código...");
+// 🎊 CELEBRACIÓN CON CONFETI 🎊
+confetti({
+particleCount: 200,
+spread: 100,
+origin: { y: 0.6 },
+gravity: 0.8
+});
 
-            try {
-                const response = await fetch('/.netlify/functions/validate-code', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ codigoId: codigo })
-                });
+ruleta.style.transition = "";
+ruleta.style.transform = `rotate(${ (indiceEnRuletaCompleta * anguloPorPremio) + (anguloPorPremio / 2) }deg)`;
+mostrarPopupPremio(premioGanado);
+mostrarMensaje(`🎉 ¡Felicidades ${nombreUsuario}! Ganaste: <b>${premioGanado}</b>`);
 
-                const result = await response.json();
+// Agregar el premio al historial
+agregarPremioAlHistorial(premioGanado);
 
-                if (response.status === 200 && result.success) {
-                    const datosCodigo = result.data;
-                    
-                    codigoActual = codigo;
-                    nombreUsuario = datosCodigo.nombreFan;
-                    
-                    // ✅ CORRECCIÓN: Mejorar gestión de premiosActuales
-                    if (datosCodigo.premios && Array.isArray(datosCodigo.premios) && datosCodigo.premios.length > 0) {
-                        // Usar premios específicos del código
-                        premiosActuales = [...datosCodigo.premios];
-                        console.log('✅ Usando premios específicos del código:', premiosActuales);
-                    } else if (premiosDisponibles && premiosDisponibles.length > 0) {
-                        // Fallback a premios globales
-                        premiosActuales = [...premiosDisponibles];
-                        console.log('⚠️ Usando premios globales como fallback:', premiosActuales);
-                    } else {
-                        // Último fallback a premios por defecto
-                        premiosActuales = ['Premio Sorpresa', 'Pack Fotos Hot', 'Videollamada 5 minutos'];
-                        console.warn('⚠️ Usando premios por defecto - no hay premios configurados');
-                    }
-                    
-                    tiradasRestantes = datosCodigo.tiradasRestantes || 0;
-                    
-                    mostrarNotificacion(`¡Bienvenida ${nombreUsuario}! Código válido con ${tiradasRestantes} tirada(s) 🎉`, 'success');
-                    mostrarMensaje(`💖 ¡Hola ${nombreUsuario}! Tienes ${tiradasRestantes} tirada(s). ¡Mucha suerte! ✨`);
-                    
-                    // Habilitar botón de girar solo si hay tiradas disponibles
-                    const girarBtn = document.getElementById('girarBtn');
-                    if (girarBtn) {
-                        girarBtn.disabled = tiradasRestantes <= 0;
-                    }
-                    
-                    codigoInput.disabled = true;
-                    validarBtn.disabled = true;
-                    
-                    codigoInput.style.borderColor = '#10ac84';
-                    validarBtn.style.background = 'linear-gradient(45deg, #10ac84, #00d2d3)';
-                    validarBtn.textContent = '✅ Código Válido';
-                    
-                    // Inicializar el historial de premios
-                    inicializarHistorial();
-                    
-                } else {
-                    mostrarNotificacion(`${result.message || 'Código no válido o sin tiradas disponibles'}`, 'error');
-                    mostrarMensaje(`❌ ${result.message || 'Error al validar el código'}`);
-                    codigoInput.style.animation = 'shake 0.5s ease-in-out';
-                    setTimeout(() => { codigoInput.style.animation = ''; }, 500);
-                }
+tiradasRestantes--;
 
-            } catch (error) {
-                console.error('Error de conexión al validar código:', error);
-                mostrarNotificacion("Error de conexión. Por favor, verifica tu internet e inténtalo de nuevo.", 'error');
-                mostrarMensaje("❌ Error de conexión. Por favor, verifica tu internet e inténtalo de nuevo.");
-                codigoInput.style.animation = 'shake 0.5s ease-in-out';
-                setTimeout(() => { codigoInput.style.animation = ''; }, 500);
-            } finally {
-                if (validarBtn.textContent !== '✅ Código Válido') {
-                    validarBtn.disabled = false;
-                    validarBtn.textContent = '✨ Validar Código ✨';
-                }
-            }
-        }
-        
-        function mostrarPopupPremio(premio) {
-            document.getElementById('popup-prize').textContent = premio;
-            document.getElementById('popup-overlay').classList.add('show');
-        }
+// Gastar el tiro en el backend
+try {
+const response = await fetch('/.netlify/functions/gastar-tiro', {
+method: 'POST',
+headers: {
+'Content-Type': 'application/json',
+},
+body: JSON.stringify({ codigoId: codigoActual })
+});
 
-        function cerrarPopup() {
-            soundClick.play();
-            document.getElementById('popup-overlay').classList.remove('show');
-        }
+const result = await response.json();
+if (response.ok && result.success) {
+console.log('Tiro gastado exitosamente:', result);
+// Actualizar tiradasRestantes con la información del backend
+if (result.tiradasRestantes !== undefined) {
+tiradasRestantes = result.tiradasRestantes;
+}
+} else {
+console.error('Error al gastar tiro:', result.message);
+mostrarNotificacion('Hubo un problema al registrar tu tirada. Contacta a soporte si persiste.', 'warning');
+}
+} catch (error) {
+console.error('Error de conexión al gastar tiro:', error);
+mostrarNotificacion('Error de conexión al registrar la tirada. Tu premio sigue siendo válido.', 'warning');
+}
 
-        function mostrarMensaje(msg) {
-            const mensajeElement = document.getElementById('mensaje');
-            mensajeElement.innerHTML = msg;
-            
-            // Añadir clase de animación
-            mensajeElement.classList.add('mensaje-update');
-            
-            // Quitar la clase después de que termine la animación
-            setTimeout(() => {
-                mensajeElement.classList.remove('mensaje-update');
-            }, 500);
-        }
+if (tiradasRestantes > 0) {
+setTimeout(() => {
+const girarBtn = document.getElementById('girarBtn');
+girarBtn.disabled = false;
+girarBtn.textContent = '✨ Girar Ruleta ✨';
+mostrarMensaje(`✨ ¡Tienes ${tiradasRestantes} tirada(s) más! Sigue participando 🌟`);
+}, 3000);
+} else {
+setTimeout(() => {
+mostrarMensaje(`🌟 ¡Gracias por participar ${nombreUsuario}! Ha sido una experiencia mágica 💖`);
+mostrarNotificacion(`¡Gracias por participar, ${nombreUsuario}! 🌟`, 'success');
+}, 3000);
+}
+}, 5200);
+}
 
-        // === FONDO INTERACTIVO REACTIVO AL MOUSE MEJORADO ===
-        function inicializarFondoInteractivo() {
-            const paleta = ['#ff6b9d', '#ffffff', '#f8b500', '#c44569', '#feca57', '#23a6d5', '#ff9a9e', '#8a2be2'];
-            let throttleTimer = null;
-            
-            // Crear partículas de fondo dinámicas
-            crearParticulasDeFondo();
-            
-            // Efecto épico de bienvenida
-            crearExplosionBienvenida(paleta);
-            
-            document.addEventListener('mousemove', function(e) {
-                // Throttle para mejor rendimiento
-                if (throttleTimer) return;
-                
-                throttleTimer = setTimeout(() => {
-                    throttleTimer = null;
-                }, 80); // Reducir frecuencia para mejor rendimiento
-                
-                crearParticulaMouse(e.clientX, e.clientY, paleta);
-            });
-        }
-        
-        function crearParticulasDeFondo() {
-            const container = document.querySelector('.background-shapes');
-            const tipos = ['heart', 'sparkle', 'star', 'diamond'];
-            
-            // Crear 12 partículas de fondo adicionales
-            for (let i = 0; i < 12; i++) {
-                setTimeout(() => {
-                    const particula = document.createElement('div');
-                    const tipo = tipos[Math.floor(Math.random() * tipos.length)];
-                    particula.className = `particle ${tipo}`;
-                    
-                    // Posición aleatoria
-                    particula.style.left = Math.random() * 100 + '%';
-                    particula.style.top = Math.random() * 100 + '%';
-                    
-                    // Delay aleatorio para animación
-                    particula.style.animationDelay = Math.random() * 5 + 's';
-                    
-                    if (tipo === 'diamond') {
-                        // Crear elementos diamante personalizados
-                        particula.style.width = (Math.random() * 6 + 6) + 'px';
-                        particula.style.height = particula.style.width;
-                    }
-                    
-                    container.appendChild(particula);
-                }, i * 200);
-            }
-        }
-        
-        function crearExplosionBienvenida(paleta) {
-            const centroX = window.innerWidth / 2;
-            const centroY = window.innerHeight / 2;
-            
-            // Crear 30 partículas desde el centro
-            for (let i = 0; i < 30; i++) {
-                setTimeout(() => {
-                    crearParticulaBienvenida(centroX, centroY, paleta, i);
-                }, i * 50); // Escalonar la creación
-            }
-        }
-        
-        function crearParticulaBienvenida(x, y, paleta, index) {
-            const particula = document.createElement('div');
-            particula.className = 'mouse-particle';
-            
-            // Tamaño más grande para el efecto de bienvenida
-            const tamaño = Math.random() * 30 + 10;
-            const color = paleta[Math.floor(Math.random() * paleta.length)];
-            
-            // Configurar estilos iniciales
-            particula.style.cssText = `
-                width: ${tamaño}px;
-                height: ${tamaño}px;
-                background: ${color};
-                left: ${x - tamaño/2}px;
-                top: ${y - tamaño/2}px;
-                box-shadow: 0 0 ${tamaño}px ${color};
-                opacity: 1;
-                z-index: 5;
-            `;
-            
-            document.body.appendChild(particula);
-            
-            // Animar hacia afuera en todas las direcciones
-            setTimeout(() => {
-                const angulo = (index / 30) * 2 * Math.PI;
-                const distancia = Math.random() * 300 + 200;
-                const moveX = Math.cos(angulo) * distancia;
-                const moveY = Math.sin(angulo) * distancia;
-                const scale = Math.random() * 1.5 + 0.5;
-                
-                particula.style.transform = `translate(${moveX}px, ${moveY}px) scale(${scale}) rotate(720deg)`;
-                particula.style.opacity = '0';
-            }, 100);
-            
-            // Limpiar después de la animación
-            setTimeout(() => {
-                if (particula.parentNode) {
-                    document.body.removeChild(particula);
-                }
-            }, 1500);
-        }
-        
-        function crearParticulaMouse(x, y, paleta) {
-            const particula = document.createElement('div');
-            particula.className = 'mouse-particle';
-            
-            // Tamaño aleatorio más sutil
-            const tamaño = Math.random() * 12 + 4;
-            
-            // Color aleatorio de la paleta con gradiente
-            const color1 = paleta[Math.floor(Math.random() * paleta.length)];
-            const color2 = paleta[Math.floor(Math.random() * paleta.length)];
-            
-            // Configurar estilos con gradiente
-            particula.style.cssText = `
-                width: ${tamaño}px;
-                height: ${tamaño}px;
-                background: radial-gradient(circle, ${color1}, ${color2});
-                left: ${x - tamaño/2}px;
-                top: ${y - tamaño/2}px;
-                box-shadow: 0 0 ${tamaño}px ${color1}40;
-                opacity: 0.7;
-                border-radius: 50%;
-                z-index: 1;
-            `;
-            
-            // Añadir al body
-            document.body.appendChild(particula);
-            
-            // Animar inmediatamente con efecto más suave
-            setTimeout(() => {
-                const moveX = (Math.random() - 0.5) * 60;
-                const moveY = (Math.random() - 0.5) * 60;
-                const scale = Math.random() * 1.5 + 0.5;
-                const rotate = Math.random() * 360;
-                
-                particula.style.transform = `translate(${moveX}px, ${moveY}px) scale(${scale}) rotate(${rotate}deg)`;
-                particula.style.opacity = '0';
-            }, 10);
-            
-            // Limpiar después de la animación
-            setTimeout(() => {
-                if (particula.parentNode) {
-                    document.body.removeChild(particula);
-                }
-            }, 1200);
-        }
+async function validarCodigo() {
+soundClick.play();
+const codigoInput = document.getElementById('codigo');
+const validarBtn = document.getElementById('validarBtn');
+const codigo = codigoInput.value.trim().toUpperCase();
 
-        // === INICIALIZACIÓN MAESTRA DE LA PÁGINA ===
-        async function inicializarPagina() {
-            try {
-                console.log('🚀 Iniciando carga de página...');
-                
-                // 1. Crear elementos del DOM primero
-                crearElementosDOM();
-                
-                // 2. Llamada única al backend para obtener toda la configuración
-                const response = await fetch('/.netlify/functions/config-manager', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
-                const result = await response.json();
-                
-                if (result.success && result.data) {
-                    console.log('✅ Configuración cargada exitosamente:', result.data);
-                    
-                    // Procesar nombre de la modelo
-                    if (result.data.nombreModelo) {
-                        const tituloElement = document.querySelector('.controls-title');
-                        if (tituloElement) {
-                            tituloElement.textContent = `${result.data.nombreModelo} 💖`;
-                        }
-                        // También actualizar el título de la página
-                        document.title = `${result.data.nombreModelo} - Ruleta Interactiva`;
-                    }
-                    
-                    // Procesar avatar
-                    if (result.data.avatarURL && result.data.avatarURL.trim() && result.data.avatarURL.startsWith('data:image/')) {
-                        mostrarAvatar(result.data.avatarURL);
-                    }
-                    
-                    // Procesar y guardar premios en variable global
-                    if (result.data.premios && Array.isArray(result.data.premios) && result.data.premios.length > 0) {
-                        premiosDisponibles = [...result.data.premios];
-                        console.log('✅ Premios cargados:', premiosDisponibles);
-                    } else {
-                        // Premios por defecto si no hay configurados
-                        premiosDisponibles = ['Premio Sorpresa', 'Pack Fotos Hot', 'Videollamada 5 minutos'];
-                        console.warn('⚠️ No hay premios configurados, usando premios por defecto');
-                    }
-                    
-                    // 3. Después de procesar todos los datos, dibujar la ruleta
-                    dibujarRuletaCompleta();
-                    
-                } else {
-                    throw new Error(result.message || 'Error en la respuesta del servidor');
-                }
-                
-            } catch (error) {
-                console.error('❌ Error de conexión al cargar configuración:', error);
-                
-                // Usar configuración por defecto en caso de error
-                premiosDisponibles = ['Premio Sorpresa', 'Pack Fotos Hot', 'Videollamada 5 minutos'];
-                
-                // Mostrar título por defecto
-                const tituloElement = document.querySelector('.controls-title');
-                if (tituloElement) {
-                    tituloElement.textContent = 'Bella Rey 💖';
-                }
-                
-                // Dibujar ruleta con configuración por defecto
-                dibujarRuletaCompleta();
-                
-                // Mostrar notificación de error al usuario
-                setTimeout(() => {
-                    mostrarNotificacion('No se pudo cargar la configuración. Usando configuración por defecto.', 'warning');
-                }, 1000);
-            }
-        }
+if (!codigo) {
+mostrarMensaje("❌ Por favor ingresa un código.");
+codigoInput.style.animation = 'shake 0.5s ease-in-out';
+setTimeout(() => { codigoInput.style.animation = ''; }, 500);
+return;
+}
 
-        // === FUNCIÓN PARA CREAR ELEMENTOS DEL DOM ===
-        function crearElementosDOM() {
-            const controlsContainer = document.querySelector('.controls-container');
-            const ruletaSection = document.querySelector('.ruleta-section');
-            
-            // Crear sección de controles
-            controlsContainer.innerHTML = `
-                <div class="controls-section">
-                    <h2 class="controls-title">Bella Rey 💖</h2>
-                    <div class="form-title">🎯Escribe tu Código🎯</div>
-                    <input type="text" id="codigo" placeholder="Escribe tu código aquí..." autocomplete="off">
-                    <button id="validarBtn" class="button">✨ Validar Código ✨</button>
-                </div>
-            `;
-            
-            // Crear sección de ruleta
-            ruletaSection.innerHTML = `
-                <div id="ruleta">
-                    <div id="flecha"></div>
-                    <canvas id="opciones" width="450" height="450"></canvas>
-                </div>
-                <button id="girarBtn" class="button" disabled>🎲 ¡Girar la Ruleta de la Suerte! 🎲</button>
-            `;
-        }
+validarBtn.disabled = true;
+validarBtn.textContent = '⏳ Validando...';
+mostrarMensaje("🔍 Validando tu código...");
 
-        // === CARGA DE CONFIGURACIÓN VISUAL (DEPRECADA - USAR inicializarPagina) ===
-        async function cargarConfiguracionVisual() {
-            try {
-                const response = await fetch('/.netlify/functions/config-manager');
-                const result = await response.json();
-                
-                if (response.ok && result.success && result.data) {
-                    // Actualizar el nombre de la modelo
-                    if (result.data.nombreModelo) {
-                        const tituloElement = document.getElementById('tituloModelo');
-                        if (tituloElement) {
-                            tituloElement.textContent = result.data.nombreModelo;
-                        }
-                        
-                        // También actualizar el título de la página
-                        document.title = `${result.data.nombreModelo} - Ruleta Interactiva`;
-                    }
-                    
-                    // Cargar y mostrar el avatar si existe
-                    if (result.data.avatarURL && result.data.avatarURL.startsWith('data:image/')) {
-                        mostrarAvatar(result.data.avatarURL);
-                    }
-                }
-            } catch (error) {
-                console.error('Error al cargar configuración visual:', error);
-                // No mostrar error al usuario, usar valores por defecto
-            }
-        }
+try {
+const response = await fetch('/.netlify/functions/validate-code', {
+method: 'POST',
+headers: {
+'Content-Type': 'application/json',
+},
+body: JSON.stringify({ codigoId: codigo })
+});
 
-        function mostrarAvatar(avatarBase64) {
-            const container = document.getElementById('avatar-container');
-            if (!container) return;
-            
-            // Limpiar contenido anterior
-            container.innerHTML = '';
-            
-            // Crear nuevo elemento imagen
-            const img = document.createElement('img');
-            img.src = avatarBase64;
-            
-            // Manejar carga de imagen
-            img.onload = function() {
-                // Añadir imagen al contenedor
-                container.appendChild(img);
-                
-                // Mostrar con animación suave después de un pequeño delay
-                setTimeout(() => {
-                    container.classList.add('visible');
-                }, 300);
+const result = await response.json();
+
+if (response.status === 200 && result.success) {
+const datosCodigo = result.data;
+
+codigoActual = codigo;
+nombreUsuario = datosCodigo.nombreFan;
+
+// ✅ CORRECCIÓN: Mejorar gestión de premiosActuales
+if (datosCodigo.premios && Array.isArray(datosCodigo.premios) && datosCodigo.premios.length > 0) {
+// Usar premios específicos del código
+premiosActuales = [...datosCodigo.premios];
+console.log('✅ Usando premios específicos del código:', premiosActuales);
+} else if (premiosDisponibles && premiosDisponibles.length > 0) {
+// Fallback a premios globales
+premiosActuales = [...premiosDisponibles];
+console.log('⚠️ Usando premios globales como fallback:', premiosActuales);
+} else {
+// Último fallback a premios por defecto
+premiosActuales = ['Premio Sorpresa', 'Pack Fotos Hot', 'Videollamada 5 minutos'];
+console.warn('⚠️ Usando premios por defecto - no hay premios configurados');
+}
+
+tiradasRestantes = datosCodigo.tiradasRestantes || 0;
+
+mostrarNotificacion(`¡Bienvenida ${nombreUsuario}! Código válido con ${tiradasRestantes} tirada(s) 🎉`, 'success');
+mostrarMensaje(`💖 ¡Hola ${nombreUsuario}! Tienes ${tiradasRestantes} tirada(s). ¡Mucha suerte! ✨`);
+
+// Habilitar botón de girar solo si hay tiradas disponibles
+const girarBtn = document.getElementById('girarBtn');
+if (girarBtn) {
+girarBtn.disabled = tiradasRestantes <= 0;
+}
+
+codigoInput.disabled = true;
+validarBtn.disabled = true;
+
+codigoInput.style.borderColor = '#10ac84';
+validarBtn.style.background = 'linear-gradient(45deg, #10ac84, #00d2d3)';
+validarBtn.textContent = '✅ Código Válido';
+
+// Inicializar el historial de premios
+inicializarHistorial();
+
+} else {
+mostrarNotificacion(`${result.message || 'Código no válido o sin tiradas disponibles'}`, 'error');
+mostrarMensaje(`❌ ${result.message || 'Error al validar el código'}`);
+codigoInput.style.animation = 'shake 0.5s ease-in-out';
+setTimeout(() => { codigoInput.style.animation = ''; }, 500);
+}
+
+} catch (error) {
+console.error('Error de conexión al validar código:', error);
+mostrarNotificacion("Error de conexión. Por favor, verifica tu internet e inténtalo de nuevo.", 'error');
+mostrarMensaje("❌ Error de conexión. Por favor, verifica tu internet e inténtalo de nuevo.");
+codigoInput.style.animation = 'shake 0.5s ease-in-out';
+setTimeout(() => { codigoInput.style.animation = ''; }, 500);
+} finally {
+if (validarBtn.textContent !== '✅ Código Válido') {
+validarBtn.disabled = false;
+validarBtn.textContent = '✨ Validar Código ✨';
+}
+}
+}
+
+function mostrarPopupPremio(premio) {
+document.getElementById('popup-prize').textContent = premio;
+document.getElementById('popup-overlay').classList.add('show');
+}
+
+function cerrarPopup() {
+soundClick.play();
+document.getElementById('popup-overlay').classList.remove('show');
+}
+
+function mostrarMensaje(msg) {
+const mensajeElement = document.getElementById('mensaje');
+mensajeElement.innerHTML = msg;
+
+// Añadir clase de animación
+mensajeElement.classList.add('mensaje-update');
+
+// Quitar la clase después de que termine la animación
+setTimeout(() => {
+mensajeElement.classList.remove('mensaje-update');
+}, 500);
+}
+
+// === FONDO INTERACTIVO REACTIVO AL MOUSE ===
+function inicializarFondoInteractivo() {
+const paleta = ['#ff6b9d', '#ffffff', '#f8b500', '#c44569', '#feca57', '#23a6d5', '#ff9a9e', '#8a2be2'];
+let throttleTimer = null;
+
+// Efecto épico de bienvenida
+crearExplosionBienvenida(paleta);
+
+document.addEventListener('mousemove', function(e) {
+// Throttle para mejor rendimiento
+if (throttleTimer) return;
+
+throttleTimer = setTimeout(() => {
+throttleTimer = null;
+}, 50); // Crear partícula cada 50ms máximo
+
+crearParticulaMouse(e.clientX, e.clientY, paleta);
+});
+}
+
+function crearExplosionBienvenida(paleta) {
+const centroX = window.innerWidth / 2;
+const centroY = window.innerHeight / 2;
+
+// Crear 30 partículas desde el centro
+for (let i = 0; i < 30; i++) {
+setTimeout(() => {
+crearParticulaBienvenida(centroX, centroY, paleta, i);
+}, i * 50); // Escalonar la creación
+}
+}
+
+function crearParticulaBienvenida(x, y, paleta, index) {
+const particula = document.createElement('div');
+particula.className = 'mouse-particle';
+
+// Tamaño más grande para el efecto de bienvenida
+const tamaño = Math.random() * 30 + 10;
+const color = paleta[Math.floor(Math.random() * paleta.length)];
+
+// Configurar estilos iniciales
+particula.style.cssText = `
+               width: ${tamaño}px;
+               height: ${tamaño}px;
+               background: ${color};
+               left: ${x - tamaño/2}px;
+               top: ${y - tamaño/2}px;
+               box-shadow: 0 0 ${tamaño}px ${color};
+               opacity: 1;
+               z-index: 5;
+           `;
+
+document.body.appendChild(particula);
+
+// Animar hacia afuera en todas las direcciones
+setTimeout(() => {
+const angulo = (index / 30) * 2 * Math.PI;
+const distancia = Math.random() * 300 + 200;
+const moveX = Math.cos(angulo) * distancia;
+const moveY = Math.sin(angulo) * distancia;
+const scale = Math.random() * 1.5 + 0.5;
+
+particula.style.transform = `translate(${moveX}px, ${moveY}px) scale(${scale}) rotate(720deg)`;
+particula.style.opacity = '0';
+}, 100);
+
+// Limpiar después de la animación
+setTimeout(() => {
+if (particula.parentNode) {
+document.body.removeChild(particula);
+}
+}, 1500);
+}
+
+function crearParticulaMouse(x, y, paleta) {
+const particula = document.createElement('div');
+particula.className = 'mouse-particle';
+
+// Tamaño aleatorio entre 5px y 25px
+const tamaño = Math.random() * 20 + 5;
+
+// Color aleatorio de la paleta
+const color = paleta[Math.floor(Math.random() * paleta.length)];
+
+// Configurar estilos iniciales
+particula.style.cssText = `
+               width: ${tamaño}px;
+               height: ${tamaño}px;
+               background: ${color};
+               left: ${x - tamaño/2}px;
+               top: ${y - tamaño/2}px;
+               box-shadow: 0 0 ${tamaño/2}px ${color};
+               opacity: 0.8;
+           `;
+
+// Añadir al body
+document.body.appendChild(particula);
+
+// Animar inmediatamente
+setTimeout(() => {
+const moveX = (Math.random() - 0.5) * 80; // Movimiento horizontal aleatorio
+const moveY = (Math.random() - 0.5) * 80; // Movimiento vertical aleatorio
+const scale = Math.random() * 2 + 0.5; // Escala final aleatoria
+
+particula.style.transform = `translate(${moveX}px, ${moveY}px) scale(${scale})`;
+particula.style.opacity = '0';
+}, 10);
+
+// Limpiar después de la animación
+setTimeout(() => {
+if (particula.parentNode) {
+document.body.removeChild(particula);
+}
+}, 1000);
+}
+
+// === INICIALIZACIÓN MAESTRA DE LA PÁGINA ===
+async function inicializarPagina() {
+try {
+console.log('🚀 Iniciando carga de página...');
+
+// 1. Crear elementos del DOM primero
+crearElementosDOM();
+
+// 2. Llamada única al backend para obtener toda la configuración
+const response = await fetch('/.netlify/functions/config-manager', {
+method: 'GET',
+headers: {
+'Content-Type': 'application/json',
+}
+});
+
+if (!response.ok) {
+throw new Error(`HTTP error! status: ${response.status}`);
+}
+
+const result = await response.json();
+
+if (result.success && result.data) {
+console.log('✅ Configuración cargada exitosamente:', result.data);
+
+// Procesar nombre de la modelo
+if (result.data.nombreModelo) {
+const tituloElement = document.querySelector('.controls-title');
+if (tituloElement) {
+tituloElement.textContent = `${result.data.nombreModelo} 💖`;
+}
+// También actualizar el título de la página
+document.title = `${result.data.nombreModelo} - Ruleta Interactiva`;
+}
+
+// Procesar avatar
+if (result.data.avatarURL && result.data.avatarURL.trim() && result.data.avatarURL.startsWith('data:image/')) {
+mostrarAvatar(result.data.avatarURL);
+}
+
+// Procesar y guardar premios en variable global
+if (result.data.premios && Array.isArray(result.data.premios) && result.data.premios.length > 0) {
+premiosDisponibles = [...result.data.premios];
+console.log('✅ Premios cargados:', premiosDisponibles);
+} else {
+// Premios por defecto si no hay configurados
+premiosDisponibles = ['Premio Sorpresa', 'Pack Fotos Hot', 'Videollamada 5 minutos'];
+console.warn('⚠️ No hay premios configurados, usando premios por defecto');
+}
+
+// 3. Después de procesar todos los datos, dibujar la ruleta
+dibujarRuletaCompleta();
+
+} else {
+throw new Error(result.message || 'Error en la respuesta del servidor');
+}
+
+} catch (error) {
+console.error('❌ Error de conexión al cargar configuración:', error);
+
+// Usar configuración por defecto en caso de error
+premiosDisponibles = ['Premio Sorpresa', 'Pack Fotos Hot', 'Videollamada 5 minutos'];
+
+// Mostrar título por defecto
+const tituloElement = document.querySelector('.controls-title');
+if (tituloElement) {
+tituloElement.textContent = 'Bella Rey 💖';
+}
+
+// Dibujar ruleta con configuración por defecto
+dibujarRuletaCompleta();
+
+// Mostrar notificación de error al usuario
+setTimeout(() => {
+mostrarNotificacion('No se pudo cargar la configuración. Usando configuración por defecto.', 'warning');
+}, 1000);
+}
+}
+
+// === FUNCIÓN PARA CREAR ELEMENTOS DEL DOM ===
+function crearElementosDOM() {
+const controlsContainer = document.querySelector('.controls-container');
+const ruletaSection = document.querySelector('.ruleta-section');
+
+// Crear sección de controles
+controlsContainer.innerHTML = `
+               <div class="controls-section">
+                   <h2 class="controls-title">Bella Rey 💖</h2>
+                   <div class="form-title">🎯Escribe tu Código🎯</div>
+                   <input type="text" id="codigo" placeholder="Escribe tu código aquí..." autocomplete="off">
+                   <button id="validarBtn" class="button">✨ Validar Código ✨</button>
+               </div>
+           `;
+
+// Crear sección de ruleta
+ruletaSection.innerHTML = `
+               <div id="ruleta">
+                   <div id="flecha"></div>
+                   <canvas id="opciones" width="450" height="450"></canvas>
+               </div>
+               <button id="girarBtn" class="button" disabled>🎲 ¡Girar la Ruleta de la Suerte! 🎲</button>
+           `;
+}
+
+// === CARGA DE CONFIGURACIÓN VISUAL (DEPRECADA - USAR inicializarPagina) ===
+async function cargarConfiguracionVisual() {
+try {
+const response = await fetch('/.netlify/functions/config-manager');
+const result = await response.json();
+
+if (response.ok && result.success && result.data) {
+// Actualizar el nombre de la modelo
+if (result.data.nombreModelo) {
+const tituloElement = document.getElementById('tituloModelo');
+if (tituloElement) {
+tituloElement.textContent = result.data.nombreModelo;
+}
+
+// También actualizar el título de la página
+document.title = `${result.data.nombreModelo} - Ruleta Interactiva`;
+}
+
+// Cargar y mostrar el avatar si existe
+if (result.data.avatarURL && result.data.avatarURL.startsWith('data:image/')) {
+mostrarAvatar(result.data.avatarURL);
+}
+}
+} catch (error) {
+console.error('Error al cargar configuración visual:', error);
+// No mostrar error al usuario, usar valores por defecto
+}
+}
+
+function mostrarAvatar(avatarBase64) {
+const container = document.getElementById('avatar-container');
+if (!container) return;
+
+// Limpiar contenido anterior
+container.innerHTML = '';
+
+// Crear nuevo elemento imagen
+const img = document.createElement('img');
+img.src = avatarBase64;
+
+// Manejar carga de imagen
+img.onload = function() {
+// Añadir imagen al contenedor
+container.appendChild(img);
+
+// Mostrar con animación suave después de un pequeño delay
+setTimeout(() => {
+container.classList.add('visible');
+}, 300);
                 
                 // 🎨 APLICAR FONDO PERSONALIZADO A LA RULETA
                 aplicarFondoRuleta(avatarBase64);
-            };
-            
-            img.onerror = function() {
-                console.error('Error al cargar la imagen del avatar');
-                // Ocultar contenedor si hay error
-                container.classList.remove('visible');
+};
+
+img.onerror = function() {
+console.error('Error al cargar la imagen del avatar');
+// Ocultar contenedor si hay error
+container.classList.remove('visible');
                 // Remover fondo de la ruleta si hay error
                 removerFondoRuleta();
-            };
-        }
+};
+}
         
         function aplicarFondoRuleta(avatarBase64) {
             const ruleta = document.getElementById('ruleta');
@@ -2219,7 +1931,7 @@
             style.id = 'ruleta-background-style';
             style.textContent = `
                 #ruleta::before {
-                    background-image: url('${avatarURL}');
+                    background-image: url('${avatarBase64}');
                 }
             `;
             
@@ -2235,7 +1947,7 @@
             // Activar la clase para mostrar el fondo con transición suave
             setTimeout(() => {
                 ruleta.classList.add('with-background');
-            }, 800);
+            }, 500);
         }
         
         function removerFondoRuleta() {
@@ -2253,43 +1965,43 @@
             }
         }
 
-        window.addEventListener('load', async () => {
-            // Función maestra que inicializa toda la configuración de la página
-            await inicializarPagina();
-            
-            // Registrar eventos después de crear los elementos DOM
-            registrarEventos();
-            
-            // Inicializar fondo interactivo reactivo al mouse
-            inicializarFondoInteractivo();
-        });
-        
-        // === FUNCIÓN PARA REGISTRAR EVENTOS ===
-        function registrarEventos() {
-            const validarBtn = document.getElementById('validarBtn');
-            const girarBtn = document.getElementById('girarBtn');
-            const popupCloseBtn = document.getElementById('popupCloseBtn');
-            const codigoInput = document.getElementById('codigo');
-            
-            if (validarBtn) validarBtn.addEventListener('click', validarCodigo);
-            if (girarBtn) girarBtn.addEventListener('click', () => { soundClick.play(); girarRuleta(); });
-            if (popupCloseBtn) popupCloseBtn.addEventListener('click', cerrarPopup);
-            if (codigoInput) codigoInput.addEventListener('keypress', e => { if (e.key === 'Enter') validarCodigo(); });
-        }
-        
-        // Redibujar ruleta cuando cambie el tamaño de ventana para adaptación responsiva
-        let resizeTimeout;
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(() => {
-                if (premiosDisponibles && premiosDisponibles.length > 0) {
-                    dibujarRuletaCompleta();
-                }
-            }, 250); // Debounce para evitar redibujado excesivo
-        });
-    </script>
-    
-    <!-- Canvas Confetti Library -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+window.addEventListener('load', async () => {
+// Función maestra que inicializa toda la configuración de la página
+await inicializarPagina();
+
+// Registrar eventos después de crear los elementos DOM
+registrarEventos();
+
+// Inicializar fondo interactivo reactivo al mouse
+inicializarFondoInteractivo();
+});
+
+// === FUNCIÓN PARA REGISTRAR EVENTOS ===
+function registrarEventos() {
+const validarBtn = document.getElementById('validarBtn');
+const girarBtn = document.getElementById('girarBtn');
+const popupCloseBtn = document.getElementById('popupCloseBtn');
+const codigoInput = document.getElementById('codigo');
+
+if (validarBtn) validarBtn.addEventListener('click', validarCodigo);
+if (girarBtn) girarBtn.addEventListener('click', () => { soundClick.play(); girarRuleta(); });
+if (popupCloseBtn) popupCloseBtn.addEventListener('click', cerrarPopup);
+if (codigoInput) codigoInput.addEventListener('keypress', e => { if (e.key === 'Enter') validarCodigo(); });
+}
+
+// Redibujar ruleta cuando cambie el tamaño de ventana para adaptación responsiva
+let resizeTimeout;
+window.addEventListener('resize', () => {
+clearTimeout(resizeTimeout);
+resizeTimeout = setTimeout(() => {
+if (premiosDisponibles && premiosDisponibles.length > 0) {
+dibujarRuletaCompleta();
+}
+}, 250); // Debounce para evitar redibujado excesivo
+});
+</script>
+
+<!-- Canvas Confetti Library -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </body>
 </html>
