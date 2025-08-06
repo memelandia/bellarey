@@ -1777,8 +1777,11 @@
                         document.title = `${result.data.nombreModelo} - Ruleta Interactiva`;
                     }
                     
-                    // Procesar avatar
-                    if (result.data.avatarURL && result.data.avatarURL.trim() && result.data.avatarURL.startsWith('data:image/')) {
+                    // Procesar avatar (aceptar tanto base64 como URLs)
+                    if (result.data.avatarURL && result.data.avatarURL.trim() && 
+                        (result.data.avatarURL.startsWith('data:image/') || 
+                         result.data.avatarURL.startsWith('http://') || 
+                         result.data.avatarURL.startsWith('https://'))) {
                         mostrarAvatar(result.data.avatarURL);
                     }
                     
@@ -1864,8 +1867,11 @@
                         document.title = `${result.data.nombreModelo} - Ruleta Interactiva`;
                     }
                     
-                    // Cargar y mostrar el avatar si existe
-                    if (result.data.avatarURL && result.data.avatarURL.startsWith('data:image/')) {
+                    // Cargar y mostrar el avatar si existe (aceptar tanto base64 como URLs)
+                    if (result.data.avatarURL && 
+                        (result.data.avatarURL.startsWith('data:image/') || 
+                         result.data.avatarURL.startsWith('http://') || 
+                         result.data.avatarURL.startsWith('https://'))) {
                         mostrarAvatar(result.data.avatarURL);
                     }
                 }
@@ -1875,7 +1881,7 @@
             }
         }
 
-        function mostrarAvatar(avatarBase64) {
+        function mostrarAvatar(avatarURL) {
             const container = document.getElementById('avatar-container');
             if (!container) return;
             
@@ -1883,8 +1889,14 @@
             container.innerHTML = '';
             
             // Crear nuevo elemento imagen
-            const img = document.createElement('img');
-            img.src = avatarBase64;
+            const img = new Image();
+            
+            // Para URLs externas, configurar crossOrigin si es necesario
+            if (avatarURL.startsWith('http://') || avatarURL.startsWith('https://')) {
+                img.crossOrigin = 'anonymous';
+            }
+            
+            img.src = avatarURL;
             
             // Manejar carga de imagen
             img.onload = function() {
@@ -1897,11 +1909,11 @@
                 }, 300);
                 
                 // 🎨 APLICAR FONDO PERSONALIZADO A LA RULETA
-                aplicarFondoRuleta(avatarBase64);
+                aplicarFondoRuleta(avatarURL);
             };
             
             img.onerror = function() {
-                console.error('Error al cargar la imagen del avatar');
+                console.error('Error al cargar la imagen del avatar desde:', avatarURL);
                 // Ocultar contenedor si hay error
                 container.classList.remove('visible');
                 // Remover fondo de la ruleta si hay error
@@ -1909,7 +1921,7 @@
             };
         }
         
-        function aplicarFondoRuleta(avatarBase64) {
+        function aplicarFondoRuleta(avatarURL) {
             const ruleta = document.getElementById('ruleta');
             if (!ruleta) return;
             
@@ -1918,7 +1930,7 @@
             style.id = 'ruleta-background-style';
             style.textContent = `
                 #ruleta::before {
-                    background-image: url('${avatarBase64}');
+                    background-image: url('${avatarURL}');
                 }
             `;
             

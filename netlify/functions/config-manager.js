@@ -59,8 +59,50 @@ exports.handler = async (event) => {
                 fieldsToUpdate['Nombre Modelo'] = nuevoNombreModelo;
             }
             if (nuevaAvatarURL !== undefined) {
+                // Validar que el avatar sea válido
+                if (nuevaAvatarURL && nuevaAvatarURL.length > 0) {
+                    // Verificar si es una URL directa o base64
+                    if (nuevaAvatarURL.startsWith('http://') || nuevaAvatarURL.startsWith('https://')) {
+                        // Es una URL directa - validar que sea una URL válida
+                        try {
+                            new URL(nuevaAvatarURL);
+                        } catch {
+                            return {
+                                statusCode: 400,
+                                headers: corsHeaders,
+                                body: JSON.stringify({
+                                    success: false,
+                                    message: 'La URL de imagen proporcionada no es válida.'
+                                })
+                            };
+                        }
+                    } else if (nuevaAvatarURL.startsWith('data:image/')) {
+                        // Es base64 - verificar tamaño
+                        if (nuevaAvatarURL.length > 500000) {
+                            return {
+                                statusCode: 400,
+                                headers: corsHeaders,
+                                body: JSON.stringify({
+                                    success: false,
+                                    message: 'La imagen es demasiado grande. Máximo 500KB o usa una URL directa.'
+                                })
+                            };
+                        }
+                    } else {
+                        // No es ni URL ni base64 válido
+                        return {
+                            statusCode: 400,
+                            headers: corsHeaders,
+                            body: JSON.stringify({
+                                success: false,
+                                message: 'El avatar debe ser una URL válida o imagen en formato base64.'
+                            })
+                        };
+                    }
+                }
+                
                 // El nombre aquí DEBE coincidir con el nombre de la columna en Airtable
-                fieldsToUpdate['avatarURL'] = nuevaAvatarURL; 
+                fieldsToUpdate['avatarURL'] = nuevaAvatarURL || ''; 
             }
             if (nuevaListaPremios !== undefined) {
                 fieldsToUpdate['Premios'] = premiosArrayToString(nuevaListaPremios);
