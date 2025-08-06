@@ -711,7 +711,6 @@
                 <input type="text" id="username" placeholder="Usuario" style="width: 100%; padding: 15px; margin-bottom: 15px; border: 2px solid #ff6b9d; border-radius: 15px; font-size: 1rem; outline: none;">
                 <input type="password" id="password" placeholder="Contraseña" style="width: 100%; padding: 15px; margin-bottom: 20px; border: 2px solid #ff6b9d; border-radius: 15px; font-size: 1rem; outline: none;">
                 <button type="submit" style="width: 100%; padding: 15px; background: linear-gradient(45deg, #ff6b9d, #c44569); color: white; border: none; border-radius: 15px; font-size: 1rem; font-weight: 700; cursor: pointer; margin-bottom: 10px;">🔓 Ingresar</button>
-                <button type="button" onclick="verificarVariablesEntorno()" style="width: 100%; padding: 10px; background: #ffa726; color: white; border: none; border-radius: 10px; font-size: 0.9rem; font-weight: 600; cursor: pointer; margin-bottom: 10px;">🔍 Verificar Variables de Entorno</button>
             </form>
             <div id="loginError" style="color: #ff4757; font-weight: 600; display: none;">
                 ❌ Usuario o contraseña incorrectos
@@ -1627,35 +1626,6 @@
                 submitBtn.textContent = originalText;
             }
         });
-
-        // Función de diagnóstico para verificar variables de entorno
-        async function verificarVariablesEntorno() {
-            try {
-                const response = await fetch('/.netlify/functions/debug-env');
-                const result = await response.json();
-                
-                if (response.ok && result.success) {
-                    const data = result.data;
-                    alert(`🔍 DIAGNÓSTICO DE VARIABLES DE ENTORNO:
-
-✅ ADMIN_USER existe: ${data.adminUserExists}
-✅ ADMIN_PASS existe: ${data.adminPassExists}
-📏 Longitud ADMIN_USER: ${data.adminUserLength}
-📏 Longitud ADMIN_PASS: ${data.adminPassLength}
-🔤 Valor ADMIN_USER: "${data.adminUserValue}"
-🔤 Primer carácter ADMIN_PASS: "${data.adminPassFirstChar}"
-🔤 Último carácter ADMIN_PASS: "${data.adminPassLastChar}"
-
-Configuradas en Netlify:
-ADMIN_USER: BELLAREY
-ADMIN_PASS: TEST1234`);
-                } else {
-                    alert('❌ Error al verificar variables de entorno: ' + result.message);
-                }
-            } catch (error) {
-                alert('❌ Error de conexión al verificar variables: ' + error.message);
-            }
-        }
 
         // --- FIN DE LA SOLUCIÓN AL BUG DE CARGA ---
 
