@@ -243,9 +243,63 @@
             font-weight: 700; 
             text-shadow: 0px 4px 15px rgba(0, 0, 0, 0.4), 0 0 10px rgba(255, 255, 255, 0.3);
         }
-        #ruleta { margin: 0 auto; width: 450px; height: 450px; border: 10px solid #c44569; border-radius: 50%; position: relative; box-shadow: 0 15px 30px rgba(0,0,0,0.2); }
-        #flecha { width: 0; height: 0; border-left: 25px solid transparent; border-right: 25px solid transparent; border-bottom: 50px solid #c44569; position: absolute; left: 50%; top: -50px; transform: translateX(-50%); z-index: 10; }
-        #opciones { position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; border-radius: 50%; }
+        #ruleta { 
+            margin: 0 auto; 
+            width: 450px; 
+            height: 450px; 
+            border: 10px solid #c44569; 
+            border-radius: 50%; 
+            position: relative; 
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+            background: linear-gradient(135deg, #ff6b9d, #c44569);
+        }
+        
+        #ruleta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            z-index: 1;
+            filter: blur(8px) brightness(0.4) contrast(1.2);
+        }
+        
+        #ruleta.with-background::before {
+            opacity: 1;
+        }
+        
+        #flecha { 
+            width: 0; 
+            height: 0; 
+            border-left: 25px solid transparent; 
+            border-right: 25px solid transparent; 
+            border-bottom: 50px solid #c44569; 
+            position: absolute; 
+            left: 50%; 
+            top: -50px; 
+            transform: translateX(-50%); 
+            z-index: 15;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+        
+        #opciones { 
+            position: absolute; 
+            width: 100%; 
+            height: 100%; 
+            top: 0; 
+            left: 0; 
+            pointer-events: none; 
+            border-radius: 50%;
+            z-index: 10;
+        }
         #mensaje { 
             margin-top: 10px; 
             font-size: 1.1rem; 
@@ -566,6 +620,10 @@
                 border-width: 7px;
             }
             
+            #ruleta::before {
+                filter: blur(6px) brightness(0.35) contrast(1.3);
+            }
+            
             #flecha {
                 border-left-width: 20px;
                 border-right-width: 20px;
@@ -686,6 +744,10 @@
                 border-width: 6px;
             }
             
+            #ruleta::before {
+                filter: blur(5px) brightness(0.3) contrast(1.4);
+            }
+            
             #flecha {
                 border-left-width: 18px;
                 border-right-width: 18px;
@@ -772,6 +834,10 @@
                 width: 250px;
                 height: 250px;
                 border-width: 5px;
+            }
+            
+            #ruleta::before {
+                filter: blur(4px) brightness(0.25) contrast(1.5);
             }
             
             #flecha {
@@ -1214,11 +1280,28 @@
                 ctx.moveTo(centroX, centroY);
                 ctx.arc(centroX, centroY, radio, anguloInicio, anguloFin);
                 ctx.closePath();
-                ctx.fillStyle = coloresPremios[i % coloresPremios.length];
+                
+                // 🎨 COLORES CON MEJOR TRANSPARENCIA PARA EL FONDO PERSONALIZADO
+                const baseColor = coloresPremios[i % coloresPremios.length];
+                ctx.fillStyle = baseColor + 'E6'; // Agregar transparencia para que se vea el fondo
                 ctx.fill();
+                
+                // 🎨 SOMBRA SUTIL PARA MEJOR DEFINICIÓN
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+                ctx.shadowBlur = 3;
+                ctx.shadowOffsetX = 1;
+                ctx.shadowOffsetY = 1;
+                ctx.fill();
+                
                 ctx.clip();
                 
+                // 🎨 TEXTO CON MEJOR CONTRASTE
                 ctx.fillStyle = "#ffffff";
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+                ctx.shadowBlur = 4;
+                ctx.shadowOffsetX = 2;
+                ctx.shadowOffsetY = 2;
+                
                 const anguloMedio = (anguloInicio + anguloFin) / 2;
                 const distanciaTexto = radio * 0.65;
                 const textoX = centroX + Math.cos(anguloMedio) * distanciaTexto;
@@ -1264,18 +1347,20 @@
                 }
                 
                 ctx.font = `bold ${fontSize}px Poppins, sans-serif`;
-                ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
-                ctx.shadowBlur = 4;
-                ctx.shadowOffsetX = 1;
-                ctx.shadowOffsetY = 1;
                 
                 const startY = -(lineas.length - 1) * lineHeight / 2;
                 lineas.forEach((linea, index) => ctx.fillText(linea, 0, startY + (index * lineHeight)));
                 ctx.restore();
             }
             
-            ctx.strokeStyle = "#ffffff";
-            ctx.lineWidth = 3;
+            // 🎨 LÍNEAS DE SEPARACIÓN MÁS ELEGANTES
+            ctx.strokeStyle = "rgba(255, 255, 255, 0.8)";
+            ctx.lineWidth = 2;
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+            ctx.shadowBlur = 2;
+            ctx.shadowOffsetX = 1;
+            ctx.shadowOffsetY = 1;
+            
             for (let i = 0; i < total; i++) {
                 const anguloFin = (2 * Math.PI / total) * (i + 1);
                 ctx.beginPath();
@@ -1284,7 +1369,7 @@
                 ctx.stroke();
             }
 
-            // Círculo central responsivo
+            // 🎨 CÍRCULO CENTRAL CON EFECTO GLASSMORPHISM
             let circleRadius = 40;
             let emojiSize = 40;
             
@@ -1302,15 +1387,33 @@
                 emojiSize = 38;
             }
 
+            // Círculo con efecto de vidrio
             ctx.beginPath();
             ctx.arc(centroX, centroY, circleRadius, 0, 2 * Math.PI);
-            ctx.fillStyle = "#c44569";
+            
+            // Gradiente radial para efecto de vidrio
+            const gradient = ctx.createRadialGradient(centroX, centroY, 0, centroX, centroY, circleRadius);
+            gradient.addColorStop(0, 'rgba(196, 69, 105, 0.9)');
+            gradient.addColorStop(0.7, 'rgba(196, 69, 105, 0.7)');
+            gradient.addColorStop(1, 'rgba(196, 69, 105, 0.5)');
+            
+            ctx.fillStyle = gradient;
             ctx.fill();
+            
+            // Borde con sombra
+            ctx.strokeStyle = "rgba(255, 255, 255, 0.8)";
+            ctx.lineWidth = 3;
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+            ctx.shadowBlur = 5;
             ctx.stroke();
             
+            // Emoji central
             ctx.fillStyle = "#ffffff";
             ctx.font = `bold ${emojiSize}px Poppins, sans-serif`;
-            ctx.shadowColor = 'transparent';
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+            ctx.shadowBlur = 3;
+            ctx.shadowOffsetX = 1;
+            ctx.shadowOffsetY = 1;
             ctx.textBaseline = "middle";
             ctx.textAlign = "center";
             ctx.fillText("💎", centroX, centroY + 4); // +4 para centrar visualmente el emoji
@@ -1792,13 +1895,61 @@
                 setTimeout(() => {
                     container.classList.add('visible');
                 }, 300);
+                
+                // 🎨 APLICAR FONDO PERSONALIZADO A LA RULETA
+                aplicarFondoRuleta(avatarBase64);
             };
             
             img.onerror = function() {
                 console.error('Error al cargar la imagen del avatar');
                 // Ocultar contenedor si hay error
                 container.classList.remove('visible');
+                // Remover fondo de la ruleta si hay error
+                removerFondoRuleta();
             };
+        }
+        
+        function aplicarFondoRuleta(avatarBase64) {
+            const ruleta = document.getElementById('ruleta');
+            if (!ruleta) return;
+            
+            // Aplicar la imagen como fondo del pseudo-elemento ::before
+            const style = document.createElement('style');
+            style.id = 'ruleta-background-style';
+            style.textContent = `
+                #ruleta::before {
+                    background-image: url('${avatarBase64}');
+                }
+            `;
+            
+            // Remover estilo anterior si existe
+            const existingStyle = document.getElementById('ruleta-background-style');
+            if (existingStyle) {
+                existingStyle.remove();
+            }
+            
+            // Agregar nuevo estilo
+            document.head.appendChild(style);
+            
+            // Activar la clase para mostrar el fondo con transición suave
+            setTimeout(() => {
+                ruleta.classList.add('with-background');
+            }, 500);
+        }
+        
+        function removerFondoRuleta() {
+            const ruleta = document.getElementById('ruleta');
+            const style = document.getElementById('ruleta-background-style');
+            
+            if (ruleta) {
+                ruleta.classList.remove('with-background');
+            }
+            
+            if (style) {
+                setTimeout(() => {
+                    style.remove();
+                }, 1000); // Esperar a que termine la transición
+            }
         }
 
         window.addEventListener('load', async () => {
