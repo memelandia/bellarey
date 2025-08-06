@@ -245,7 +245,16 @@ text-shadow: 0px 4px 15px rgba(0, 0, 0, 0.4), 0 0 10px rgba(255, 255, 255, 0.3);
 }
         #ruleta { margin: 0 auto; width: 450px; height: 450px; border: 10px solid #c44569; border-radius: 50%; position: relative; box-shadow: 0 15px 30px rgba(0,0,0,0.2); }
         #flecha { width: 0; height: 0; border-left: 25px solid transparent; border-right: 25px solid transparent; border-bottom: 50px solid #c44569; position: absolute; left: 50%; top: -50px; transform: translateX(-50%); z-index: 10; }
-        #opciones { position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; border-radius: 50%; }
+        #opciones { 
+            position: absolute; 
+            width: 100%; 
+            height: 100%; 
+            top: 0; 
+            left: 0; 
+            pointer-events: none; 
+            border-radius: 50%;
+            animation: slowRotate 20s linear infinite;
+        }
         #ruleta { 
             margin: 0 auto; 
             width: 450px; 
@@ -410,21 +419,24 @@ max-width: 500px; width: 90%; transform: scale(0.5); transition: all 0.4s cubic-
 .popup-instructions { font-size: 0.9rem; color: white; opacity: 0.9; margin-top: 25px; font-weight: 500; }
 .popup-close { background: white; color: #c44569; border: none; padding: 15px 30px; border-radius: 25px; font-weight: 700; font-size: 1.1rem; cursor: pointer; margin-top: 20px; }
 
-@keyframes fadeIn {
-0% { opacity: 0; transform: translateY(10px); }
-100% { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes fadeInUp {
-0% { opacity: 0; transform: translateY(30px) scale(0.9); }
-100% { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-.mensaje-update {
-animation: fadeIn 0.5s ease-in-out;
-}
-
-/* === CONTENEDOR DEL AVATAR === */
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(30px) scale(0.9); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        
+        @keyframes slowRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .mensaje-update {
+            animation: fadeIn 0.5s ease-in-out;
+        }/* === CONTENEDOR DEL AVATAR === */
 #avatar-container {
 position: absolute;
 right: 5%;
@@ -1432,58 +1444,66 @@ ctx.textAlign = "center";
 ctx.fillText("💎", centroX, centroY + 4); // +4 para centrar visualmente el emoji
 }
 
-async function girarRuleta() {
-if (tiradasRestantes <= 0 || premiosActuales.length === 0) return;
+        async function girarRuleta() {
+            if (tiradasRestantes <= 0 || premiosActuales.length === 0) return;
 
-// Configurar estado de carga del botón
-const girarBtn = document.getElementById('girarBtn');
-girarBtn.disabled = true;
-girarBtn.textContent = 'Girando... 🎲';
+            // Configurar estado de carga del botón
+            const girarBtn = document.getElementById('girarBtn');
+            girarBtn.disabled = true;
+            girarBtn.textContent = 'Girando... 🎲';
 
-soundSpin.loop = true;
-soundSpin.play();
-const indiceGanadorEnPool = Math.floor(Math.random() * premiosActuales.length);
-const premioGanado = premiosActuales[indiceGanadorEnPool];
-const indiceEnRuletaCompleta = premiosDisponibles.findIndex(p => p === premioGanado);
+            soundSpin.loop = true;
+            soundSpin.play();
+            const indiceGanadorEnPool = Math.floor(Math.random() * premiosActuales.length);
+            const premioGanado = premiosActuales[indiceGanadorEnPool];
+            const indiceEnRuletaCompleta = premiosDisponibles.findIndex(p => p === premioGanado);
 
-if (indiceEnRuletaCompleta === -1) {
-mostrarNotificacion("Error de configuración. Por favor, intenta de nuevo.", "error");
-soundSpin.pause();
-return;
-}
-const anguloPorPremio = 360 / premiosDisponibles.length;
-const anguloFinal = (360 * 6) + (indiceEnRuletaCompleta * anguloPorPremio) + (anguloPorPremio / 2);
+            if (indiceEnRuletaCompleta === -1) {
+                mostrarNotificacion("Error de configuración. Por favor, intenta de nuevo.", "error");
+                soundSpin.pause();
+                return;
+            }
+            const anguloPorPremio = 360 / premiosDisponibles.length;
+            const anguloFinal = (360 * 6) + (indiceEnRuletaCompleta * anguloPorPremio) + (anguloPorPremio / 2);
 
-const ruleta = document.getElementById('opciones');
-ruleta.style.transition = "transform 5s cubic-bezier(.17,.67,.83,.67)";
-ruleta.style.transform = `rotate(${anguloFinal}deg)`;
-document.getElementById('girarBtn').disabled = true;
-mostrarMensaje("🎯 ¡La ruleta está girando mágicamente! ✨");
+            const ruleta = document.getElementById('opciones');
+            
+            // Pausar la animación lenta durante el giro
+            ruleta.style.animationPlayState = 'paused';
+            
+            ruleta.style.transition = "transform 5s cubic-bezier(.17,.67,.83,.67)";
+            ruleta.style.transform = `rotate(${anguloFinal}deg)`;
+            document.getElementById('girarBtn').disabled = true;
+            mostrarMensaje("🎯 ¡La ruleta está girando mágicamente! ✨");
 
-setTimeout(async () => {
-soundSpin.pause();
-soundSpin.currentTime = 0;
-soundWin.play();
+            setTimeout(async () => {
+                soundSpin.pause();
+                soundSpin.currentTime = 0;
+                soundWin.play();
 
-// 🎊 CELEBRACIÓN CON CONFETI 🎊
-confetti({
-particleCount: 200,
-spread: 100,
-origin: { y: 0.6 },
-gravity: 0.8
-});
+                // 🎊 CELEBRACIÓN CON CONFETI 🎊
+                confetti({
+                    particleCount: 200,
+                    spread: 100,
+                    origin: { y: 0.6 },
+                    gravity: 0.8
+                });
 
-ruleta.style.transition = "";
-ruleta.style.transform = `rotate(${ (indiceEnRuletaCompleta * anguloPorPremio) + (anguloPorPremio / 2) }deg)`;
-mostrarPopupPremio(premioGanado);
-mostrarMensaje(`🎉 ¡Felicidades ${nombreUsuario}! Ganaste: <b>${premioGanado}</b>`);
+                ruleta.style.transition = "";
+                ruleta.style.transform = `rotate(${ (indiceEnRuletaCompleta * anguloPorPremio) + (anguloPorPremio / 2) }deg)`;
+                
+                // Reactivar la animación lenta después del giro
+                setTimeout(() => {
+                    ruleta.style.animationPlayState = 'running';
+                }, 1000);
+                
+                mostrarPopupPremio(premioGanado);
+                mostrarMensaje(`🎉 ¡Felicidades ${nombreUsuario}! Ganaste: <b>${premioGanado}</b>`);
 
-// Agregar el premio al historial
-agregarPremioAlHistorial(premioGanado);
+                // Agregar el premio al historial
+                agregarPremioAlHistorial(premioGanado);
 
-tiradasRestantes--;
-
-// Gastar el tiro en el backend
+                tiradasRestantes--;// Gastar el tiro en el backend
 try {
 const response = await fetch('/.netlify/functions/gastar-tiro', {
 method: 'POST',
