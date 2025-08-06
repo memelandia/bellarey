@@ -1666,9 +1666,13 @@ document.getElementById('popup-prize').textContent = premio;
 document.getElementById('popup-overlay').classList.add('show');
 }
 
+// CÓDIGO CORREGIDO Y MEJORADO
 function cerrarPopup() {
-soundClick.play();
-document.getElementById('popup-overlay').classList.remove('show');
+    soundClick.play();
+    document.getElementById('popup-overlay').classList.remove('show');
+
+    // ¡AQUÍ ESTÁ LA MAGIA! Se le dice a la ruleta que vuelva a girar lentamente.
+    document.getElementById('opciones').classList.add('is-idling');
 }
 
 function mostrarMensaje(msg) {
