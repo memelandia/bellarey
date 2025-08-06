@@ -255,15 +255,10 @@ text-shadow: 0px 4px 15px rgba(0, 0, 0, 0.4), 0 0 10px rgba(255, 255, 255, 0.3);
             border-radius: 50%;
         }
         
-        #slowRotateContainer {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            border-radius: 50%;
+        .is-idling {
             animation: slowRotate 30s linear infinite;
         }
+        
         #ruleta { 
             margin: 0 auto; 
             width: 450px; 
@@ -1032,9 +1027,8 @@ margin-right: 8px;
 </div>
 <div class="ruleta-section">
 <div id="ruleta">
-<div id="slowRotateContainer">
+<div id="flecha"></div>
 <canvas id="opciones" width="450" height="450"></canvas>
-</div>
 </div>
 <button id="girarBtn" class="button" disabled>🎯 ¡GIRAR RULETA! 🎯</button>
 </div>
@@ -1074,6 +1068,25 @@ let codigoActual = "";
 // Variables para el historial de premios
 let historialPremios = [];
 let contadorPremios = 0;
+
+// Función auxiliar para obtener la rotación actual
+function getCurrentRotation(element) {
+    const st = window.getComputedStyle(element, null);
+    const tm = st.getPropertyValue("-webkit-transform") ||
+               st.getPropertyValue("-moz-transform") ||
+               st.getPropertyValue("-ms-transform") ||
+               st.getPropertyValue("-o-transform") ||
+               st.getPropertyValue("transform") ||
+               "none";
+    if (tm !== "none") {
+        const values = tm.split('(')[1].split(')')[0].split(',');
+        const a = values[0];
+        const b = values[1];
+        const angle = Math.round(Math.atan2(b, a) * (180/Math.PI));
+        return (angle < 0) ? angle + 360 : angle;
+    }
+    return 0;
+}
 
 const soundClick = new Audio('sounds/click.wav');
 const soundWin = new Audio('sounds/win.wav');
@@ -1474,26 +1487,36 @@ ctx.fillText("💎", centroX, centroY + 4); // +4 para centrar visualmente el em
                 soundSpin.pause();
                 return;
             }
-            const anguloPorPremio = 360 / premiosDisponibles.length;
-            const anguloFinal = (360 * 6) + (indiceEnRuletaCompleta * anguloPorPremio) + (anguloPorPremio / 2);
+            // --- INICIO DEL BLOQUE A REEMPLAZAR EN girarRuleta() ---
+            const opcionesCanvas = document.getElementById('opciones');
 
-            const ruleta = document.getElementById('opciones');
-            const slowContainer = document.getElementById('slowRotateContainer');
-            
-            // Pausar la animación lenta durante el giro
-            slowContainer.style.animationPlayState = 'paused';
-            
-            ruleta.style.transition = "transform 5s cubic-bezier(.17,.67,.83,.67)";
-            ruleta.style.transform = `rotate(${anguloFinal}deg)`;
-            document.getElementById('girarBtn').disabled = true;
+            // 1. Obtener la rotación actual y detener la animación CSS
+            const currentAngle = getCurrentRotation(opcionesCanvas);
+            opcionesCanvas.classList.remove('is-idling');
+            opcionesCanvas.style.transition = 'none'; // Evitar transiciones no deseadas
+            opcionesCanvas.style.transform = `rotate(${currentAngle}deg)`;
+
+            // Forzar un reflow del navegador para aplicar el transform estático antes de la transición
+            opcionesCanvas.offsetWidth; 
+
+            // 2. Calcular el ángulo final del giro
+            const anguloPorPremio = 360 / premiosDisponibles.length;
+            // Se añaden varias vueltas + el ángulo del premio + el ángulo actual
+            const anguloDeGiro = (360 * 6) + (indiceEnRuletaCompleta * anguloPorPremio) + (anguloPorPremio / 2);
+            const anguloFinalTotal = currentAngle + anguloDeGiro;
+
+            // 3. Aplicar la transición para el giro rápido
+            opcionesCanvas.style.transition = "transform 5s cubic-bezier(.17,.67,.83,.67)";
+            opcionesCanvas.style.transform = `rotate(${anguloFinalTotal}deg)`;
+
             mostrarMensaje("🎯 ¡La ruleta está girando mágicamente! ✨");
 
+            // 4. Procesar el resultado después de que termine el giro
             setTimeout(async () => {
                 soundSpin.pause();
                 soundSpin.currentTime = 0;
                 soundWin.play();
 
-                // 🎊 CELEBRACIÓN CON CONFETI 🎊
                 confetti({
                     particleCount: 200,
                     spread: 100,
@@ -1501,60 +1524,50 @@ ctx.fillText("💎", centroX, centroY + 4); // +4 para centrar visualmente el em
                     gravity: 0.8
                 });
 
-                ruleta.style.transition = "";
-                ruleta.style.transform = `rotate(${ (indiceEnRuletaCompleta * anguloPorPremio) + (anguloPorPremio / 2) }deg)`;
-                
-                // Reactivar la animación lenta después del giro
-                setTimeout(() => {
-                    slowContainer.style.animationPlayState = 'running';
-                }, 1000);
-                
+                // Detener la transición para que la ruleta se quede fija en el premio
+                opcionesCanvas.style.transition = 'none';
+
+                // La lógica del premio, historial y tiradas restantes sigue aquí...
+                // (El resto del código dentro del setTimeout original)
                 mostrarPopupPremio(premioGanado);
                 mostrarMensaje(`🎉 ¡Felicidades ${nombreUsuario}! Ganaste: <b>${premioGanado}</b>`);
-
-                // Agregar el premio al historial
                 agregarPremioAlHistorial(premioGanado);
 
-                tiradasRestantes--;// Gastar el tiro en el backend
-try {
-const response = await fetch('/.netlify/functions/gastar-tiro', {
-method: 'POST',
-headers: {
-'Content-Type': 'application/json',
-},
-body: JSON.stringify({ codigoId: codigoActual })
-});
+                tiradasRestantes--;
 
-const result = await response.json();
-if (response.ok && result.success) {
-console.log('Tiro gastado exitosamente:', result);
-// Actualizar tiradasRestantes con la información del backend
-if (result.tiradasRestantes !== undefined) {
-tiradasRestantes = result.tiradasRestantes;
-}
-} else {
-console.error('Error al gastar tiro:', result.message);
-mostrarNotificacion('Hubo un problema al registrar tu tirada. Contacta a soporte si persiste.', 'warning');
-}
-} catch (error) {
-console.error('Error de conexión al gastar tiro:', error);
-mostrarNotificacion('Error de conexión al registrar la tirada. Tu premio sigue siendo válido.', 'warning');
-}
+                try {
+                    const response = await fetch('/.netlify/functions/gastar-tiro', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ codigoId: codigoActual })
+                    });
+                    const result = await response.json();
+                    if (response.ok && result.success) {
+                        if (result.tiradasRestantes !== undefined) tiradasRestantes = result.tiradasRestantes;
+                    } else {
+                        console.error('Error al gastar tiro:', result.message);
+                        mostrarNotificacion('Hubo un problema al registrar tu tirada.', 'warning');
+                    }
+                } catch (error) {
+                    console.error('Error de conexión al gastar tiro:', error);
+                    mostrarNotificacion('Error de conexión al registrar la tirada.', 'warning');
+                }
 
-if (tiradasRestantes > 0) {
-setTimeout(() => {
-const girarBtn = document.getElementById('girarBtn');
-girarBtn.disabled = false;
-girarBtn.textContent = '✨ Girar Ruleta ✨';
-mostrarMensaje(`✨ ¡Tienes ${tiradasRestantes} tirada(s) más! Sigue participando 🌟`);
-}, 3000);
-} else {
-setTimeout(() => {
-mostrarMensaje(`🌟 ¡Gracias por participar ${nombreUsuario}! Ha sido una experiencia mágica 💖`);
-mostrarNotificacion(`¡Gracias por participar, ${nombreUsuario}! 🌟`, 'success');
-}, 3000);
-}
-}, 5200);
+                if (tiradasRestantes > 0) {
+                    setTimeout(() => {
+                        document.getElementById('girarBtn').disabled = false;
+                        document.getElementById('girarBtn').textContent = '✨ Girar Ruleta ✨';
+                        mostrarMensaje(`✨ ¡Tienes ${tiradasRestantes} tirada(s) más! Sigue participando 🌟`);
+                    }, 3000);
+                } else {
+                    setTimeout(() => {
+                        mostrarMensaje(`🌟 ¡Gracias por participar ${nombreUsuario}! Ha sido una experiencia mágica 💖`);
+                        mostrarNotificacion(`¡Gracias por participar, ${nombreUsuario}! 🌟`, 'success');
+                    }, 3000);
+                }
+
+            }, 5200); // Fin del setTimeout principal
+            // --- FIN DEL BLOQUE A REEMPLAZAR ---
 }
 
 async function validarCodigo() {
@@ -1839,6 +1852,9 @@ console.warn('⚠️ No hay premios configurados, usando premios por defecto');
 
 // 3. Después de procesar todos los datos, dibujar la ruleta
 dibujarRuletaCompleta();
+
+// Iniciar la animación de rotación lenta
+document.getElementById('opciones').classList.add('is-idling');
 
 } else {
 throw new Error(result.message || 'Error en la respuesta del servidor');
