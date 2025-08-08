@@ -1135,6 +1135,31 @@ historialContainer.classList.remove('visible');
 }
 }
 
+// NUEVA FUNCIÓN: Verificar progreso de premios únicos
+function verificarProgresoPremiosUnicos() {
+if (!premiosActuales || premiosActuales.length === 0) return;
+
+const premiosYaGanados = historialPremios.map(item => item.nombre);
+const premiosUnicos = [...new Set(premiosActuales)];
+const premiosUnicosGanados = [...new Set(premiosYaGanados.filter(p => premiosUnicos.includes(p)))];
+const premiosRestantes = premiosUnicos.filter(premio => !premiosYaGanados.includes(premio));
+
+console.log(`📊 Progreso de premios únicos:`, {
+total: premiosUnicos.length,
+ganados: premiosUnicosGanados.length,
+restantes: premiosRestantes.length,
+listaPremiosRestantes: premiosRestantes
+});
+
+return {
+total: premiosUnicos.length,
+ganados: premiosUnicosGanados.length,
+restantes: premiosRestantes.length,
+premiosRestantes: premiosRestantes,
+completado: premiosRestantes.length === 0
+};
+}
+
 function limpiarHistorial() {
 historialPremios = [];
 contadorPremios = 0;
@@ -1369,6 +1394,19 @@ ctx.fillText("💎", centroX, centroY + 4); // +4 para centrar visualmente el em
         async function girarRuleta() {
             if (tiradasRestantes <= 0 || premiosActuales.length === 0) return;
 
+            // NUEVA LÓGICA: Filtrar premios ya ganados
+            const premiosYaGanados = historialPremios.map(item => item.nombre);
+            const premiosDisponiblesParaEsteGiro = premiosActuales.filter(premio => !premiosYaGanados.includes(premio));
+            
+            // Si no hay premios únicos disponibles, mostrar mensaje
+            if (premiosDisponiblesParaEsteGiro.length === 0) {
+                mostrarNotificacion("¡Ya has ganado todos los premios disponibles! 🎉", "success");
+                mostrarMensaje(`🎉 ¡Felicidades ${nombreUsuario}! Ya tienes todos los premios únicos ✨`);
+                document.getElementById('girarBtn').disabled = true;
+                document.getElementById('girarBtn').textContent = '🏆 ¡Completado!';
+                return;
+            }
+
             // Configurar estado de carga del botón
             const girarBtn = document.getElementById('girarBtn');
             girarBtn.disabled = true;
@@ -1376,8 +1414,10 @@ ctx.fillText("💎", centroX, centroY + 4); // +4 para centrar visualmente el em
 
             soundSpin.loop = true;
             soundSpin.play();
-            const indiceGanadorEnPool = Math.floor(Math.random() * premiosActuales.length);
-            const premioGanado = premiosActuales[indiceGanadorEnPool];
+            
+            // Seleccionar premio de los disponibles (sin duplicados)
+            const indiceGanadorEnPool = Math.floor(Math.random() * premiosDisponiblesParaEsteGiro.length);
+            const premioGanado = premiosDisponiblesParaEsteGiro[indiceGanadorEnPool];
             const indiceEnRuletaCompleta = premiosDisponibles.findIndex(p => p === premioGanado);
 
             if (indiceEnRuletaCompleta === -1) {
@@ -1451,13 +1491,29 @@ ctx.fillText("💎", centroX, centroY + 4); // +4 para centrar visualmente el em
                     mostrarNotificacion('Error de conexión al registrar la tirada.', 'warning');
                 }
 
-                if (tiradasRestantes > 0) {
+                // NUEVA LÓGICA: Verificar si se han ganado todos los premios únicos
+                const premiosYaGanadosActualizados = historialPremios.map(item => item.nombre);
+                const premiosUnicos = [...new Set(premiosActuales)]; // Eliminar duplicados si los hay
+                const todosLosPremiosGanados = premiosUnicos.every(premio => premiosYaGanadosActualizados.includes(premio));
+
+                if (tiradasRestantes > 0 && !todosLosPremiosGanados) {
+                    // Aún hay tiradas y premios únicos por ganar
                     setTimeout(() => {
                         document.getElementById('girarBtn').disabled = false;
                         document.getElementById('girarBtn').textContent = '✨ Girar Ruleta ✨';
-                        mostrarMensaje(`✨ ¡Tienes ${tiradasRestantes} tirada(s) más! Sigue participando 🌟`);
+                        const premiosRestantes = premiosUnicos.length - [...new Set(premiosYaGanadosActualizados.filter(p => premiosUnicos.includes(p)))].length;
+                        mostrarMensaje(`✨ ¡Tienes ${tiradasRestantes} tirada(s) más! Te faltan ${premiosRestantes} premio(s) único(s) 🌟`);
+                    }, 3000);
+                } else if (todosLosPremiosGanados) {
+                    // Se han ganado todos los premios únicos
+                    setTimeout(() => {
+                        document.getElementById('girarBtn').disabled = true;
+                        document.getElementById('girarBtn').textContent = '🏆 ¡Todos los premios obtenidos!';
+                        mostrarMensaje(`🎉 ¡Increíble ${nombreUsuario}! Has ganado todos los premios únicos disponibles 🏆✨`);
+                        mostrarNotificacion(`¡Felicidades! Has completado todos los premios únicos �`, 'success');
                     }, 3000);
                 } else {
+                    // No hay más tiradas
                     setTimeout(() => {
                         mostrarMensaje(`🌟 ¡Gracias por participar ${nombreUsuario}! Ha sido una experiencia mágica 💖`);
                         mostrarNotificacion(`¡Gracias por participar, ${nombreUsuario}! 🌟`, 'success');
@@ -1519,8 +1575,14 @@ console.warn('⚠️ Usando premios por defecto - no hay premios configurados');
 
 tiradasRestantes = datosCodigo.tiradasRestantes || 0;
 
+// NUEVA FUNCIONALIDAD: Mostrar información de premios únicos
+const premiosUnicos = [...new Set(premiosActuales)];
+const mensajePremiosUnicos = premiosUnicos.length === premiosActuales.length 
+    ? `Tienes ${premiosUnicos.length} premio(s) único(s) por ganar` 
+    : `Tienes ${premiosUnicos.length} premio(s) único(s) por ganar (sin repetir)`;
+
 mostrarNotificacion(`¡Bienvenida ${nombreUsuario}! Código válido con ${tiradasRestantes} tirada(s) 🎉`, 'success');
-mostrarMensaje(`💖 ¡Hola ${nombreUsuario}! Tienes ${tiradasRestantes} tirada(s). ¡Mucha suerte! ✨`);
+mostrarMensaje(`💖 ¡Hola ${nombreUsuario}! Tienes ${tiradasRestantes} tirada(s). ${mensajePremiosUnicos} ✨`);
 
 // Habilitar botón de girar solo si hay tiradas disponibles
 const girarBtn = document.getElementById('girarBtn');
