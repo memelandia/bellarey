@@ -106,12 +106,16 @@ align-items: center; gap: 60px;
 }
 .controls-container { grid-column: 1 / 2; justify-self: end; }
 .ruleta-section { grid-column: 2 / 3; }
-.historial-container { grid-column: 3 / 4; justify-self: start; }
+.historial-container { 
+grid-column: 3 / 4; 
+justify-self: start; 
+display: none; /* Oculto por defecto en escritorio */
+}
+.historial-container.visible { display: flex; }
 }
 .controls-container { display: flex; flex-direction: column; align-items: center; gap: 25px; }
 .ruleta-section { display: flex; flex-direction: column; align-items: center; gap: 30px; flex-shrink: 0; }
-.historial-container { display: none; flex-direction: column; align-items: center; gap: 25px; }
-.historial-container.visible { display: flex; }
+.historial-container { display: flex; flex-direction: column; align-items: center; gap: 25px; }
 
 /* === ESTILOS DEL HISTORIAL DE PREMIOS === */
 .historial-section {
@@ -448,48 +452,9 @@ max-width: 500px; width: 90%; transform: scale(0.5); transition: all 0.4s cubic-
         
         .mensaje-update {
             animation: fadeIn 0.5s ease-in-out;
-        }/* === CONTENEDOR DEL AVATAR === */
-#avatar-container {
-position: absolute;
-right: 5%;
-top: 50%;
-transform: translateY(-50%);
-width: 350px;
-height: 500px;
-z-index: 0;
-opacity: 0;
-transition: opacity 1.5s ease-in-out;
-border-radius: 20px;
-overflow: hidden;
-pointer-events: none;
-}
-
-#avatar-container.visible {
-opacity: 1;
-}
-
-#avatar-container img {
-width: 100%;
-height: 100%;
-object-fit: cover;
-border-radius: 20px;
-/* Efecto de fusión con el fondo */
-filter: grayscale(0.1) brightness(0.9) contrast(1.1);
-/* Máscara de gradiente para difuminar bordes superior e inferior */
-mask-image: linear-gradient(to top, transparent 0%, black 25%, black 75%, transparent 100%);
--webkit-mask-image: linear-gradient(to top, transparent 0%, black 25%, black 75%, transparent 100%);
-}
+        }
 
 /* === DISEÑO RESPONSIVO COMPLETO === */
-
-/* Pantallas grandes */
-@media (max-width: 1200px) {
-#avatar-container {
-width: 300px;
-height: 400px;
-right: 2%;
-}
-}
 
 /* Tablets y pantallas medianas */
 @media (max-width: 992px) {
@@ -512,25 +477,18 @@ right: 2%;
         grid-column: 2 / 3;
         justify-self: center; /* Centrado en su columna */
     }
-    .ruleta-section, #avatar-container {
-        grid-column: 1 / -1; /* Ocupan todo el ancho */
+    .ruleta-section {
+        grid-column: 1 / -1; /* Ocupa todo el ancho */
     }
 
     /* Tamaños flexibles para los Paneles */
     .controls-section,
     .historial-section {
         width: 100%;
-        max-width: 320px;
-        padding: 20px;
+        max-width: 280px; /* Reducido para que quepan mejor lado a lado */
+        padding: 15px; /* Padding reducido */
         margin: 0;
         height: auto;
-    }
-    
-    #avatar-container {
-       position: relative;
-       width: 250px;
-       height: 350px;
-       margin: 20px auto;
     }
 
     /* Otros ajustes generales para tablet/móvil */
@@ -575,12 +533,6 @@ font-size: 0.9rem;
 
 .premio-fecha {
 font-size: 0.75rem;
-}
-
-#avatar-container {
-width: 200px;
-height: 280px;
-margin: 15px auto;
 }
 
 .controls-title {
@@ -674,12 +626,6 @@ font-size: 1rem;
 @media (max-width: 480px) {
 .container {
 padding: 10px;
-}
-
-#avatar-container {
-width: 150px;
-height: 200px;
-margin: 10px auto;
 }
 
 .historial-section {
@@ -986,8 +932,6 @@ margin-right: 8px;
 </div>
 <button id="girarBtn" class="button" disabled>🎯 ¡GIRAR RULETA! 🎯</button>
 </div>
-<!-- Nuevo contenedor para avatar -->
-<div id="avatar-container"></div>
 <!-- Historial de premios -->
 <div class="historial-container" id="historial-container">
 <div class="historial-section">
