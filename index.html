@@ -493,81 +493,53 @@ right: 2%;
 
 /* Tablets y pantallas medianas */
 @media (max-width: 992px) {
-.main-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    align-items: start;
-    justify-items: center;
-    width: 100%;
-}
+    /* --- INICIA EL LAYOUT GRID PARA TABLET/MÓVIL --- */
+    .main-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px; /* Gap más reducido para móviles */
+        align-items: start;
+        justify-items: center;
+        width: 100%;
+    }
 
-/* --- POSICIONAMIENTO EN LA GRID MÓVIL --- */
-.controls-container {
-    grid-column: 1 / 2;
-    justify-self: end;
-}
-.historial-container {
-    grid-column: 2 / 3;
-    justify-self: start;
-}
-.ruleta-section, #avatar-container {
-    grid-column: 1 / -1; /* Ocupa el ancho completo */
-}
+    /* Posicionamiento en la Grid */
+    .controls-container {
+        grid-column: 1 / 2;
+        justify-self: center; /* Centrado en su columna */
+    }
+    .historial-container {
+        grid-column: 2 / 3;
+        justify-self: center; /* Centrado en su columna */
+    }
+    .ruleta-section, #avatar-container {
+        grid-column: 1 / -1; /* Ocupan todo el ancho */
+    }
 
-/* --- TAMAÑOS FLEXIBLES PARA PANELES EN MÓVIL --- */
-.controls-section,
-.historial-section {
-    width: 100%; /* CLAVE: Ocupa el 100% de su columna */
-    max-width: none; /* Anula cualquier max-width previo */
-    padding: 20px; /* Padding más pequeño para móvil */
-    height: auto;
-    max-height: 400px;
-}
+    /* Tamaños flexibles para los Paneles */
+    .controls-section,
+    .historial-section {
+        width: 100%;
+        max-width: 320px;
+        padding: 20px;
+        margin: 0;
+        height: auto;
+    }
+    
+    #avatar-container {
+       position: relative;
+       width: 250px;
+       height: 350px;
+       margin: 20px auto;
+    }
 
-.historial-title {
-font-size: 1.8rem;
-}
-
-.historial-lista {
-max-height: 300px;
-}
-
-.controls-title {
-font-size: 2.2rem;
-}
-
-.form-title {
-font-size: 1.6rem;
-}
-
-#codigo {
-font-size: 1rem;
-padding: 16px 18px;
-}
-
-#validarBtn {
-font-size: 0.95rem;
-}
-
-#ruleta {
-width: 400px;
-height: 400px;
-border-width: 8px;
-}
-
-#flecha {
-border-left-width: 22px;
-border-right-width: 22px;
-border-bottom-width: 45px;
-top: -45px;
-}
-
-#girarBtn {
-min-width: 250px;
-padding: 16px 40px;
-font-size: 1.1rem;
-}
+    /* Otros ajustes generales para tablet/móvil */
+    .historial-section, .historial-lista { max-height: 400px; }
+    .historial-title { font-size: 1.8rem; }
+    .controls-title { font-size: 2.2rem; }
+    #ruleta { width: 400px; height: 400px; border-width: 8px; }
+    #flecha { border-left-width: 22px; border-right-width: 22px; border-bottom-width: 45px; top: -45px; }
+    #girarBtn { min-width: 250px; padding: 16px 40px; font-size: 1.1rem; }
 }
 
 /* Tablets pequeñas y móviles grandes */
@@ -575,10 +547,6 @@ font-size: 1.1rem;
 .container {
 padding: 15px;
 gap: 15px;
-}
-
-.main-content {
-gap: 25px;
 }
 
 .historial-section {
@@ -657,11 +625,6 @@ border-bottom-width: 40px;
 top: -40px;
 }
 
-.controls-section {
-padding: 25px;
-gap: 18px;
-}
-
 .form-title {
 font-size: 1.5rem;
 }
@@ -711,10 +674,6 @@ font-size: 1rem;
 @media (max-width: 480px) {
 .container {
 padding: 10px;
-}
-
-.main-content {
-gap: 20px;
 }
 
 #avatar-container {
@@ -778,11 +737,6 @@ border-left-width: 18px;
 border-right-width: 18px;
 border-bottom-width: 35px;
 top: -35px;
-}
-
-.controls-section {
-padding: 20px;
-gap: 15px;
 }
 
 .form-title {
@@ -869,10 +823,6 @@ border-left-width: 15px;
 border-right-width: 15px;
 border-bottom-width: 30px;
 top: -30px;
-}
-
-.controls-section {
-padding: 18px;
 }
 
 #girarBtn {
