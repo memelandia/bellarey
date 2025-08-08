@@ -499,35 +499,30 @@ right: 2%;
     gap: 20px;
     align-items: start;
     justify-items: center;
+    width: 100%;
 }
 
-/* Posiciona los paneles de control e historial en la primera fila */
+/* --- POSICIONAMIENTO EN LA GRID MÓVIL --- */
 .controls-container {
     grid-column: 1 / 2;
-    justify-self: end; /* Alinea a la derecha de su celda */
+    justify-self: end;
 }
-
 .historial-container {
     grid-column: 2 / 3;
-    justify-self: start; /* Alinea a la izquierda de su celda */
-    order: 0; /* Anula el 'order' previo */
+    justify-self: start;
+}
+.ruleta-section, #avatar-container {
+    grid-column: 1 / -1; /* Ocupa el ancho completo */
 }
 
-/* Hace que la ruleta y el avatar ocupen el ancho completo en las filas siguientes */
-.ruleta-section,
-.avatar-container {
-    grid-column: 1 / -1; /* Ocupa ambas columnas */
-    order: 0; /* Anula el 'order' previo */
-}
-
-.historial-container {
-order: 4; /* Después del avatar */
-}
-
+/* --- TAMAÑOS FLEXIBLES PARA PANELES EN MÓVIL --- */
+.controls-section,
 .historial-section {
-width: 300px;
-padding: 20px;
-max-height: 400px;
+    width: 100%; /* CLAVE: Ocupa el 100% de su columna */
+    max-width: none; /* Anula cualquier max-width previo */
+    padding: 20px; /* Padding más pequeño para móvil */
+    height: auto;
+    max-height: 400px;
 }
 
 .historial-title {
@@ -536,17 +531,6 @@ font-size: 1.8rem;
 
 .historial-lista {
 max-height: 300px;
-}
-
-#avatar-container {
-position: relative;
-right: auto;
-top: auto;
-transform: none;
-width: 250px;
-height: 350px;
-margin: 20px auto;
-order: 3; /* Después de la ruleta y antes de controles */
 }
 
 .controls-title {
@@ -579,22 +563,10 @@ border-bottom-width: 45px;
 top: -45px;
 }
 
-.controls-section {
-width: 300px;
-padding: 30px;
-}
-
 #girarBtn {
 min-width: 250px;
 padding: 16px 40px;
 font-size: 1.1rem;
-}
-
-/* Ajuste de ancho para los paneles en la grid móvil */
-.controls-section,
-.historial-section {
-    width: 100%; /* Ocupa todo el espacio de su columna */
-    max-width: 320px; /* Evita que se estire demasiado en tablets */
 }
 }
 
@@ -686,7 +658,6 @@ top: -40px;
 }
 
 .controls-section {
-width: 280px;
 padding: 25px;
 gap: 18px;
 }
@@ -810,7 +781,6 @@ top: -35px;
 }
 
 .controls-section {
-width: 260px;
 padding: 20px;
 gap: 15px;
 }
@@ -902,7 +872,6 @@ top: -30px;
 }
 
 .controls-section {
-width: 240px;
 padding: 18px;
 }
 
