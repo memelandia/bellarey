@@ -494,10 +494,30 @@ right: 2%;
 /* Tablets y pantallas medianas */
 @media (max-width: 992px) {
 .main-content {
-gap: 30px;
-display: flex;
-flex-direction: column;
-align-items: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: start;
+    justify-items: center;
+}
+
+/* Posiciona los paneles de control e historial en la primera fila */
+.controls-container {
+    grid-column: 1 / 2;
+    justify-self: end; /* Alinea a la derecha de su celda */
+}
+
+.historial-container {
+    grid-column: 2 / 3;
+    justify-self: start; /* Alinea a la izquierda de su celda */
+    order: 0; /* Anula el 'order' previo */
+}
+
+/* Hace que la ruleta y el avatar ocupen el ancho completo en las filas siguientes */
+.ruleta-section,
+.avatar-container {
+    grid-column: 1 / -1; /* Ocupa ambas columnas */
+    order: 0; /* Anula el 'order' previo */
 }
 
 .historial-container {
