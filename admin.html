@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BellaRey - Panel de Administración</title>
+    <title>Bellarey - Panel de Administración</title>
     
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="images/favicon.ico">
@@ -327,60 +327,89 @@
             background: #27ae60;
         }
 
-        /* Sistema de Notificaciones */
-        .notification-banner {
-            position: relative;
-            padding: 15px 50px 15px 20px;
-            margin: 20px 0;
-            border-radius: 12px;
-            font-weight: 600;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            transform: translateY(-20px);
-            opacity: 0;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        .copy-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: #3498db;
+            transform: scale(1.1);
+        }
+
+        /* Ajuste para los botones de acción para que se muestren en fila */
+        .code-item > div:last-child {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
+            flex-direction: row; /* Cambia a fila */
+            justify-content: center;
+            flex-wrap: wrap; /* Permite que los botones pasen a la siguiente línea si no caben */
+            gap: 5px;
+        }
+
+        /* === SISTEMA DE NOTIFICACIONES BANNER SUPERIOR === */
+        .notification-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 10000;
+            display: none;
+            transform: translateY(-100%);
+            transition: transform 0.3s ease;
         }
 
         .notification-banner.show {
             transform: translateY(0);
-            opacity: 1;
         }
 
         .notification-banner.success {
-            background: linear-gradient(135deg, #00b894, #00cec9);
-            color: white;
-            border-left: 5px solid #00a085;
+            background: linear-gradient(135deg, #5cb85c, #449d44);
         }
 
         .notification-banner.error {
-            background: linear-gradient(135deg, #e17055, #d63031);
-            color: white;
-            border-left: 5px solid #c0392b;
+            background: linear-gradient(135deg, #d9534f, #c9302c);
+        }
+
+        .notification-banner.info {
+            background: linear-gradient(135deg, #5bc0de, #31b0d5);
+        }
+
+        .notification-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .notification-text {
-            flex: 1;
+            color: white;
+            font-weight: 600;
             font-size: 1rem;
+            flex-grow: 1;
         }
 
         .notification-close {
             background: none;
             border: none;
-            color: rgba(255,255,255,0.8);
-            font-size: 1.2rem;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
             cursor: pointer;
-            padding: 5px;
-            border-radius: 50%;
-            transition: all 0.3s ease;
-            margin-left: 15px;
+            padding: 0 10px;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
         }
 
         .notification-close:hover {
-            background: rgba(255,255,255,0.2);
-            color: white;
-            transform: scale(1.1);
+            opacity: 1;
         }
 
         /* Indicadores de Carga */
@@ -508,14 +537,16 @@
     </style>
 </head>
 <body>
+    <!-- Banner de notificaciones -->
+    <div id="notification-banner" class="notification-banner">
+        <div class="notification-content">
+            <span class="notification-text"></span>
+            <button class="notification-close" onclick="cerrarNotificacion()">×</button>
+        </div>
+    </div>
+
     <div class="container" style="display: none;">
         <h1>Panel de Administración</h1>
-        
-        <!-- Sistema de notificaciones -->
-        <div id="notification-banner" class="notification-banner" style="display: none;">
-            <span class="notification-text"></span>
-            <button class="notification-close" onclick="cerrarNotificacion()">✕</button>
-        </div>
         
         <div class="navigation">
             <a href="index.html" class="nav-btn">🎯 Ir a la Ruleta</a>
@@ -541,7 +572,10 @@
                 <h2>🎁 Crear Nuevo Código</h2>
                 <form id="createCodeForm">
                     <div class="form-group">
-                        <label>Código Personalizado:</label>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <label for="customCode">Código Personalizado:</label>
+                            <button type="button" id="generateCodeBtn" style="padding: 5px 10px; font-size: 0.8rem; border-radius: 10px; background: rgba(255,255,255,0.3); color: white; border: 1px solid white; cursor: pointer;">🎲 Generar Aleatorio</button>
+                        </div>
                         <input type="text" id="customCode" placeholder="Ej: MARIA2025" required maxlength="20" style="text-transform: uppercase;">
                     </div>
                     
@@ -607,72 +641,11 @@
                         <input type="text" id="nombreModeloInput" placeholder="Ej: Scarlet Lucy" maxlength="25" style="width: 100%; padding: 12px; border: 2px solid #ff6b9d; border-radius: 10px; font-size: 1rem; margin-bottom: 10px;">
                         <button id="guardarNombreBtn" class="btn" style="width: 100%; padding: 12px 25px;">💎 Guardar Nombre</button>
                     </div>
-                    <div>
-                        <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #c44569;">Avatar de la Modelo:</label>
-                        
-                        <!-- Nueva zona de carga elegante -->
-                        <div id="uploadZone" style="
-                            width: 100%; 
-                            min-height: 150px; 
-                            border: 3px dashed #ff6b9d; 
-                            border-radius: 15px; 
-                            background: linear-gradient(135deg, rgba(255,107,157,0.1), rgba(196,69,105,0.1));
-                            display: flex; 
-                            flex-direction: column; 
-                            align-items: center; 
-                            justify-content: center; 
-                            cursor: pointer; 
-                            position: relative;
-                            transition: all 0.3s ease;
-                            margin-bottom: 10px;
-                        " onmouseover="this.style.borderColor='#c44569'; this.style.background='linear-gradient(135deg, rgba(255,107,157,0.2), rgba(196,69,105,0.2))'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 5px 15px rgba(255,107,157,0.3)'" onmouseout="this.style.borderColor='#ff6b9d'; this.style.background='linear-gradient(135deg, rgba(255,107,157,0.1), rgba(196,69,105,0.1))'; this.style.transform='none'; this.style.boxShadow='none'">
-                            <input type="file" id="avatarUploadInput" accept="image/png,image/jpg,image/jpeg" style="
-                                position: absolute; 
-                                width: 100%; 
-                                height: 100%; 
-                                opacity: 0; 
-                                cursor: pointer;
-                                z-index: 2;
-                            ">
-                            <label for="avatarUploadInput" id="uploadLabel" style="
-                                display: flex; 
-                                flex-direction: column; 
-                                align-items: center; 
-                                justify-content: center; 
-                                width: 100%; 
-                                height: 100%; 
-                                cursor: pointer;
-                                text-align: center;
-                                pointer-events: none;
-                                z-index: 1;
-                            ">
-                                <span style="font-size: 2rem; margin-bottom: 10px;">📸</span>
-                                <span style="font-weight: 600; color: #c44569;">Haz clic aquí o arrastra tu imagen</span>
-                                <span style="font-size: 0.8rem; color: #666; margin-top: 5px;">(PNG, JPG - Max 5MB)</span>
-                            </label>
-                            
-                            <!-- Vista previa -->
-                            <img id="avatarPreview" style="
-                                display: none; 
-                                width: 100%; 
-                                height: 100%; 
-                                object-fit: cover; 
-                                border-radius: 12px;
-                                position: absolute;
-                                top: 0;
-                                left: 0;
-                                z-index: 3;
-                            ">
-                        </div>
-                        
-                        <button id="guardarAvatarBtn" class="btn" style="width: 100%; padding: 12px 25px;" disabled>🖼️ Guardar Avatar</button>
-                    </div>
                 </div>
                 <div style="margin-top: 15px; padding: 15px; background: linear-gradient(135deg, #74b9ff, #0984e3); color: white; border-radius: 12px;">
                     <h4 style="margin-bottom: 10px; font-family: 'Dancing Script', cursive; font-size: 1.3rem;">💡 Consejos:</h4>
                     <ul style="margin: 0; padding-left: 20px; line-height: 1.6;">
                         <li><strong>Nombre:</strong> Máximo 25 caracteres. Solo letras, números, espacios, guiones y puntos.</li>
-                        <li><strong>Avatar:</strong> Usa URLs de imágenes públicas (JPG, PNG, GIF). Tamaño recomendado: 200x200px.</li>
                     </ul>
                 </div>
             </div>
@@ -724,186 +697,6 @@
         // Variable global para almacenar los premios cargados dinámicamente
         let premiosDisponibles = [];
         
-        // === GESTIÓN DE AVATAR CON CARGA DE ARCHIVOS ===
-        async function redimensionarYConvertirImagen(file) {
-            return new Promise((resolve, reject) => {
-                // Validar tamaño del archivo (5MB máximo)
-                if (file.size > 5 * 1024 * 1024) {
-                    reject(new Error('El archivo es muy grande. Máximo 5MB permitido.'));
-                    return;
-                }
-
-                // Validar tipo de archivo
-                if (!file.type.match(/^image\/(png|jpg|jpeg)$/)) {
-                    reject(new Error('Solo se permiten archivos PNG, JPG o JPEG.'));
-                    return;
-                }
-
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = new Image();
-                    img.onload = function() {
-                        // Crear canvas para redimensionar
-                        const canvas = document.createElement('canvas');
-                        const ctx = canvas.getContext('2d');
-
-                        // Calcular nuevas dimensiones (máximo 800px en el lado más largo)
-                        const MAX_SIZE = 800;
-                        let { width, height } = img;
-
-                        if (width > height) {
-                            if (width > MAX_SIZE) {
-                                height = (height * MAX_SIZE) / width;
-                                width = MAX_SIZE;
-                            }
-                        } else {
-                            if (height > MAX_SIZE) {
-                                width = (width * MAX_SIZE) / height;
-                                height = MAX_SIZE;
-                            }
-                        }
-
-                        // Configurar canvas
-                        canvas.width = width;
-                        canvas.height = height;
-
-                        // Dibujar imagen redimensionada
-                        ctx.drawImage(img, 0, 0, width, height);
-
-                        // Convertir a Base64 con compresión (80% calidad)
-                        const base64String = canvas.toDataURL('image/png', 0.8);
-                        resolve(base64String);
-                    };
-                    
-                    img.onerror = () => reject(new Error('Error al cargar la imagen. Verifica que sea un archivo válido.'));
-                    img.src = e.target.result;
-                };
-                
-                reader.onerror = () => reject(new Error('Error al leer el archivo seleccionado.'));
-                reader.readAsDataURL(file);
-            });
-        }
-
-        function configurarCargaAvatar() {
-            const uploadInput = document.getElementById('avatarUploadInput');
-            const uploadZone = document.getElementById('uploadZone');
-            const uploadLabel = document.getElementById('uploadLabel');
-            const previewImg = document.getElementById('avatarPreview');
-            const guardarBtn = document.getElementById('guardarAvatarBtn');
-            let imagenBase64 = null;
-
-            // Evento de cambio de archivo
-            uploadInput.addEventListener('change', async function(e) {
-                const file = e.target.files[0];
-                if (!file) return;
-
-                try {
-                    mostrarNotificacion('Procesando imagen, por favor espera...', 'info');
-                    
-                    // Redimensionar y convertir
-                    imagenBase64 = await redimensionarYConvertirImagen(file);
-                    
-                    // Mostrar vista previa
-                    previewImg.src = imagenBase64;
-                    previewImg.style.display = 'block';
-                    uploadLabel.style.display = 'none';
-                    uploadZone.style.borderColor = '#4CAF50';
-                    uploadZone.style.borderStyle = 'solid';
-                    guardarBtn.disabled = false;
-                    
-                    mostrarNotificacion('✨ Imagen cargada y optimizada correctamente. ¡Ahora puedes guardarla!', 'success');
-                    
-                } catch (error) {
-                    console.error('Error al procesar imagen:', error);
-                    mostrarNotificacion(error.message, 'error');
-                    // Resetear estado
-                    resetearCargaAvatar();
-                }
-            });
-
-            // Eventos drag and drop
-            uploadZone.addEventListener('dragover', function(e) {
-                e.preventDefault();
-                uploadZone.style.borderColor = '#c44569';
-                uploadZone.style.background = 'linear-gradient(135deg, rgba(255,107,157,0.3), rgba(196,69,105,0.3))';
-                uploadZone.style.transform = 'scale(1.02)';
-            });
-
-            uploadZone.addEventListener('dragleave', function() {
-                if (!previewImg.style.display || previewImg.style.display === 'none') {
-                    uploadZone.style.borderColor = '#ff6b9d';
-                    uploadZone.style.background = 'linear-gradient(135deg, rgba(255,107,157,0.1), rgba(196,69,105,0.1))';
-                    uploadZone.style.transform = 'none';
-                }
-            });
-
-            uploadZone.addEventListener('drop', function(e) {
-                e.preventDefault();
-                uploadZone.style.transform = 'none';
-                
-                const files = e.dataTransfer.files;
-                if (files.length > 0) {
-                    uploadInput.files = files;
-                    uploadInput.dispatchEvent(new Event('change'));
-                }
-            });
-
-            // Botón guardar avatar
-            guardarBtn.addEventListener('click', async function() {
-                if (!imagenBase64) {
-                    mostrarNotificacion('Primero debes cargar una imagen válida.', 'error');
-                    return;
-                }
-
-                const btn = this;
-                const originalText = btn.textContent;
-                
-                try {
-                    btn.disabled = true;
-                    btn.textContent = 'Guardando... ✨';
-
-                    const response = await fetch('/.netlify/functions/config-manager', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ nuevaAvatarURL: imagenBase64 })
-                    });
-
-                    const result = await response.json();
-
-                    if (response.ok && result.success) {
-                        mostrarNotificacion('🎉 Avatar guardado exitosamente. Se mostrará en la ruleta!', 'success');
-                    } else {
-                        mostrarNotificacion(result.message || 'Error al guardar el avatar', 'error');
-                    }
-
-                } catch (error) {
-                    console.error('Error al guardar avatar:', error);
-                    mostrarNotificacion('Error de conexión. Verifica tu internet e intenta de nuevo.', 'error');
-                } finally {
-                    btn.disabled = false;
-                    btn.textContent = originalText;
-                }
-            });
-
-            // Función para resetear el estado de carga
-            function resetearCargaAvatar() {
-                previewImg.style.display = 'none';
-                uploadLabel.style.display = 'flex';
-                uploadZone.style.borderColor = '#ff6b9d';
-                uploadZone.style.borderStyle = 'dashed';
-                guardarBtn.disabled = true;
-                imagenBase64 = null;
-                uploadInput.value = '';
-            }
-
-            // Click en la imagen previa para cambiar la imagen
-            previewImg.addEventListener('click', function() {
-                resetearCargaAvatar();
-            });
-        }
-
         // === GESTIÓN DE CONFIGURACIÓN VISUAL ===
         async function cargarConfiguracion() {
             try {
@@ -932,23 +725,6 @@
                 const nombreInput = document.getElementById('nombreModeloInput');
                 if (nombreInput && result.data.nombreModelo) {
                     nombreInput.value = result.data.nombreModelo;
-                }
-                
-                // Actualizar vista previa del avatar si existe
-                if (result.data.avatarURL && result.data.avatarURL.trim() && result.data.avatarURL.startsWith('data:image/')) {
-                    const previewImg = document.getElementById('avatarPreview');
-                    const uploadLabel = document.getElementById('uploadLabel');
-                    const uploadZone = document.getElementById('uploadZone');
-                    const guardarBtn = document.getElementById('guardarAvatarBtn');
-                    
-                    if (previewImg && uploadLabel && uploadZone) {
-                        previewImg.src = result.data.avatarURL;
-                        previewImg.style.display = 'block';
-                        uploadLabel.style.display = 'none';
-                        uploadZone.style.borderColor = '#4CAF50';
-                        uploadZone.style.borderStyle = 'solid';
-                        if (guardarBtn) guardarBtn.disabled = false;
-                    }
                 }
                 
                 return result.data;
@@ -1369,33 +1145,33 @@
         // === FUNCIÓN DE ELIMINACIÓN DIRECTA (DEPRECADA) ===
         // Esta función es obsoleta, se usa eliminarPremioLocal con gestión local de premios
         
-        // === SISTEMA DE NOTIFICACIONES ===
+        // SISTEMA DE NOTIFICACIONES BANNER SUPERIOR (IGUAL QUE INDEX.HTML)
         function mostrarNotificacion(mensaje, tipo = 'success') {
             const banner = document.getElementById('notification-banner');
             const textElement = banner.querySelector('.notification-text');
-            
+
             // Configurar el mensaje
             textElement.textContent = mensaje;
-            
+
             // Limpiar clases anteriores y añadir la nueva
             banner.className = `notification-banner ${tipo}`;
-            
+
             // Mostrar con animación
             banner.style.display = 'flex';
             setTimeout(() => {
                 banner.classList.add('show');
             }, 10);
-            
-            // Auto-ocultar después de 4 segundos
+
+            // Auto-ocultar después de 5 segundos
             setTimeout(() => {
                 cerrarNotificacion();
-            }, 4000);
+            }, 5000);
         }
 
         function cerrarNotificacion() {
             const banner = document.getElementById('notification-banner');
             banner.classList.remove('show');
-            
+
             setTimeout(() => {
                 banner.style.display = 'none';
             }, 400);
@@ -1531,9 +1307,6 @@
             // Cargar premios dinámicamente
             await cargarYMostrarPremios();
             
-            // Configurar carga de avatar
-            configurarCargaAvatar();
-            
             // Inicializar el selector de premios con los datos cargados
             document.getElementById('numTiradas').addEventListener('change', manejarCambioTiradas);
             document.getElementById('numTiradas').addEventListener('input', manejarCambioTiradas);
@@ -1548,7 +1321,6 @@
             
             // Event listeners para personalización visual
             document.getElementById('guardarNombreBtn').addEventListener('click', guardarNombreModelo);
-            // El avatar ya se configura en configurarCargaAvatar()
             
             // Permitir guardar con Enter en el campo de nombre
             document.getElementById('nombreModeloInput').addEventListener('keypress', function(e) {
@@ -1560,6 +1332,9 @@
             // Cargar códigos y estadísticas
             actualizarListaCodigos();
             actualizarEstadisticas();
+            
+            // Event listener para el botón de generar código aleatorio
+            document.getElementById('generateCodeBtn').addEventListener('click', generarCodigoAleatorio);
             
             // Llamar una vez para establecer el estado inicial correcto
             setTimeout(manejarCambioTiradas, 100); 
@@ -1795,10 +1570,13 @@
                     div.className = `code-item ${codigo.usado ? 'used' : 'active'}`;
                     
                     const estado = codigo.usado ? 'Gastado' : 'Activo';
-                    const botones = codigo.usado 
-                        ? `<button class="delete-btn reactivate-btn action-btn" data-codigo="${codigo.codigoId}" data-action="reactivar" id="reactivar-${codigo.codigoId}">🔄 Reactivar</button>
-                           <button class="delete-btn action-btn" data-codigo="${codigo.codigoId}" data-action="eliminar" id="eliminar-${codigo.codigoId}">🗑️ Eliminar</button>`
-                        : `<button class="delete-btn action-btn" data-codigo="${codigo.codigoId}" data-action="eliminar" id="eliminar-${codigo.codigoId}">🗑️ Eliminar</button>`;
+                    let botones = `<button class="copy-btn action-btn" data-codigo="${codigo.codigoId}" title="Copiar código">Copiar</button>`;
+
+                    if (codigo.usado) {
+                        botones += `<button class="delete-btn reactivate-btn action-btn" data-codigo="${codigo.codigoId}" data-action="reactivar" id="reactivar-${codigo.codigoId}">Reactivar</button>`;
+                    }
+
+                    botones += `<button class="delete-btn action-btn" data-codigo="${codigo.codigoId}" data-action="eliminar" id="eliminar-${codigo.codigoId}">🗑️ Eliminar</button>`;
                     
                     // Manejar premios como array o string
                     const premiosArray = Array.isArray(codigo.premios) ? codigo.premios : [codigo.premios];
@@ -1858,6 +1636,14 @@
                     if (confirmed) {
                         await eliminarCodigo(codigo, this);
                     }
+                });
+            });
+            
+            // Event listeners para botones de copiar
+            document.querySelectorAll('.copy-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const codigo = this.getAttribute('data-codigo');
+                    copiarAlPortapapeles(codigo);
                 });
             });
         }
@@ -1968,6 +1754,41 @@
                 document.getElementById('totalPremios').textContent = '0';
                 document.getElementById('totalTiradas').textContent = '0';
             }
+        }
+
+        function generarCodigoAleatorio() {
+            const prefix = 'USERVIP';
+            const chars = '123456789'; // Caracteres sin O y 0 para evitar confusiones
+            let result = '';
+            for (let i = 0; i < 4; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            document.getElementById('customCode').value = prefix + result;
+            mostrarNotificacion('✨ ¡Código aleatorio generado!', 'success');
+        }
+
+        function copiarAlPortapapeles(texto) {
+            if (!navigator.clipboard) {
+                // Fallback para navegadores antiguos
+                const textArea = document.createElement("textarea");
+                textArea.value = texto;
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    mostrarNotificacion(`Código "${texto}" copiado.`, 'success');
+                } catch (err) {
+                    mostrarNotificacion('Error al intentar copiar.', 'error');
+                }
+                document.body.removeChild(textArea);
+                return;
+            }
+            navigator.clipboard.writeText(texto).then(function() {
+                mostrarNotificacion(`Código "${texto}" copiado.`, 'success');
+            }, function(err) {
+                mostrarNotificacion('Error al copiar.', 'error');
+            });
         }
 
         document.getElementById('customCode').addEventListener('input', e => e.target.value = e.target.value.toUpperCase());
