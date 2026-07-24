@@ -1,7 +1,7 @@
 {
-  "name": "bellarey-backend",
-  "version": "1.0.1",
-  "description": "Backend functions for Bellarey roulette app",
+  "name": "vickyluna-backend",
+  "version": "1.0.0",
+  "description": "Backend functions for VickyLuna roulette app",
   "main": "index.js",
   "scripts": {
     "dev": "netlify dev",
@@ -21,6 +21,6 @@
     "airtable",
     "serverless"
   ],
-  "author": "Bellarey",
+  "author": "VickyLuna",
   "license": "MIT"
 }

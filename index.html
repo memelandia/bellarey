@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bella Rey - Ruleta Interactiva</title>
+<title>Bella Rey 💖 — La Ruleta</title>
+<meta name="description" content="Ingresá tu código y girá la ruleta para ganar premios exclusivos 💖">
 
 <!-- Favicon -->
 <link rel="icon" type="image/x-icon" href="images/favicon.ico">
@@ -13,20 +14,34 @@
 <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.ico">
 
 <!-- METADATOS PARA REDES SOCIALES (OPEN GRAPH) -->
-<meta property="og:title" content="BellaRey - La Ruleta de la Suerte 💖" />
+<meta property="og:title" content="Bella Rey 💖 — La Ruleta" />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="https://bellarey.netlify.app/" /> <!-- ¡Recuerda cambiar esto! -->
-<meta property="og:image" content="https://i.imgur.com/e19Cdnc.png" /> <!-- ¡Y esto también! -->
-<meta property="og:description" content="¡Gira la ruleta mágica y gana premios exclusivos! Ingresa tu código para empezar." />
-<meta property="og:site_name" content="BellaRey" />
+<meta property="og:url" content="https://bellarey.netlify.app/" />
+<meta property="og:description" content="Ingresá tu código y girá la ruleta para ganar premios exclusivos 💖" />
+<meta property="og:site_name" content="Bella Rey" />
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;600;700&display=swap');
 
+/* === VARIABLES DE COLOR (TEMA DARK INTENSO - BELLA REY 💖) === */
+:root {
+--bg-fondo-a: #1a0812;
+--bg-fondo-b: #2a0f22;
+--bg-fondo-c: #200a1a;
+--accent-principal: #ff2d78;
+--accent-secundario: #b0114e;
+--texto-oscuro: #ffffff;
+--texto-suave: #f7c3dd;
+--glass-white: rgba(26, 8, 8, 0.85);
+--glass-border: rgba(164, 22, 35, 0.35);
+--accent-soft: rgba(230, 57, 70, 0.15);
+--accent-border: rgba(230, 57, 70, 0.5);
+}
+
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { 
 font-family: 'Poppins', sans-serif; text-align: center; min-height: 100vh;
-background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab, #ff9a9e, #8a2be2);
+background: linear-gradient(-45deg, var(--bg-fondo-a), var(--bg-fondo-b), var(--bg-fondo-c), var(--bg-fondo-b), var(--bg-fondo-a));
 background-size: 400% 400%; 
 animation: gradientMove 10s ease-in-out infinite;
 position: relative; overflow-x: hidden;
@@ -40,9 +55,9 @@ position: relative; overflow-x: hidden;
 }
 .background-shapes { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1; }
 .particle { position: absolute; pointer-events: none; opacity: 0.6; animation: floatParticle 8s ease-in-out infinite; }
-.particle.heart { font-size: 20px; color: #ff6b9d; animation: floatHeart 10s ease-in-out infinite; }
-.particle.sparkle { width: 8px; height: 8px; background: radial-gradient(circle, #feca57, #ff9ff3); border-radius: 50%; animation: floatSparkle 6s ease-in-out infinite; }
-.particle.star { font-size: 16px; color: #c44569; animation: floatStar 12s ease-in-out infinite; }
+.particle.heart { font-size: 20px; color: var(--accent-principal); animation: floatHeart 10s ease-in-out infinite; }
+.particle.sparkle { width: 8px; height: 8px; background: radial-gradient(circle, var(--accent-secundario), var(--accent-principal)); border-radius: 50%; animation: floatSparkle 6s ease-in-out infinite; }
+.particle.star { font-size: 16px; color: var(--accent-secundario); animation: floatStar 12s ease-in-out infinite; }
 @keyframes floatParticle {
 0%, 100% { transform: translateY(0px) translateX(0px) rotate(0deg); opacity: 0.3; }
 25% { transform: translateY(-30px) translateX(15px) rotate(90deg); opacity: 0.7; }
@@ -55,8 +70,8 @@ position: relative; overflow-x: hidden;
 66% { transform: translateY(-30px) scale(0.8) rotate(-10deg); opacity: 0.6; }
 }
 @keyframes floatSparkle {
-0%, 100% { transform: translateY(0px) scale(1); opacity: 0.5; box-shadow: 0 0 10px #feca57; }
-50% { transform: translateY(-40px) scale(1.5); opacity: 1; box-shadow: 0 0 20px #ff9ff3; }
+0%, 100% { transform: translateY(0px) scale(1); opacity: 0.5; box-shadow: 0 0 10px var(--accent-secundario); }
+50% { transform: translateY(-40px) scale(1.5); opacity: 1; box-shadow: 0 0 20px var(--accent-principal); }
 }
 @keyframes floatStar {
 0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); opacity: 0.4; }
@@ -80,10 +95,10 @@ z-index: 1;
 position: absolute; border-radius: 50%; opacity: 0.08; 
 animation: float 15s ease-in-out infinite; 
 }
-.shape:nth-child(1) { width: 80px; height: 80px; background: #ff6b9d; top: 10%; left: 10%; }
-.shape:nth-child(2) { width: 120px; height: 120px; background: #c44569; top: 20%; right: 15%; animation-delay: 2s; }
-.shape:nth-child(3) { width: 60px; height: 60px; background: #f8b500; bottom: 20%; left: 20%; animation-delay: 4s; }
-.shape:nth-child(4) { width: 100px; height: 100px; background: #ff6b9d; bottom: 10%; right: 10%; animation-delay: 1s; }
+.shape:nth-child(1) { width: 80px; height: 80px; background: var(--accent-principal); top: 10%; left: 10%; }
+.shape:nth-child(2) { width: 120px; height: 120px; background: var(--accent-secundario); top: 20%; right: 15%; animation-delay: 2s; }
+.shape:nth-child(3) { width: 60px; height: 60px; background: var(--bg-fondo-c); bottom: 20%; left: 20%; animation-delay: 4s; }
+.shape:nth-child(4) { width: 100px; height: 100px; background: var(--accent-principal); bottom: 10%; right: 10%; animation-delay: 1s; }
 @keyframes float {
 0% { transform: translateY(0) rotate(0deg); }
 33% { transform: translateY(-20px) rotate(45deg); }
@@ -119,14 +134,14 @@ display: none; /* Oculto por defecto en escritorio */
 
 /* === ESTILOS DEL HISTORIAL DE PREMIOS === */
 .historial-section {
-background: rgba(255, 255, 255, 0.95); padding: 25px; border-radius: 25px;
+background: var(--glass-white); padding: 25px; border-radius: 25px;
 box-shadow: 0 15px 35px rgba(0,0,0,0.1); backdrop-filter: blur(15px);
-border: 1px solid rgba(255, 255, 255, 0.2); width: 320px; max-height: 500px;
+border: 1px solid var(--glass-border); width: 320px; max-height: 500px;
 }
 
 .historial-title {
 font-family: 'Dancing Script', cursive; 
-color: #c44569; 
+color: var(--accent-secundario); 
 font-size: 2rem; 
 font-weight: 700; 
 text-shadow: 0px 4px 15px rgba(0, 0, 0, 0.4), 0 0 10px rgba(255, 255, 255, 0.3);
@@ -145,23 +160,23 @@ width: 8px;
 }
 
 .historial-lista::-webkit-scrollbar-track {
-background: rgba(255, 255, 255, 0.3);
+background: rgba(232, 221, 255, 0.3);
 border-radius: 10px;
 }
 
 .historial-lista::-webkit-scrollbar-thumb {
-background: linear-gradient(45deg, #ff6b9d, #c44569);
+background: linear-gradient(45deg, var(--accent-principal), var(--accent-secundario));
 border-radius: 10px;
-border: 2px solid rgba(255, 255, 255, 0.3);
+border: 2px solid var(--glass-border);
 }
 
 .historial-lista::-webkit-scrollbar-thumb:hover {
-background: linear-gradient(45deg, #c44569, #ff6b9d);
+background: linear-gradient(45deg, var(--accent-secundario), var(--accent-principal));
 }
 
 .premio-item {
-background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(196, 69, 105, 0.1));
-border: 2px solid rgba(255, 107, 157, 0.3);
+background: linear-gradient(135deg, var(--accent-soft), rgba(122, 92, 255, 0.08));
+border: 2px solid var(--accent-border);
 border-radius: 15px;
 padding: 15px;
 margin-bottom: 12px;
@@ -172,8 +187,8 @@ overflow: hidden;
 
 .premio-item:hover {
 transform: translateX(5px);
-box-shadow: 0 8px 20px rgba(196, 69, 105, 0.2);
-border-color: rgba(255, 107, 157, 0.6);
+box-shadow: 0 8px 20px rgba(255, 79, 163, 0.2);
+border-color: rgba(122, 92, 255, 0.5);
 }
 
 .premio-item::before {
@@ -193,7 +208,7 @@ left: 100%;
 
 .premio-nombre {
 font-weight: 700;
-color: #c44569;
+color: var(--accent-secundario);
 font-size: 0.95rem;
 margin-bottom: 5px;
 text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
@@ -201,7 +216,7 @@ text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
 
 .premio-fecha {
 font-size: 0.8rem;
-color: #666;
+color: var(--texto-suave);
 font-weight: 500;
 display: flex;
 align-items: center;
@@ -212,7 +227,7 @@ gap: 5px;
 position: absolute;
 top: 8px;
 right: 12px;
-background: linear-gradient(45deg, #ff6b9d, #c44569);
+background: linear-gradient(45deg, var(--accent-principal), var(--accent-secundario));
 color: white;
 border-radius: 50%;
 width: 25px;
@@ -222,17 +237,17 @@ align-items: center;
 justify-content: center;
 font-size: 0.7rem;
 font-weight: bold;
-box-shadow: 0 2px 8px rgba(196, 69, 105, 0.3);
+box-shadow: 0 2px 8px rgba(122, 92, 255, 0.3);
 }
 
 .historial-vacio {
 text-align: center;
-color: #999;
+color: var(--texto-suave);
 font-style: italic;
 padding: 30px 20px;
 background: rgba(255, 255, 255, 0.5);
 border-radius: 15px;
-border: 2px dashed rgba(196, 69, 105, 0.3);
+border: 2px dashed var(--accent-border);
 }
 
 .historial-vacio::before {
@@ -244,19 +259,19 @@ opacity: 0.5;
 }
 .controls-section {
 display: flex; flex-direction: column; align-items: center; gap: 20px;
-background: rgba(255, 255, 255, 0.95); padding: 35px; border-radius: 25px;
+background: var(--glass-white); padding: 35px; border-radius: 25px;
 box-shadow: 0 15px 35px rgba(0,0,0,0.1); backdrop-filter: blur(15px);
-border: 1px solid rgba(255, 255, 255, 0.2); width: 320px;
+border: 1px solid var(--glass-border); width: 320px;
 }
 .controls-title { 
 font-family: 'Dancing Script', cursive; 
-color: #c44569; 
+color: var(--accent-secundario); 
 font-size: 2.5rem; 
 font-weight: 700; 
 text-shadow: 0px 4px 15px rgba(0, 0, 0, 0.4), 0 0 10px rgba(255, 255, 255, 0.3);
 }
-        #ruleta { margin: 0 auto; width: 450px; height: 450px; border: 10px solid #c44569; border-radius: 50%; position: relative; box-shadow: 0 15px 30px rgba(0,0,0,0.2); }
-        #flecha { width: 0; height: 0; border-left: 25px solid transparent; border-right: 25px solid transparent; border-bottom: 50px solid #c44569; position: absolute; left: 50%; top: -50px; transform: translateX(-50%); z-index: 10; }
+        #ruleta { margin: 0 auto; width: 450px; height: 450px; border: 10px solid var(--accent-principal); border-radius: 50%; position: relative; box-shadow: 0 15px 30px rgba(0,0,0,0.2); }
+        #flecha { width: 0; height: 0; border-left: 25px solid transparent; border-right: 25px solid transparent; border-bottom: 50px solid var(--accent-principal); position: absolute; left: 50%; top: -50px; transform: translateX(-50%); z-index: 10; }
         #opciones { 
             position: absolute; 
             width: 100%; 
@@ -275,12 +290,12 @@ text-shadow: 0px 4px 15px rgba(0, 0, 0, 0.4), 0 0 10px rgba(255, 255, 255, 0.3);
             margin: 0 auto; 
             width: 450px; 
             height: 450px; 
-            border: 10px solid #c44569; 
+            border: 10px solid var(--accent-principal); 
             border-radius: 50%; 
             position: relative; 
             box-shadow: 0 15px 30px rgba(0,0,0,0.2);
             overflow: hidden;
-            background: linear-gradient(135deg, #ff6b9d, #c44569);
+            background: linear-gradient(135deg, var(--accent-principal), var(--accent-secundario));
         }
         
         #ruleta::before {
@@ -309,7 +324,7 @@ text-shadow: 0px 4px 15px rgba(0, 0, 0, 0.4), 0 0 10px rgba(255, 255, 255, 0.3);
             height: 0; 
             border-left: 25px solid transparent; 
             border-right: 25px solid transparent; 
-            border-bottom: 50px solid #c44569; 
+            border-bottom: 50px solid var(--accent-principal); 
             position: absolute; 
             left: 50%; 
             top: -50px; 
@@ -331,48 +346,48 @@ text-shadow: 0px 4px 15px rgba(0, 0, 0, 0.4), 0 0 10px rgba(255, 255, 255, 0.3);
 #mensaje { 
 margin-top: 10px; 
 font-size: 1.1rem; 
-color: #c44569; 
+color: var(--accent-secundario); 
 font-weight: 600; 
-background: rgba(255, 255, 255, 0.95); 
+background: var(--glass-white); 
 padding: 15px 25px; 
 border-radius: 20px; 
 display: inline-block; 
 box-shadow: 0 8px 20px rgba(0,0,0,0.15); 
 min-height: 35px; 
 backdrop-filter: blur(10px);
-border: 2px solid rgba(255, 255, 255, 0.3);
+border: 2px solid var(--glass-border);
 text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
 }
 .form-title { 
 font-family: 'Dancing Script', cursive; 
 font-size: 1.6rem; 
-color: #c44569; 
+color: var(--accent-secundario); 
 margin-bottom: 10px; 
 text-shadow: 2px 2px 5px rgba(0,0,0,0.15);
 }
 #codigo { 
 padding: 18px 20px; 
 font-size: 1.1rem; 
-border: 3px solid #ff6b9d; 
+border: 3px solid var(--accent-principal); 
 border-radius: 20px; 
 width: 100%; 
 text-align: center; 
 transition: all 0.3s ease;
-background: rgba(255, 255, 255, 0.95);
+background: var(--glass-white);
 font-weight: 600;
 }
 
 #codigo:focus {
 outline: none;
 background: white;
-box-shadow: 0 0 30px rgba(196, 69, 105, 0.5);
-border-color: #c44569;
+box-shadow: 0 0 30px rgba(255, 79, 163, 0.5);
+border-color: var(--accent-secundario);
 transform: translateY(-2px);
 }
 #validarBtn { 
 padding: 15px 25px; 
 font-size: 1rem; 
-background: linear-gradient(45deg, #ff6b9d, #c44569); 
+background: linear-gradient(45deg, var(--accent-principal), var(--accent-secundario)); 
 color: white; 
 border: none; 
 border-radius: 20px; 
@@ -381,17 +396,17 @@ font-weight: 600;
 width: 100%; 
 text-transform: uppercase; 
 transition: all 0.3s ease;
-box-shadow: 0 4px 15px rgba(196, 69, 105, 0.3);
+box-shadow: 0 4px 15px rgba(122, 92, 255, 0.3);
 }
 
 #validarBtn:hover:not(:disabled) {
 transform: translateY(-3px);
-box-shadow: 0 8px 25px rgba(196, 69, 105, 0.4);
+box-shadow: 0 8px 25px rgba(122, 92, 255, 0.4);
 }
 #girarBtn { 
 padding: 18px 50px; 
 font-size: 1.2rem; 
-background: linear-gradient(45deg, #ff6b9d, #c44569, #ff6b9d); 
+background: linear-gradient(45deg, var(--accent-principal), var(--accent-secundario), var(--accent-principal)); 
 color: white; 
 border: none; 
 border-radius: 30px; 
@@ -399,13 +414,13 @@ cursor: pointer;
 font-weight: 700; 
 min-width: 280px; 
 transition: all 0.3s ease;
-box-shadow: 0 6px 20px rgba(196, 69, 105, 0.4);
+box-shadow: 0 6px 20px rgba(255, 79, 163, 0.4);
 text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 #girarBtn:hover:not(:disabled) {
 transform: translateY(-4px) scale(1.02);
-box-shadow: 0 12px 30px rgba(196, 69, 105, 0.5);
+box-shadow: 0 12px 30px rgba(255, 79, 163, 0.5);
 }
 #girarBtn:disabled { background: linear-gradient(45deg, #ccc, #999); cursor: not-allowed; }
 
@@ -426,14 +441,14 @@ align-items: center; z-index: 1000; opacity: 0; visibility: hidden; transition: 
 }
 .popup-overlay.show { opacity: 1; visibility: visible; }
 .popup-content {
-background: linear-gradient(135deg, #ff6b9d, #c44569); border-radius: 30px; padding: 40px; text-align: center;
+background: linear-gradient(135deg, var(--accent-principal), var(--accent-secundario)); border-radius: 30px; padding: 40px; text-align: center;
 max-width: 500px; width: 90%; transform: scale(0.5); transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
 }
 .popup-overlay.show .popup-content { transform: scale(1); }
 .popup-title { font-family: 'Dancing Script', cursive; font-size: 3rem; color: white; margin-bottom: 20px; }
 .popup-prize { font-size: 1.5rem; color: white; font-weight: 700; margin: 20px 0; padding: 15px; background: rgba(255,255,255,0.2); border-radius: 15px; }
 .popup-instructions { font-size: 0.9rem; color: white; opacity: 0.9; margin-top: 25px; font-weight: 500; }
-.popup-close { background: white; color: #c44569; border: none; padding: 15px 30px; border-radius: 25px; font-weight: 700; font-size: 1.1rem; cursor: pointer; margin-top: 20px; }
+.popup-close { background: white; color: var(--accent-secundario); border: none; padding: 15px 30px; border-radius: 25px; font-weight: 700; font-size: 1.1rem; cursor: pointer; margin-top: 20px; }
 
         @keyframes fadeIn {
             0% { opacity: 0; transform: translateY(10px); }
@@ -806,15 +821,15 @@ transform: translateY(0);
 }
 
 .notification-banner.success {
-background: linear-gradient(135deg, #5cb85c, #449d44);
+background: linear-gradient(135deg, var(--accent-secundario), var(--accent-principal));
 }
 
 .notification-banner.error {
-background: linear-gradient(135deg, #d9534f, #c9302c);
+background: linear-gradient(135deg, #ff4d94, #c9186b);
 }
 
 .notification-banner.warning {
-background: linear-gradient(135deg, #f0ad4e, #ec971f);
+background: linear-gradient(135deg, var(--accent-principal), var(--accent-secundario));
 }
 
 .notification-content {
@@ -886,6 +901,46 @@ animation: spin 1s linear infinite;
 margin-right: 8px;
 }
 </style>
+
+<style id="ruleta-mejoras">
+/* ===== Layout móvil: una sola columna, centrado (override) ===== */
+@media (max-width: 992px) {
+  .main-content { display:flex !important; flex-direction:column !important; align-items:center !important; justify-items:center !important; gap:24px !important; }
+  .controls-container { order:1; } .ruleta-section { order:2; } .historial-container { order:3; }
+  .controls-container, .ruleta-section, .historial-container { width:100% !important; justify-self:center !important; }
+  .controls-section, .historial-section { width:100% !important; max-width:440px !important; margin:0 auto !important; }
+  #ruleta { width:min(86vw, 400px) !important; height:min(86vw, 400px) !important; }
+  #girarBtn { width:100% !important; max-width:360px !important; min-width:0 !important; }
+}
+@media (max-width: 480px) {
+  .controls-section, .historial-section { max-width:400px !important; }
+  #ruleta { width:min(88vw, 360px) !important; height:min(88vw, 360px) !important; }
+}
+/* ===== Foto de la modelo como fondo de la tarjeta del código ===== */
+.controls-section { position:relative; overflow:hidden; isolation:isolate; }
+.controls-section.has-foto::before {
+  content:''; position:absolute; inset:0; z-index:-2;
+  background-size:cover; background-position:center 25%;
+  filter:blur(1.5px) saturate(1.14) brightness(0.85);
+  transform:scale(1.08); opacity:0.9;
+}
+.controls-section.has-foto::after {
+  content:''; position:absolute; inset:0; z-index:-1;
+  background:linear-gradient(180deg, rgba(8,5,12,0.15) 0%, rgba(8,5,12,0.42) 52%, rgba(8,5,12,0.72) 100%);
+}
+.controls-section.has-foto .controls-title { text-shadow:0 2px 12px rgba(0,0,0,0.6); }
+/* ===== "Escribe tu Código" como etiqueta píldora limpia ===== */
+.controls-section .form-title {
+  font-family:'Poppins', sans-serif !important;
+  font-size:0.8rem !important; font-weight:600 !important;
+  letter-spacing:0.16em; text-transform:uppercase;
+  text-shadow:none !important;
+  display:inline-block; padding:7px 18px; border-radius:999px;
+  -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
+  margin:2px auto 14px !important;
+  color:#ffffff !important; background:rgba(0,0,0,0.40); border:1px solid rgba(255,255,255,0.18); box-shadow:0 4px 14px rgba(0,0,0,0.28);
+}
+</style>
 </head>
 <body>
 <!-- Banner de notificaciones -->
@@ -916,7 +971,7 @@ margin-right: 8px;
 </div>
 <div class="main-content">
 <div class="controls-container">
-<div class="controls-title" id="tituloModelo">Bella Rey</div>
+<div class="controls-title" id="tituloModelo">Bella Rey 💖</div>
 <div class="controls-section">
 <div class="form-title">💝 Código Exclusivo</div>
 <div id="formulario">
@@ -953,7 +1008,7 @@ Aún no has ganado premios.<br>
 <script>
 // Variables globales para premios dinámicos
 let premiosDisponibles = [];
-const coloresPremios = [ "#ff6b9d", "#c44569", "#f8b500", "#ff9ff3", "#54a0ff", "#5f27cd", "#ff9f43", "#10ac84", "#ee5a24", "#0abde3", "#feca57", "#ff6348" ];
+const coloresPremios = [ "#ff6b9d", "#d6336c", "#f8b500", "#ff9ff3", "#54a0ff", "#5f27cd", "#ff9f43", "#10ac84", "#ee5a24", "#0abde3", "#feca57", "#ff6348" ];
 
 // Eliminado: const codigosValidosDefault - ahora usamos solo el backend
 // Eliminado: let codigosValidos = {} - ahora usamos solo el backend
@@ -1263,7 +1318,7 @@ let rotacion = anguloMedio;
 if (rotacion > Math.PI/2 && rotacion < 3*Math.PI/2) rotacion += Math.PI;
 ctx.rotate(rotacion);
 
-let textoLimpio = premiosDisponibles[i].replace(/[\u{1F300}-\u{1F9FF}]/gu, '').trim().toUpperCase();
+let textoLimpio = premiosDisponibles[i].trim().toUpperCase();
 const palabras = textoLimpio.split(' ');
 let lineas = [], lineaActual = '';
 palabras.forEach(palabra => {
@@ -1348,7 +1403,7 @@ emojiSize = 38;
             // Círculo con efecto de vidrio
 ctx.beginPath();
 ctx.arc(centroX, centroY, circleRadius, 0, 2 * Math.PI);
-            ctx.fillStyle = "#c44569";
+            ctx.fillStyle = "#d6336c";
             
             // Gradiente radial para efecto de vidrio
             const gradient = ctx.createRadialGradient(centroX, centroY, 0, centroX, centroY, circleRadius);
@@ -1638,7 +1693,7 @@ mensajeElement.classList.remove('mensaje-update');
 
 // === FONDO INTERACTIVO REACTIVO AL MOUSE ===
 function inicializarFondoInteractivo() {
-const paleta = ['#ff6b9d', '#ffffff', '#f8b500', '#c44569', '#feca57', '#23a6d5', '#ff9a9e', '#8a2be2'];
+const paleta = ['#ff6b9d', '#ffffff', '#f8b500', '#d6336c', '#feca57', '#23a6d5', '#ff9a9e', '#8a2be2'];
 let throttleTimer = null;
 
 // Efecto épico de bienvenida
@@ -2003,5 +2058,27 @@ dibujarRuletaCompleta();
 
 <!-- Canvas Confetti Library -->
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+<script id="foto-modelo-loader">
+(function () {
+  function aplicar(dataUrl) {
+    if (!dataUrl || dataUrl.indexOf('data:image/') !== 0) return;
+    var st = document.getElementById('foto-modelo-style') || document.createElement('style');
+    st.id = 'foto-modelo-style';
+    st.textContent = '.controls-section.has-foto::before{background-image:url("' + dataUrl + '")}';
+    document.head.appendChild(st);
+    var apply = function () {
+      var cs = document.querySelector('.controls-section');
+      if (cs) { cs.classList.add('has-foto'); return true; }
+      return false;
+    };
+    if (!apply()) { var n = 0, iv = setInterval(function () { if (apply() || ++n > 40) clearInterval(iv); }, 150); }
+  }
+  fetch('/.netlify/functions/config-manager')
+    .then(function (r) { return r.json(); })
+    .then(function (j) { if (j && j.data) aplicar(j.data.avatarURL); })
+    .catch(function () {});
+})();
+</script>
 </body>
 </html>

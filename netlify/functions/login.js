@@ -1,9 +1,9 @@
 exports.handler = async (event, context) => {
     // Configurar CORS
     const headers = {
-        'Access-control-Allow-Origin': '*',
-        'Access-control-Allow-Headers': 'Content-Type',
-        'Access-control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
         'Content-Type': 'application/json'
     };
 
@@ -50,29 +50,24 @@ exports.handler = async (event, context) => {
 
         // Verificar que las variables de entorno estén configuradas
         if (!validUsername || !validPassword) {
-            console.error('ALERTA: Las variables de entorno ADMIN_USER o ADMIN_PASS no están configuradas en Netlify.');
+            console.error('Variables de entorno ADMIN_USER o ADMIN_PASS no configuradas');
             return {
                 statusCode: 500,
                 headers,
                 body: JSON.stringify({
                     success: false,
-                    message: 'Error de configuración del servidor. Faltan variables de entorno.'
+                    message: 'Error de configuración del servidor.'
                 })
             };
         }
 
-        // Log para diagnóstico (mantener para futuras depuraciones)
-        console.log(`[LOGIN] Intento de login recibido.`);
-        console.log(`[LOGIN] Usuario esperado: '${validUsername}'`);
-        console.log(`[LOGIN] Usuario recibido: '${username}'`);
-        console.log(`[LOGIN] Contraseña esperada: '${validPassword}'`);
-        console.log(`[LOGIN] Contraseña recibida: '${password}'`);
-        console.log(`[LOGIN] Longitud contraseña esperada: ${validPassword.length}`);
-        console.log(`[LOGIN] Longitud contraseña recibida: ${password.length}`);
-        
-        // Verificar credenciales
-        if (username === validUsername && password === validPassword) {
-            console.log(`[LOGIN] ¡ÉXITO! Credenciales correctas.`);
+        // Comparación tolerante a espacios de copiar/pegar: recorta ambos lados;
+        // el usuario no distingue mayúsculas, la contraseña sigue siendo exacta.
+        const isValidUsername = String(username).trim().toLowerCase() === String(validUsername).trim().toLowerCase();
+        const isValidPassword = String(password).trim() === String(validPassword).trim();
+
+        if (isValidUsername && isValidPassword) {
+            // Login exitoso
             return {
                 statusCode: 200,
                 headers,
@@ -83,12 +78,7 @@ exports.handler = async (event, context) => {
                 })
             };
         } else {
-            console.log(`[LOGIN] ¡FALLO! Credenciales incorrectas.`);
-            console.log(`[LOGIN] Usuario coincide: ${username === validUsername}`);
-            console.log(`[LOGIN] Contraseña coincide: ${password === validPassword}`);
-            console.log(`[LOGIN] Comparación directa usuario: "${username}" === "${validUsername}"`);
-            console.log(`[LOGIN] Comparación directa contraseña: "${password}" === "${validPassword}"`);
-            
+            // Credenciales incorrectas
             return {
                 statusCode: 401,
                 headers,
@@ -100,13 +90,13 @@ exports.handler = async (event, context) => {
         }
 
     } catch (error) {
-        console.error('Error catastrófico en la función login:', error);
+        console.error('Error en función login:', error);
         return {
             statusCode: 500,
             headers,
             body: JSON.stringify({
                 success: false,
-                message: `Error interno del servidor: ${error.message}`
+                message: 'Error interno del servidor'
             })
         };
     }
